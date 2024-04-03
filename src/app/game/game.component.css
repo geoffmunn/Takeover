@@ -1,0 +1,11 @@
+div#intro {
+    display: block
+}
+
+div#howToPlay {
+    display: none
+}
+
+div#theMap {
+    display: none
+}
