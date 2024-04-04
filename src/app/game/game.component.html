@@ -91,13 +91,9 @@
     <h3>Pick your side</h3>
     <p>So first of all, define the scenario...</p>
 
-    <p>What sort of government are you trying to overthrow?</p>
+    <political-selector [title]="'And what sort of rebel group do you represent?'" (change)="registerUserPoliticalSelection($event)"></political-selector>
 
-    <political-selector (change)="registerUserPoliticalSelection($event)"></political-selector>
-
-    <p>And what sort of rebel group do you represent?</p>
-
-    <political-selector (change)="registerGovtPoliticalSelection($event)"></political-selector>
+    <political-selector [title]="'What sort of government are you trying to overthrow?'" (change)="registerGovtPoliticalSelection($event)"></political-selector>
 
 
 Is President Xerxes' government:

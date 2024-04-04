@@ -1,4 +1,4 @@
-<label id="example-radio-group-label">Pick your favorite season</label>
+<label id="example-radio-group-label">{{title}}</label>
 <mat-radio-group
   aria-labelledby="rebel-political-side"
   class="political-radio-group"
@@ -7,4 +7,3 @@
     <mat-radio-button class="example-radio-button" [value]="season" (change)="select($event)">{{season}}</mat-radio-button>
   }
 </mat-radio-group>
-<div>Your favorite season is: {{politicalSelection}}</div>

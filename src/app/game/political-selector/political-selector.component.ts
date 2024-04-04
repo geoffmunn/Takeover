@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
 
@@ -13,6 +13,9 @@ import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
 export class PoliticalSelection {
   politicalSelection!: string;
   seasons: string[] = ['Communist', 'Socialist', 'Liberal', 'Rightwing', 'Fascist'];
+
+  @Input()
+  title: string = '';
 
   @Output()
   change: EventEmitter<string> = new EventEmitter<string>();

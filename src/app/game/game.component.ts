@@ -14,6 +14,9 @@ export class GameComponent {
   userPoliticalSelection:string = ''
   govtPoliticalSelection:string = ''
 
+  //geoff1: string = 'geoff1'
+  //geoff2: string = 'geoff2'
+
   showHide = {
     'intro': true,
     'howToPlay': false,
