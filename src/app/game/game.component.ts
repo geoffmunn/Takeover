@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { PoliticalSelection } from './political-selector/political-selector.component';
+import { StabilitySelection } from './stability-selector/stability-selector.component';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf, PoliticalSelection],
+  imports: [NgIf, PoliticalSelection, StabilitySelection],
   templateUrl: './game.component.html', 
   styleUrl: './game.component.css'
 })
@@ -13,9 +14,7 @@ export class GameComponent {
 
   userPoliticalSelection:string = ''
   govtPoliticalSelection:string = ''
-
-  //geoff1: string = 'geoff1'
-  //geoff2: string = 'geoff2'
+  govtStabilitySelection:string = ''
 
   showHide = {
     'intro': true,
@@ -23,15 +22,17 @@ export class GameComponent {
     'theMap': false,
     'scenarios': false,
     'pickASide': false,
+    'confirmation': false
   }
 
   registerUserPoliticalSelection(event:string) {
     this.userPoliticalSelection = event;
-
-    console.log(this.userPoliticalSelection)
   }
   registerGovtPoliticalSelection(event:string) {
     this.govtPoliticalSelection = event;
+  }
+  registerGovtStabilitySelection(event:string) {
+    this.govtStabilitySelection = event;
   }
 
   nextPage(nextDiv:string){

@@ -1,9 +1,9 @@
-<label id="example-radio-group-label">{{title}}</label>
+<label class="political-selector-options">{{title}}</label>
 <mat-radio-group
-  aria-labelledby="rebel-political-side"
+  aria-labelledby="political-side"
   class="political-radio-group"
   [(ngModel)]="politicalSelection">
-  @for (season of seasons; track season) {
-    <mat-radio-button class="example-radio-button" [value]="season" (change)="select($event)">{{season}}</mat-radio-button>
+  @for (govtType of govtTypes; track govtType) {
+    <mat-radio-button class="political-selector-radio-button" [value]="govtType" (change)="select($event)">{{govtType}}</mat-radio-button>
   }
 </mat-radio-group>

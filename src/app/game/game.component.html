@@ -95,19 +95,20 @@
 
     <political-selector [title]="'What sort of government are you trying to overthrow?'" (change)="registerGovtPoliticalSelection($event)"></political-selector>
 
+    <stability-selector [title]="'Is President Xerxes\' government:'" (change)="registerGovtStabilitySelection($event)"></stability-selector>
 
-Is President Xerxes' government:
+    <button (click)="nextPage('scenarios')" >Back</button>  
+    <button (click)="nextPage('confirmation')" >Next</button> 
+</div>
 
+<div *ngIf="showHide['confirmation']" id="confirmation">
+    <h3>Confirmation</h3>
+    <p>So, you represent a {{userPoliticalSelection}} group attempting to overthrow a {{govtPoliticalSelection}} government headed by President Xerxes.
 
+    <p>Because you are more to the right than the government, your forces will be red and the government will be blue</p>
 
-Very weak & about to fall
+    <p>Is this correct?</p>
 
-Weak & unpopular
-
-Reasonably
-secure
-
-Stable & strong
-
-Very secure & highly popular
+    <button (click)="nextPage('pickASide')" >No</button>  
+    <button (click)="nextPage('confirmation')" >Yes</button> 
 </div>

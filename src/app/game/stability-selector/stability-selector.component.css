@@ -1,11 +1,11 @@
-.political-radio-group {
+.stability-radio-group {
     display: flex;
     flex-direction: column;
     margin: 15px 0;
     align-items: flex-start;
   }
   
-  .political-selector-radio-button {
+  .stability-selector-radio-button {
     margin: 5px;
   }
   

@@ -1,0 +1,9 @@
+<label class="stability-selector-options">{{title}}</label>
+<mat-radio-group
+  aria-labelledby="government-stability"
+  class="stability-radio-group"
+  [(ngModel)]="politicalSelection">
+  @for (govtStability of govtStabilities; track govtStability) {
+    <mat-radio-button class="stability-selector-radio-button" [value]="govtStability" (change)="select($event)">{{govtStability}}</mat-radio-button>
+  }
+</mat-radio-group>

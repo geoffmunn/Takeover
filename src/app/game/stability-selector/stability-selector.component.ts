@@ -3,16 +3,16 @@ import {FormsModule} from '@angular/forms';
 import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
 
 @Component({
-  selector: 'political-selector',
-  templateUrl: 'political-selector.component.html',
-  styleUrl: 'political-selector.component.css',
+  selector: 'stability-selector',
+  templateUrl: 'stability-selector.component.html',
+  styleUrl: 'stability-selector.component.css',
   standalone: true,
   imports: [MatRadioModule, FormsModule],
 })
 
-export class PoliticalSelection {
-  politicalSelection!: string;
-  govtTypes: string[] = ['Communist', 'Socialist', 'Liberal', 'Rightwing', 'Fascist'];
+export class StabilitySelection {
+  politicalStability!: string;
+  govtStabilities: string[] = ['Very weak & about to fall', 'Weak & unpopular', 'Reasonably secure', 'Stable & strong', 'Very secure & highly popular'];
 
   @Input()
   title: string = '';
