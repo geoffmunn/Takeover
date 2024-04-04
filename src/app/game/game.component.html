@@ -93,28 +93,13 @@
 
     <p>What sort of government are you trying to overthrow?</p>
 
-Communist
+    <political-selector (change)="registerUserPoliticalSelection($event)"></political-selector>
 
-Socialist
+    <p>And what sort of rebel group do you represent?</p>
 
-Liberal
-
-Rightwing
-
-Fascist
-And what sort of rebel group do you represent?
+    <political-selector (change)="registerGovtPoliticalSelection($event)"></political-selector>
 
 
-
-Communist
-
-Socialist
-
-Liberal
-
-Rightwing
-
-Fascist
 Is President Xerxes' government:
 
 

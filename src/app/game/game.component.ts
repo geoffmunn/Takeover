@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
-
-declare function getToday(): any;
-declare function greetings(name: any): any;
-
+import { PoliticalSelection } from './political-selector/political-selector.component';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf],
+  imports: [NgIf, PoliticalSelection],
   templateUrl: './game.component.html', 
   styleUrl: './game.component.css'
 })
 
-export class GameComponent implements OnInit{
+export class GameComponent {
+
+  userPoliticalSelection:string = ''
+  govtPoliticalSelection:string = ''
 
   showHide = {
     'intro': true,
@@ -21,13 +21,14 @@ export class GameComponent implements OnInit{
     'scenarios': false,
     'pickASide': false,
   }
-  
-  ngOnInit() {
-    //getToday(); // without param
-    //greetings('geoff'); // with param
 
-    //this.showHide['intro'] = true
-    //this.showHide['theMap'] = true
+  registerUserPoliticalSelection(event:string) {
+    this.userPoliticalSelection = event;
+
+    console.log(this.userPoliticalSelection)
+  }
+  registerGovtPoliticalSelection(event:string) {
+    this.govtPoliticalSelection = event;
   }
 
   nextPage(nextDiv:string){
@@ -40,5 +41,6 @@ export class GameComponent implements OnInit{
         this.showHide[key as keyof typeof this.showHide] = false
       }
     }
+
   }
 }
