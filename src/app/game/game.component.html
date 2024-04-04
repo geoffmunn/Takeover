@@ -1,4 +1,4 @@
-<div id="intro">
+<div *ngIf="showHide['intro']" id="intro">
     <h2>Takeover</h2>
     <p>
         In this game you attempt to take over the government headed by the evil president Xerxes.
@@ -12,9 +12,12 @@
     <p>
         Points are gained by capturing key buildings and the first player to reach 35 points is the winner.
     </p>
+
+    <button (click)="nextPage('howToPlay')">Next</button>  
+
 </div>
 
-<div id="howToPlay">
+<div *ngIf="showHide['howToPlay']" id="howToPlay">
     <h3>How to play</h3>
     <p>
         You and I each take alternate turns, and each turn consists of four consecutive moves.
@@ -35,9 +38,13 @@
     <p>
         If an attempt to take a building or street square is unsuccesfull, then your turn is over!
     </p>
+
+    <button (click)="nextPage('intro')" >Back</button>  
+    <button (click)="nextPage('theMap')" >Next</button>  
+
 </div>
 
-<div id="theMap">
+<div *ngIf="showHide['theMap']" id="theMap">
     <h3>The Map</h3>
     <p>
         Taking over a street square is only possible if you already own more surrounding squares (up to 8 buildings or streets) than the opposing colour.
@@ -61,4 +68,65 @@
         The radio station, newspaper office and cathedral are the most important buildings to hold, but you will probably never manage to capture Xerxes' Palace!
     </p>
 
+    <button (click)="nextPage('howToPlay')" >Back</button>  
+    <button (click)="nextPage('scenarios')" >Next</button>  
+
+</div>
+
+<div *ngIf="showHide['scenarios']" id="scenarios">
+    <h3>Scenarios</h3>
+    <p>Each game will be a different scenario.</p>
+
+    <p>Not only will the city map be changed, you can choose whether you wish to be left or right wing. Remember that allegiances of each building will be different.</p>
+
+    <p>It all depends on your political colour as well as the Government's politics and strength.</p>
+
+    <p>Watch out. The Government will play a mean game! No one likes to suffer a Takeover.....</p>
+
+    <button (click)="nextPage('theMap')" >Back</button>  
+    <button (click)="nextPage('pickASide')" >Next</button> 
+</div>
+
+<div *ngIf="showHide['pickASide']" id="pickASide">
+    <h3>Pick your side</h3>
+    <p>So first of all, define the scenario...</p>
+
+    <p>What sort of government are you trying to overthrow?</p>
+
+Communist
+
+Socialist
+
+Liberal
+
+Rightwing
+
+Fascist
+And what sort of rebel group do you represent?
+
+
+
+Communist
+
+Socialist
+
+Liberal
+
+Rightwing
+
+Fascist
+Is President Xerxes' government:
+
+
+
+Very weak & about to fall
+
+Weak & unpopular
+
+Reasonably
+secure
+
+Stable & strong
+
+Very secure & highly popular
 </div>
