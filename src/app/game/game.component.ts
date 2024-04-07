@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { PoliticalSelection } from './political-selector/political-selector.component';
 import { StabilitySelection } from './stability-selector/stability-selector.component';
-//import { LeftService } from './services/left.service';
-//import { RightService } from './services/right.service';
 import { PlayerService } from './services/player.service';
 import { LeftService } from './services/left.service';
 import { RightService } from './services/right.service';
-//import { GovernmentService } from './services/government.service';
+
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -20,7 +18,7 @@ import { RightService } from './services/right.service';
 export class GameComponent {
 
   public user: PlayerService | undefined;
-  public govt: PlayerService | undefined
+  public govt: PlayerService | undefined;
   
   public showHide = {
     'intro': true,
@@ -28,8 +26,9 @@ export class GameComponent {
     'theMap': false,
     'scenarios': false,
     'pickASide': false,
-    'confirmation': false
-  }
+    'confirmation': false,
+    'summary': false
+  };
 
   getGovtTypes() {
     let map = new Map<string, number>();
@@ -40,58 +39,56 @@ export class GameComponent {
     map.set('Rightwing', 4);
     map.set('Fascist', 5);
 
-    return map
-  }
+    return map;
+  };
   
   checkPoliticalSelections(){
-    
-    let govtTypes = this.getGovtTypes()
-    let left = new LeftService()
-    let right = new RightService()
+
+    let govtTypes = this.getGovtTypes();
+    let left = new LeftService();
+    let right = new RightService();
 
     if (this.govt!.politicalType != ''){
-      let userType: number | undefined = govtTypes.get(this.user!.politicalType)
-      let govtType: number | undefined = govtTypes.get(this.govt!.politicalType)
+      let userType: number | undefined = govtTypes.get(this.user!.politicalType);
+      let govtType: number | undefined = govtTypes.get(this.govt!.politicalType);
 
-    if (userType! <= govtType!){
-        this.user!.position = left
-        this.govt!.position = right
+      if (userType! <= govtType!){
+        this.user!.position = left;
+        this.govt!.position = right;
       } else {
-        this.user!.position = right
-        this.govt!.position = left
-      }
-    }
-  }
+        this.user!.position = right;
+        this.govt!.position = left;
+      };
+    };
+  };
 
   registerUserPoliticalSelection(event:string) {
-    this.user!.politicalType = event
-    
-    this.checkPoliticalSelections()
-  }
+    this.user!.politicalType = event;
+    this.checkPoliticalSelections();
+  };
   registerGovtPoliticalSelection(event:string) {
-    this.govt!.politicalType = event
-
-    this.checkPoliticalSelections()
-  }
+    this.govt!.politicalType = event;
+    this.checkPoliticalSelections();
+  };
   registerGovtStabilitySelection(event:string) {
-    this.govt!.stability = event
-  }
+    this.govt!.stability = event;
+  };
 
   nextPage(nextDiv:string){
     for (let key in this.showHide) {
       //let value = this.showHide[key as keyof typeof this.showHide]
       
       if (key == nextDiv) {
-        this.showHide[key as keyof typeof this.showHide] = true
+        this.showHide[key as keyof typeof this.showHide] = true;
       } else {
-        this.showHide[key as keyof typeof this.showHide] = false
+        this.showHide[key as keyof typeof this.showHide] = false;
       }
     }
-  }
+  };
 
   constructor() {
-    this.user = new PlayerService()
-    this.govt = new PlayerService()
-  }
+    this.user = new PlayerService();
+    this.govt = new PlayerService();
+  };
 }
 
