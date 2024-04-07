@@ -15,8 +15,4 @@ export class PlayerService {
   stability: string = ''
   
   constructor() {}
-  // constructor(politicalType: PoliticalTypeService) { 
-  //   this.position = politicalType
-
-  // }
 }

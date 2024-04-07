@@ -19,14 +19,9 @@ import { RightService } from './services/right.service';
 
 export class GameComponent {
 
-  //public userPoliticalSelection:string = ''
-  //public govtPoliticalSelection:string = ''
-  //public govtStabilitySelection:string = ''
-
   public user: PlayerService | undefined;
   public govt: PlayerService | undefined
-  //public player3: PlayerService | undefined
-
+  
   public showHide = {
     'intro': true,
     'howToPlay': false,
@@ -35,8 +30,6 @@ export class GameComponent {
     'pickASide': false,
     'confirmation': false
   }
-
-  //govtTypes: string[] = ['Communist', 'Socialist', 'Liberal', 'Rightwing', 'Fascist'];
 
   getGovtTypes() {
     let map = new Map<string, number>();
@@ -51,74 +44,25 @@ export class GameComponent {
   }
   
   checkPoliticalSelections(){
+    
     let govtTypes = this.getGovtTypes()
+    let left = new LeftService()
+    let right = new RightService()
 
     if (this.govt!.politicalType != ''){
       let userType: number | undefined = govtTypes.get(this.user!.politicalType)
       let govtType: number | undefined = govtTypes.get(this.govt!.politicalType)
 
-      //console.log ('userType:', userType)
-      
-      //player3!.test = 'geoff3'
-
-      
-
-      if (userType! <= govtType!){
-        //console.log ('assigning left')
-        let userPositionType = new LeftService()
-        let govtPositionType = new RightService()
-
-        //console.log(userPositionType.getLeft())
-
-        //userPositionType.description = 'hi'
-
-        this.user!.position = userPositionType
-        this.govt!.position = govtPositionType
-
-        //console.log (this.user!.position.description)
-        
-          //this.user.position2.chosenType = this.user.position2.leftType
-          //this.govt.position2.chosenType = this.govt.position2.rightType
-          // this.user!.colour = '#ff0000'
-          // this.user!.position = 'left'
-          // this.user!.colourName = 'red'
-
-          // this.govt.colour = '#0000ff'
-          // this.govt.position = 'right'
-          // this.govt.colourName = 'blue'
-
+    if (userType! <= govtType!){
+        this.user!.position = left
+        this.govt!.position = right
       } else {
-
-        let userPositionType = new RightService()
-        let govtPositionType = new LeftService()
-
-        this.user!.position = userPositionType
-        this.govt!.position = govtPositionType
-        //this.user.position2.chosenType = this.user.position2.rightType
-        //this.govt.position2.chosenType = this.govt.position2.leftType
-        // this.govt.colour = '#ff0000'
-        // this.govt.position = 'left'
-        // this.govt.colourName = 'red'
-
-        // this.user.colour = '#0000ff'
-        // this.user.position = 'right'
-        // this.user.colourName = 'blue'
+        this.user!.position = right
+        this.govt!.position = left
       }
-
-      //console.log('player 3 test:', player3.test)
     }
-
-    // if (this.user!.politicalType != '')
-    //   console.log (this.user!.position.description)
-    // //   console.log (this.user.position2.chosenType)
-    // //   console.log (this.govt.position2.chosenType)
-
-    // if (this.govt!.politicalType != '')
-    //   console.log (this.govt!.position.description)
-    // //   console.log (this.user.position2.chosenType)
-    // //   console.log (this.govt.position2.chosenType)
-    
   }
+
   registerUserPoliticalSelection(event:string) {
     this.user!.politicalType = event
     
@@ -146,26 +90,8 @@ export class GameComponent {
   }
 
   constructor() {
-   // let userPoliticalSelection: any = new PoliticalSelection()
-    //let govtPoliticalSelection: any = new PoliticalSelection()
-      
-    //this.user = new PlayerService(userPoliticalSelection)
-    //this.govt = new PlayerService(govtPoliticalSelection)
     this.user = new PlayerService()
     this.govt = new PlayerService()
   }
-  // constructor(player: PlayerService, govt: GovernmentService, player2: PlayerService){
-
-  //   player.test = 'Geoff1';
-  //   player2.test = 'Geoff2';
-  //   //this.player3!.test = 'Geoff3'
-
-  //   this.user = player
-  //   this.govt = govt
-    
-  //   console.log('player test:', player.test)
-  //   console.log('player2 test:', player2.test)
-  //   //console.log('player3 test:', this.player3!.test)
-  // }
 }
 
