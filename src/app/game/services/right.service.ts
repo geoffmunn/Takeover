@@ -11,10 +11,10 @@ export class RightService {
 
   constructor() { }
 
-  getRight(){
-    return {
-      'colour': this.colour,
-      'description': this.description,
-    }
-  }
+  // getRight(){
+  //   return {
+  //     'colour': this.colour,
+  //     'description': this.description,
+  //   }
+  // }
 }

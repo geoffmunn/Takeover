@@ -11,10 +11,10 @@ export class LeftService {
   
   constructor() { }
 
-  getLeft(){
-    return {
-      'colour': this.colour,
-      'description': this.description,
-    }
-  }
+  // getLeft(){
+  //   return {
+  //     'colour': this.colour,
+  //     'description': this.description,
+  //   }
+  // }
 }
