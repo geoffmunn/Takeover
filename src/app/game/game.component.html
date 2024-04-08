@@ -110,5 +110,31 @@
     <p>Is this correct?</p>
 
     <button (click)="nextPage('pickASide')" >No</button>  
+    <button (click)="nextPage('summary')" >Yes</button> 
+</div>
+
+<div *ngIf="showHide['summary']" id="summary">
+    <h3>The targets</h3>
+    <p>At the start of the game, will any of the following buildings join the rebels?</p>
+    <p>(Make a note of the likely targets!)</p>
+
+    <ul>
+        <li *ngFor="let building of buildings">{{building.name}}</li>
+        <!-- <li>The Government building will not</li>
+        <li>The Radio station might</li>
+        <li>The Newspaper office might</li>
+        <li>The Police station will not</li>
+        <li>The Military HQ probably won't</li>
+        <li>The Trades Union might</li>
+        <li>The Xerxes Palace will not</li>
+        <li>The University will</li>
+        <li>The Airport probably won't</li>
+        <li>The Hospital might</li>
+        <li>The Bank will not</li>
+        <li>The Shopping Centre will not</li>
+        <li>The Cathedral probably will</li>
+        <li>The Factory probably won't</li>
+        <li>The Jail will</li> -->
+    </ul>
     <button (click)="nextPage('confirmation')" >Yes</button> 
 </div>

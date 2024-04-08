@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { PoliticalSelection } from './political-selector/political-selector.component';
 import { StabilitySelection } from './stability-selector/stability-selector.component';
 import { PlayerService } from './services/player.service';
 import { LeftService } from './services/left.service';
 import { RightService } from './services/right.service';
+import { BuildingsService } from './services/buildings.service';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf, PoliticalSelection, StabilitySelection],
+  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection],
   templateUrl: './game.component.html', 
   styleUrl: './game.component.css',
   providers: [PlayerService]
@@ -19,7 +20,8 @@ export class GameComponent {
 
   public user: PlayerService | undefined;
   public govt: PlayerService | undefined;
-  
+  public buildings: any
+
   public showHide = {
     'intro': true,
     'howToPlay': false,
@@ -89,6 +91,7 @@ export class GameComponent {
   constructor() {
     this.user = new PlayerService();
     this.govt = new PlayerService();
+    this.buildings = new BuildingsService().buildings
   };
 }
 
