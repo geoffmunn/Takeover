@@ -10,11 +10,4 @@ export class LeftService {
   description:string = 'left'
   
   constructor() { }
-
-  // getLeft(){
-  //   return {
-  //     'colour': this.colour,
-  //     'description': this.description,
-  //   }
-  // }
 }
