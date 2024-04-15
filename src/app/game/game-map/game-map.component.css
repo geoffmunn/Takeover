@@ -59,46 +59,23 @@ header,
             top: -20px;
         }
 
-        /*.building .building-name {
-            border-bottom: 4px solid #a9a9a9;
-            border-left: 2px solid #a9a9a9;
-            border-top: 1px solid #fff;
-            border-right: 1px solid #fff;
-            border-radius: 18px/40px;
-            box-shadow: 
-                0 0 0 2px #171314,
-                0 0 0 5px #26714A,
-                -3px 3px 2px 5px #171314;
-            
-            overflow: hidden;
+        .building .building-name {
+            margin: -25px 10px 5px 10px;
+            align-self: baseline;
+            font-weight: 400;
+            font-size: 0.7em;
+            text-align: center;
+        }
 
-            background: 
-                linear-gradient( 0deg, rgba(201, 216, 201, .3), rgba(201, 216, 209, .3) ), 
-                url(https://image.ibb.co/jKByZn/tile_bg_1.jpg);     
-            display: flex;
-            margin-top: 0;
-            margin-left: 5px;
-            margin-right: 5px;
-            margin-bottom: 7px;
-            padding: 8px 0;
-            display: flex;
-            justify-content: space-between;
-        } */
+        .building .building-name p {
+            margin: 0px;
+        }
 
-            .building .building-name {
-                margin: -20px 10px 0px 10px;
-                align-self: baseline;
-                font-weight: 400;
-                font-size: 0.7em;
-                text-align: center;
+        .building .building-points {
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+            .building .building-points p {
+                margin: 0px;
             }
-
-            .building .points {
-                text-align: center;
-                font-size: 1.1em;
-            }
-
-    .building {
-        
-
-    }
