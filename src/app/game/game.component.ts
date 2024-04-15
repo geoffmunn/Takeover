@@ -6,14 +6,16 @@ import { PlayerService } from './services/player.service';
 import { LeftService } from './services/left.service';
 import { RightService } from './services/right.service';
 import { BuildingsService } from './services/buildings.service';
-
+import { GovtTypesService } from './services/govt-types.service';
+import { StabilitlyTypesService } from './services/stabilitly-types.service';
+import { GameMapComponent } from './game-map/game-map.component';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection],
-  templateUrl: './game.component.html', 
-  styleUrl: './game.component.css',
-  providers: [PlayerService]
+  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent],
+  templateUrl: 'game.component.html', 
+  styleUrl: 'game.component.css',
+  providers: [PlayerService, GovtTypesService]
 })
 
 export class GameComponent {
@@ -29,32 +31,17 @@ export class GameComponent {
     'scenarios': false,
     'pickASide': false,
     'confirmation': false,
-    'summary': false
+    'summary': false,
+    'game': false
   };
 
-  getGovtTypes() {
-    let map = new Map<string, number>();
-
-    map.set('Communist', 1); 
-    map.set('Socialist', 2);
-    map.set('Liberal', 3);
-    map.set('Rightwing', 4);
-    map.set('Fascist', 5);
-
-    return map;
-  };
-  
   checkPoliticalSelections(){
 
-    let govtTypes = this.getGovtTypes();
     let left = new LeftService();
     let right = new RightService();
 
-    if (this.govt!.politicalType != ''){
-      let userType: number | undefined = govtTypes.get(this.user!.politicalType);
-      let govtType: number | undefined = govtTypes.get(this.govt!.politicalType);
-
-      if (userType! <= govtType!){
+    if (this.govt!.politicalType != 0){
+      if (this.user!.politicalType <= this.govt!.politicalType){
         this.user!.position = left;
         this.govt!.position = right;
       } else {
@@ -65,15 +52,37 @@ export class GameComponent {
   };
 
   registerUserPoliticalSelection(event:string) {
-    this.user!.politicalType = event;
+    this.user!.politicalType = new GovtTypesService().govtTypes.get(event)!
     this.checkPoliticalSelections();
   };
   registerGovtPoliticalSelection(event:string) {
-    this.govt!.politicalType = event;
+    this.govt!.politicalType = new GovtTypesService().govtTypes.get(event)!;
     this.checkPoliticalSelections();
   };
+
   registerGovtStabilitySelection(event:string) {
-    this.govt!.stability = event;
+    this.govt!.stability = new StabilitlyTypesService().stabilityTypes.get(event)!;
+
+    /*
+    ##### A = difficulty
+    ##### G1 = the government type
+    ##### P1 = the player type 
+    6785 IFA<1ORA>5THEN6780
+    6790 G2=(A-1)/2+1.5+ABS(3-G1)/2
+    6795 P2=2.5+ABS(3-P1)/2:PRINT"ì"
+    6900 RETURN
+    7000 REM ****************
+    */
+
+    //console.log (this.govt!.politicalType)
+    //console.log (this.govt!.stability)
+    //console.log (this.user?.politicalType)
+    let govtPopularity: number = (this.govt!.stability - 1) / 2 + 1.5 + Math.abs(3 - this.govt!.politicalType) / 2
+    let userPopularity: number = 2.5 + Math.abs(3 - this.user!.politicalType) / 2
+    
+    this.buildings.calculateLiklihoods(govtPopularity, this.govt?.politicalType, userPopularity, this.user?.politicalType)
+    
+    //console.log (this.buildings.buildings)
   };
 
   nextPage(nextDiv:string){
@@ -91,7 +100,8 @@ export class GameComponent {
   constructor() {
     this.user = new PlayerService();
     this.govt = new PlayerService();
-    this.buildings = new BuildingsService().buildings
+
+    this.buildings = new BuildingsService()
   };
 }
 
