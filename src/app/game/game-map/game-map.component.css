@@ -1,0 +1,104 @@
+section {
+  display: table;
+  border-collapse:separate;
+  /*border-spacing:5px;*/
+}
+
+header,
+.line-break,
+.row {
+  display: table-row;
+}
+
+.cell {
+  display: table-cell;
+}
+
+.street {
+  width: 50px;
+  height: 50px;
+}
+    .street.neutral {
+        background-color: #ccc;
+    }
+
+.building {
+    height:130px;
+    border: 1px solid Blue;
+    margin: 0 auto;
+    margin-top: 56px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    /*box-shadow: -8px 9px 16px -3px gray;*/
+    box-shadow: 8px 9px 16px -3px gray;
+    background: #171314; 
+    position: relative;
+}
+    .building-background {
+        margin: 2px 2px 0 2px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        /* background-image: url(https://image.ibb.co/e1XKAS/green_background.jpg);
+        background-repeat: no-repeat;
+        background-size: cover; */
+        /*display: flex;*/
+        /*background-color: #bbb;*/
+        background-color: White;
+        z-index: 0;
+        height: 124px;
+        font-family: "DM Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+        .building img {
+            position: relative;
+            top: -20px;
+        }
+
+        /*.building .building-name {
+            border-bottom: 4px solid #a9a9a9;
+            border-left: 2px solid #a9a9a9;
+            border-top: 1px solid #fff;
+            border-right: 1px solid #fff;
+            border-radius: 18px/40px;
+            box-shadow: 
+                0 0 0 2px #171314,
+                0 0 0 5px #26714A,
+                -3px 3px 2px 5px #171314;
+            
+            overflow: hidden;
+
+            background: 
+                linear-gradient( 0deg, rgba(201, 216, 201, .3), rgba(201, 216, 209, .3) ), 
+                url(https://image.ibb.co/jKByZn/tile_bg_1.jpg);     
+            display: flex;
+            margin-top: 0;
+            margin-left: 5px;
+            margin-right: 5px;
+            margin-bottom: 7px;
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        } */
+
+            .building .building-name {
+                margin: -20px 10px 0px 10px;
+                align-self: baseline;
+                font-weight: 400;
+                font-size: 0.7em;
+                text-align: center;
+            }
+
+            .building .points {
+                text-align: center;
+                font-size: 1.1em;
+            }
+
+    .building {
+        
+
+    }
