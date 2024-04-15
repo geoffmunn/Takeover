@@ -3,6 +3,7 @@ import { BuildingService } from './building.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class BuildingsService {
   
   buildings: any[] = []
@@ -43,13 +44,15 @@ export class BuildingsService {
       this.buildings[key].liklihood = liklihood
 
       var moods=Array();
-      moods[1]='will';
-      moods[2]='probably will';
-      moods[3]='might';
-      moods[4]="probably won't";
-      moods[5]='will not';
+      moods[1] = 'will';
+      moods[2] = 'probably will';
+      moods[3] = 'might';
+      moods[4] = "probably won't";
+      moods[5] = 'will not';
 
-      this.buildings[key].mood = moods[liklihood]
+      this.buildings[key].setMood(moods[liklihood])
     }
+
   }
+
 }

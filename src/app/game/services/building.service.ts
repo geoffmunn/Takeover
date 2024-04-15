@@ -1,9 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject } from '@angular/core';
 import { GovtTypesService } from './govt-types.service';
-
-@Injectable({
-  providedIn: 'root'
-})
 
 export class BuildingService {
 
@@ -13,7 +9,7 @@ export class BuildingService {
   public points: number = 0
   public liklihood: number = 0
   public mood: string = ''
-  
+
   constructor(@Inject(String) name:string, @Inject(Number) leaning:number, @Inject(Number) proGovernment: number, @Inject(Number) points: number) {
     this.name = name;
     this.leaning = leaning;
@@ -29,6 +25,15 @@ export class BuildingService {
     let liklihood = Math.floor(score + govtPopularity - userPopularity)
 
     this.liklihood = liklihood
+  }
+
+  setMood(mood:string){
+    this.mood = mood;
+  }
+
+  getMood(){
+    console.log(this.mood)
+    return this.mood;
   }
 
   getDetails(){
