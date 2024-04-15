@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+import { GovtTypesService } from './govt-types.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 'root'
+// })
 
 export class PlayerService {
 
-  //politicalType: string = '';
   politicalType: number = 0;
   position: any
   colour: string = ''
@@ -17,8 +17,16 @@ export class PlayerService {
 
   constructor() {}
 
-  // updatePopularity(){
-  //   govt_popularity=(difficulty-1)/2+1.5+Math.abs(3-govt_type)/2;
-	// 	rebel_popularity=2.5+Math.abs(3-rebel_type)/2;
-  // }
+  getPoliticalType(){
+
+    var result: string = ''
+    var govtTypes = new GovtTypesService().govtTypes
+
+    govtTypes.forEach((value: number, key: string) => {
+      if (value == this.politicalType)
+        result = key
+    });
+
+    return result
+  }
 }

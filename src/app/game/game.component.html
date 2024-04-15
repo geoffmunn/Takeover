@@ -103,7 +103,7 @@
 
 <div *ngIf="showHide['confirmation']" id="confirmation">
     <h3>Confirmation</h3>
-    <p>So, you represent a {{user!.politicalType}} group attempting to overthrow a {{govt!.politicalType}} government headed by President Xerxes.
+    <p>So, you represent a {{user!.getPoliticalType()}} group attempting to overthrow a {{govt!.getPoliticalType()}} government headed by President Xerxes.
 
     <p>Because you are more to the {{user!.position.description}} than the government, your forces will be {{user!.position.colourName}} and the government will be {{govt!.position.colourName}}.</p>
 
