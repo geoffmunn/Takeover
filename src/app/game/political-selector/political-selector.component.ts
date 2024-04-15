@@ -23,4 +23,5 @@ export class PoliticalSelection {
   select($event: MatRadioChange) {
     this.change.emit($event.value);
   }
+
 }
