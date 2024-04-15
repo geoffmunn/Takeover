@@ -9,20 +9,20 @@ import { BuildingsService } from './services/buildings.service';
 import { GovtTypesService } from './services/govt-types.service';
 import { StabilitlyTypesService } from './services/stabilitly-types.service';
 import { GameMapComponent } from './game-map/game-map.component';
+
 @Component({
   selector: 'app-game',
   standalone: true,
   imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent],
   templateUrl: 'game.component.html', 
   styleUrl: 'game.component.css',
-  providers: [PlayerService, GovtTypesService]
+  providers: [BuildingsService]
 })
 
 export class GameComponent {
 
-  public user: PlayerService | undefined;
-  public govt: PlayerService | undefined;
-  public buildings: any
+  public user: PlayerService;
+  public govt: PlayerService;
 
   public showHide = {
     'intro': true,
@@ -52,11 +52,11 @@ export class GameComponent {
   };
 
   registerUserPoliticalSelection(event:string) {
-    this.user!.politicalType = new GovtTypesService().govtTypes.get(event)!
+    this.user.politicalType = new GovtTypesService().govtTypes.get(event)!
     this.checkPoliticalSelections();
   };
   registerGovtPoliticalSelection(event:string) {
-    this.govt!.politicalType = new GovtTypesService().govtTypes.get(event)!;
+    this.govt.politicalType = new GovtTypesService().govtTypes.get(event)!;
     this.checkPoliticalSelections();
   };
 
@@ -80,9 +80,9 @@ export class GameComponent {
     let govtPopularity: number = (this.govt!.stability - 1) / 2 + 1.5 + Math.abs(3 - this.govt!.politicalType) / 2
     let userPopularity: number = 2.5 + Math.abs(3 - this.user!.politicalType) / 2
     
-    this.buildings.calculateLiklihoods(govtPopularity, this.govt?.politicalType, userPopularity, this.user?.politicalType)
+    this.buildings.calculateLiklihoods(govtPopularity, this.govt.politicalType, userPopularity, this.user.politicalType)
+    //this.buildings.calculateLiklihoods(govtPopularity, this.govt?.politicalType, userPopularity, this.user?.politicalType)
     
-    //console.log (this.buildings.buildings)
   };
 
   nextPage(nextDiv:string){
@@ -97,11 +97,11 @@ export class GameComponent {
     }
   };
 
-  constructor() {
+  constructor(public buildings: BuildingsService) {
     this.user = new PlayerService();
     this.govt = new PlayerService();
 
-    this.buildings = new BuildingsService()
+    //this.buildings = service
   };
 }
 
