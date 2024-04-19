@@ -11,10 +11,11 @@ import { StabilitlyTypesService } from './services/stabilitly-types.service';
 import { GameMapComponent } from './game-map/game-map.component';
 import { GameScoreComponent } from './game-score/game-score.component';
 import { GamePopularityComponent } from './game-popularity/game-popularity.component';
+import { GameRemainingMovesComponent } from './game-remaining-moves/game-remaining-moves.component';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent, GameScoreComponent, GamePopularityComponent],
+  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent, GameScoreComponent, GamePopularityComponent, GameRemainingMovesComponent],
   templateUrl: 'game.component.html', 
   styleUrl: 'game.component.css',
   providers: [BuildingsService]
@@ -24,7 +25,8 @@ export class GameComponent {
 
   public user: PlayerService;
   public govt: PlayerService;
-
+  public remainingMoves: number = 0
+  
   public showHide = {
     'intro': true,
     'howToPlay': false,
@@ -99,6 +101,8 @@ export class GameComponent {
   constructor(public buildings: BuildingsService) {
     this.user = new PlayerService();
     this.govt = new PlayerService();
+
+    this.remainingMoves = 5;
 
   };
 }
