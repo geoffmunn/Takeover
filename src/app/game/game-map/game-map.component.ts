@@ -15,7 +15,7 @@ export class GameMapComponent implements AfterViewInit  {
   ngAfterViewInit(): void {
     var buildingDivs = this.el.nativeElement.querySelectorAll('div.building');
 
-    var nums = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+    var nums = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
     randomNums: number[] = [],
     i = nums.length,
     j = 0;
@@ -25,21 +25,23 @@ export class GameMapComponent implements AfterViewInit  {
         randomNums.push(nums[j]);
         nums.splice(j,1);
     }
-    
+
     var count: number = 0
     buildingDivs.forEach((buildingDiv: any) => {
+      // console.log ('count:', count)
+      // console.log (randomNums)
+      // console.log (randomNums[count])
       let randomBuilding = this.buildings.buildings[randomNums[count]]
 
-      console.log (randomBuilding)
-
-      this.renderer.addClass(buildingDiv, 'geoff')
+      //console.log (randomBuilding)
 
       var divBuildingBackground = this.renderer.createElement('div')
       this.renderer.addClass(divBuildingBackground, 'building-background')
 
       var divBuildingImage = this.renderer.createElement('div')
       var buildingImg = this.renderer.createElement('img')
-      this.renderer.setAttribute(buildingImg, 'src', '/assets/militaryhq.png')
+      //this.renderer.setAttribute(buildingImg, 'src', '/assets/militaryhq.png')
+      this.renderer.setAttribute(buildingImg, 'src', '/assets/' + randomBuilding.image)
       this.renderer.setAttribute(buildingImg, 'width', '75')
       this.renderer.addClass(divBuildingImage, 'building-image')
       this.renderer.appendChild(divBuildingImage, buildingImg)
@@ -67,16 +69,6 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.appendChild(buildingDiv, divBuildingBackground)
       
       count += 1
-      
-      //newDiv = this.renderer.createElement()
-      // let div = this.renderer.createElement('div');
-      // let p = this.renderer.createElement('p')
-      // let text = this.renderer.createText('TESTTEST')
-      // this.renderer.appendChild(p, text)
-      // this.renderer.appendChild(div, p)
-
-
-      //this.renderer.appendChild(building, div)
 
     })
     

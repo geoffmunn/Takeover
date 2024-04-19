@@ -9,11 +9,12 @@ import { BuildingsService } from './services/buildings.service';
 import { GovtTypesService } from './services/govt-types.service';
 import { StabilitlyTypesService } from './services/stabilitly-types.service';
 import { GameMapComponent } from './game-map/game-map.component';
-
+import { GameScoreComponent } from './game-score/game-score.component';
+import { GamePopularityComponent } from './game-popularity/game-popularity.component';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent],
+  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent, GameScoreComponent, GamePopularityComponent],
   templateUrl: 'game.component.html', 
   styleUrl: 'game.component.css',
   providers: [BuildingsService]
@@ -74,15 +75,13 @@ export class GameComponent {
     7000 REM ****************
     */
 
-    //console.log (this.govt!.politicalType)
-    //console.log (this.govt!.stability)
-    //console.log (this.user?.politicalType)
     let govtPopularity: number = (this.govt!.stability - 1) / 2 + 1.5 + Math.abs(3 - this.govt!.politicalType) / 2
     let userPopularity: number = 2.5 + Math.abs(3 - this.user!.politicalType) / 2
     
     this.buildings.calculateLiklihoods(govtPopularity, this.govt.politicalType, userPopularity, this.user.politicalType)
-    //this.buildings.calculateLiklihoods(govtPopularity, this.govt?.politicalType, userPopularity, this.user?.politicalType)
-    
+
+    this.user.popularity = userPopularity
+    this.govt.popularity = govtPopularity
   };
 
   nextPage(nextDiv:string){
@@ -101,7 +100,6 @@ export class GameComponent {
     this.user = new PlayerService();
     this.govt = new PlayerService();
 
-    //this.buildings = service
   };
 }
 

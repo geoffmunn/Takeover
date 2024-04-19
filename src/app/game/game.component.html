@@ -126,4 +126,6 @@
 
 <div *ngIf="showHide['game']" id ="game">
     <app-game-map></app-game-map>
+    <app-game-score [userScore]="user.score" [govtScore]="govt.score"></app-game-score>
+    <app-game-popularity [userPopularity]="user.popularity" [govtPopularity]="govt.popularity"></app-game-popularity>
 </div>

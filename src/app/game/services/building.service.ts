@@ -1,5 +1,6 @@
 import { Inject } from '@angular/core';
 import { GovtTypesService } from './govt-types.service';
+import { LowerCasePipe } from '@angular/common';
 
 export class BuildingService {
 
@@ -9,12 +10,14 @@ export class BuildingService {
   public points: number = 0
   public liklihood: number = 0
   public mood: string = ''
+  public image: string = ''
 
   constructor(@Inject(String) name:string, @Inject(Number) leaning:number, @Inject(Number) proGovernment: number, @Inject(Number) points: number) {
     this.name = name;
     this.leaning = leaning;
     this.proGovernment = proGovernment;
     this.points = points
+    this.image = name.toLowerCase().replace(' ', '_') + '.png'
   }
 
   calculateLiklihood(govtType: string, userType: string, govtPopularity: number, userPopularity: number){
@@ -32,7 +35,6 @@ export class BuildingService {
   }
 
   getMood(){
-    console.log(this.mood)
     return this.mood;
   }
 
