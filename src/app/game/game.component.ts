@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { PoliticalSelection } from './political-selector/political-selector.component';
 import { StabilitySelection } from './stability-selector/stability-selector.component';
@@ -38,6 +38,10 @@ export class GameComponent {
     'game': false
   };
 
+  changeValues($event:any){
+    this.remainingMoves -= 1;
+  }
+  
   checkPoliticalSelections(){
 
     let left = new LeftService();

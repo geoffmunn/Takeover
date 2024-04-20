@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, Renderer2} from '@angular/core';
+import { Component, AfterViewInit, ElementRef, Renderer2, Output, EventEmitter} from '@angular/core';
 import { BuildingsService } from '../services/buildings.service';
 
 @Component({
@@ -10,7 +10,29 @@ import { BuildingsService } from '../services/buildings.service';
 })
 export class GameMapComponent implements AfterViewInit  {
 
+  @Output() valueChange = new EventEmitter();
+  counter = 0;
+
   mapBuildings: any
+
+  valueChanged() { // You can give any function name
+
+    this.counter = this.counter + 1;
+    this.valueChange.emit(this.counter);
+  }
+
+  activateBuilding($event: any){
+    console.log($event.target.parentElement.parentElement.parentElement)
+
+    var curEl = $event.target
+
+    while (!curEl.getAttribute('data-building-name'))
+      curEl = curEl.parentElement
+
+    console.log(curEl.getAttribute('data-building-name'))
+    
+    this.valueChanged()
+  }
 
   ngAfterViewInit(): void {
     var buildingDivs = this.el.nativeElement.querySelectorAll('div.building');
@@ -28,19 +50,13 @@ export class GameMapComponent implements AfterViewInit  {
 
     var count: number = 0
     buildingDivs.forEach((buildingDiv: any) => {
-      // console.log ('count:', count)
-      // console.log (randomNums)
-      // console.log (randomNums[count])
       let randomBuilding = this.buildings.buildings[randomNums[count]]
-
-      //console.log (randomBuilding)
 
       var divBuildingBackground = this.renderer.createElement('div')
       this.renderer.addClass(divBuildingBackground, 'building-background')
 
       var divBuildingImage = this.renderer.createElement('div')
       var buildingImg = this.renderer.createElement('img')
-      //this.renderer.setAttribute(buildingImg, 'src', '/assets/militaryhq.png')
       this.renderer.setAttribute(buildingImg, 'src', '/assets/' + randomBuilding.image)
       this.renderer.setAttribute(buildingImg, 'width', '75')
       this.renderer.addClass(divBuildingImage, 'building-image')
@@ -68,6 +84,7 @@ export class GameMapComponent implements AfterViewInit  {
 
       this.renderer.appendChild(buildingDiv, divBuildingBackground)
       
+      this.renderer.setAttribute(buildingDiv, 'data-building-name', randomBuilding.name)
       count += 1
 
     })
@@ -75,9 +92,7 @@ export class GameMapComponent implements AfterViewInit  {
 	}
 
   constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
-    //this.buildings = service
     this.mapBuildings = buildings
-    
     
   }
 }
