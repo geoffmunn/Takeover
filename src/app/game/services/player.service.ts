@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GovtTypesService } from './govt-types.service';
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-
 export class PlayerService {
 
   politicalType: number = 0;
