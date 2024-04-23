@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { PoliticalSelection } from './political-selector/political-selector.component';
 import { StabilitySelection } from './stability-selector/stability-selector.component';
@@ -12,10 +12,12 @@ import { GameMapComponent } from './game-map/game-map.component';
 import { GameScoreComponent } from './game-score/game-score.component';
 import { GamePopularityComponent } from './game-popularity/game-popularity.component';
 import { GameRemainingMovesComponent } from './game-remaining-moves/game-remaining-moves.component';
+import { GameMessageboxComponent } from './game-messagebox/game-messagebox.component';
+
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent, GameScoreComponent, GamePopularityComponent, GameRemainingMovesComponent],
+  imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent, GameScoreComponent, GamePopularityComponent, GameRemainingMovesComponent, GameMessageboxComponent],
   templateUrl: 'game.component.html', 
   styleUrl: 'game.component.css',
   providers: [BuildingsService]
@@ -41,7 +43,7 @@ export class GameComponent {
   changeValues($event:any){
     this.remainingMoves -= 1;
   }
-  
+
   checkPoliticalSelections(){
 
     let left = new LeftService();
@@ -102,11 +104,13 @@ export class GameComponent {
     }
   };
 
-  constructor(public buildings: BuildingsService) {
+  constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
     this.user = new PlayerService();
     this.govt = new PlayerService();
 
     this.remainingMoves = 5;
+
+              
 
   };
 }
