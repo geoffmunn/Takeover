@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { PoliticalSelection } from './political-selector/political-selector.component';
 import { StabilitySelection } from './stability-selector/stability-selector.component';
@@ -13,7 +13,7 @@ import { GameScoreComponent } from './game-score/game-score.component';
 import { GamePopularityComponent } from './game-popularity/game-popularity.component';
 import { GameRemainingMovesComponent } from './game-remaining-moves/game-remaining-moves.component';
 import { GameMessageboxComponent } from './game-messagebox/game-messagebox.component';
-
+import { MessageBoxService } from './services/message-box.service';
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -23,12 +23,13 @@ import { GameMessageboxComponent } from './game-messagebox/game-messagebox.compo
   providers: [BuildingsService]
 })
 
-export class GameComponent {
+export class GameComponent{
 
   public user: PlayerService;
   public govt: PlayerService;
-  public remainingMoves: number = 0
-  
+  public remainingMoves: number = 0;
+  public message:string = 'Geoff waz here';
+
   public showHide = {
     'intro': true,
     'howToPlay': false,
@@ -110,8 +111,10 @@ export class GameComponent {
 
     this.remainingMoves = 5;
 
-              
+    
+    //this.child.callMe('calling from the parent')
+    
+  }
 
-  };
 }
 
