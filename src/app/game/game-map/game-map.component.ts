@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ElementRef, Input, Renderer2, Output, EventEm
 import { BuildingsService } from '../services/buildings.service';
 import { BuildingService } from '../services/building.service';
 import { PlayerService } from '../services/player.service';
+import Typewriter from '@philio/t-writer.js'
 
 @Component({
   selector: 'app-game-map',
@@ -16,6 +17,8 @@ export class GameMapComponent implements AfterViewInit  {
   @Input() govt!: PlayerService
 
   @Output() movesChange = new EventEmitter();
+  @Output() messageChange = new EventEmitter();
+
   counter = 0;
 
   mapBuildings: any
@@ -28,6 +31,8 @@ export class GameMapComponent implements AfterViewInit  {
 
     this.counter = this.counter + 1;
     this.movesChange.emit(this.counter);
+
+    //this.messageChange.emit('You did something!' + Math.random())
   }
 
   calculateMood(x: number, y: number){				
@@ -106,14 +111,14 @@ export class GameMapComponent implements AfterViewInit  {
       decision = 0
     if (decision > 5)
       decision = 5
-    
+
     console.log ('decision:', decision)
 		// if(b<1)
 		// 	b=1;
 		// if(b>5)
 		// 	b=5;
 
-
+    this.messageChange.emit('You clicked on a building!')
     this.updateRemainingMoves()
   }
 
@@ -125,11 +130,12 @@ export class GameMapComponent implements AfterViewInit  {
     var mood = this.calculateMood(parseInt($event.target.getAttribute('data-col')), parseInt($event.target.getAttribute('data-row')))
 
 
+    this.messageChange.emit('You clicked on a street!')
     this.updateRemainingMoves()
 
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     var buildingDivs = this.el.nativeElement.querySelectorAll('div.building');
 
     var nums = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
@@ -177,9 +183,24 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.appendChild(divBuildingPoints, buildingPoints)
       this.renderer.appendChild(divBuildingBackground, divBuildingPoints)
 
+      var intelligence = this.renderer.createElement('p')
+      var intelligenceText = this.renderer.createText('This building probably won\'t join the revolution!')
+      this.renderer.addClass(intelligence, 'buildingIntelligence')
+      this.renderer.appendChild(intelligence, intelligenceText)
+      this.renderer.appendChild(divBuildingBackground, intelligence)
+
+      var activate = this.renderer.createElement('p')
+      var activateText = this.renderer.createText('Activate building')
+      this.renderer.addClass(activate, 'activateBuilding')
+      this.renderer.appendChild(activate, activateText)
+      this.renderer.appendChild(divBuildingBackground, activate)
+
       this.renderer.appendChild(buildingDiv, divBuildingBackground)
       
       this.renderer.setAttribute(buildingDiv, 'data-building-name', randomBuilding.name)
+
+      buildingDiv.addEventListener('mouseenter', this.onMouseOver.bind(this));
+
       count += 1
 
     })
@@ -200,11 +221,30 @@ export class GameMapComponent implements AfterViewInit  {
 			}
 		}
     
-    console.log (this.grid)
+    //console.log (this.grid)
+
+    //this.messageChange.emit('Your turn - start the revolution!')
 	}
+
+  onMouseOver($event: any){
+    const target = $event.target.querySelector('p.buildingIntelligence')
+
+    target!.innerHTML = ''
+
+    const writer = new Typewriter(target, {
+      loop: false,
+      typeColor: 'blue'
+    })
+
+    writer.clearText()
+
+    writer
+      .type('this is a new message')
+      .rest(500)
+      .start()
+  }
 
   constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
     this.mapBuildings = buildings
-    
   }
 }

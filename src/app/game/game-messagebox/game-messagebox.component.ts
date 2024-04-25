@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import Typewriter from '@philio/t-writer.js'
 
-
 @Component({
   selector: 'app-game-messagebox',
   standalone: true,
@@ -11,41 +10,57 @@ import Typewriter from '@philio/t-writer.js'
   `,
   styles: ``
 })
-export class GameMessageboxComponent implements AfterViewInit  {
 
-  @Input() message: string = 'Your turn - start the revolution!'
+export class GameMessageboxComponent implements AfterViewInit {
 
-  ngAfterViewInit(){
+  @Input() 
+    public set message(val: string) {
+      console.log('new message received!')
+      this.typeText(val)
+    }
+
+  typeText(message:string){
     const target = document.querySelector('#messageBox')
+
+    // if (target === undefined){
+    //   console.log('undefined typewriter')
+    // }else {
+
+    //var test = document.querySelector('#messageBox')
+    //test!.innerHTML = ''
+    target!.innerHTML = ''
 
     const writer = new Typewriter(target, {
       loop: false,
       typeColor: 'blue'
     })
-    
+
+    writer.clearText()
+
     writer
-      .type(this.message)
+      .type(message)
       .rest(500)
       .start()
+
   }
-  //export class GameMessageboxComponent {
-  
-  // callMe(value : string) { 
-  //   console.log('Called : ' + value);
-  // }
 
-  // ngAfterViewInit() {
-  // //constructor(){
-  //   const target = document.querySelector('#messageBox')
+  // ngOnChanges(changes:any) {
+  //   // console.log(changes)
+  //   // const target = document.querySelector('#messageBox')
 
-  //   const writer = new Typewriter(target, {
-  //     loop: false,
-  //     typeColor: 'blue'
-  //   })
+  //   // const writer = new Typewriter(target, {
+  //   //   loop: false,
+  //   //   typeColor: 'blue'
+  //   // })
     
-  //   writer
-  //     .type('Your turn - start the revolution!')
-  //     .rest(500)
-  //     .start()
+  //   // writer
+  //   //   .type(this.message)
+  //   //   .rest(500)
+  //   //   .start()
+  //   //this.typeText()
   // }
+  
+  ngAfterViewInit(){
+    this.typeText('Your turn - start the revolution!')
+  }
 }

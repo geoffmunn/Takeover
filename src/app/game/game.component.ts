@@ -13,7 +13,7 @@ import { GameScoreComponent } from './game-score/game-score.component';
 import { GamePopularityComponent } from './game-popularity/game-popularity.component';
 import { GameRemainingMovesComponent } from './game-remaining-moves/game-remaining-moves.component';
 import { GameMessageboxComponent } from './game-messagebox/game-messagebox.component';
-import { MessageBoxService } from './services/message-box.service';
+//import { MessageBoxService } from './services/message-box.service';
 @Component({
   selector: 'app-game',
   standalone: true,
@@ -28,7 +28,7 @@ export class GameComponent{
   public user: PlayerService;
   public govt: PlayerService;
   public remainingMoves: number = 0;
-  public message:string = 'Geoff waz here';
+  public message:string = '';
 
   public showHide = {
     'intro': true,
@@ -43,6 +43,10 @@ export class GameComponent{
 
   changeValues($event:any){
     this.remainingMoves -= 1;
+  }
+
+  changeMessage($event:any){
+    this.message = $event
   }
 
   checkPoliticalSelections(){
@@ -111,7 +115,7 @@ export class GameComponent{
 
     this.remainingMoves = 5;
 
-    
+    //this.changeMessage('Your turn - start the revolution!')
     //this.child.callMe('calling from the parent')
     
   }

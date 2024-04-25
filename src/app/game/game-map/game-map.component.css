@@ -79,3 +79,36 @@ header,
             .building .building-points p {
                 margin: 0px;
             }
+
+        .building .buildingIntelligence {
+            display: none;
+            text-align: left;
+        }
+        .building p.activateBuilding {
+            display: none;
+            text-align: center;
+        }
+
+    .building:hover {
+        transform: scale(2.0);
+        z-index: 999;
+    }
+
+        .building:hover .building-name p {
+            font-size: 0.75em;
+        }
+        
+        .building:hover .building-points p {
+            /*font-size: 0.6em;*/
+            display: none;
+        }
+
+        .building:hover p.buildingIntelligence {
+            display: block;
+            font-size: 0.4em;
+        }
+
+        .building:hover p.activateBuilding {
+            display: block;
+            font-size: 0.5em;
+        }
