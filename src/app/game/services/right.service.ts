@@ -6,5 +6,7 @@ export class RightService {
   colourName:string = 'blue'
   description:string = 'right'
 
+  css:string = 'right'
+  
   constructor() { }
 }

@@ -9,5 +9,7 @@ export class LeftService {
   colourName:string = 'red'
   description:string = 'left'
   
+  css: string = 'left'
+
   constructor() { }
 }
