@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: 'game-remaining-moves.component.html',
   styleUrl: 'game-remaining-moves.component.css',
 })
+
 export class GameRemainingMovesComponent {
   @Input() remainingMoves: number = 0
 }
