@@ -36,7 +36,10 @@ export class BuildingsService {
     for (let key in this.buildings){
       let building: BuildingService = this.buildings[key]
 
+      //console.log(this.buildings[key].name)
       building.calculateLiklihood(userPopularity, userType, govtPopularity, govtType)
+      
+      //this.buildings[key] = building
     }
   }
 

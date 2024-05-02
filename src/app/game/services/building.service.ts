@@ -4,11 +4,13 @@ import { LowerCasePipe } from '@angular/common';
 
 export class BuildingService {
 
+  public grid: object          = {}
   public image: string         = '';  // Static - doesn't change
   public leaning: number       = 0;   // Only used at the starting summary
   public liklihood: number     = 0;   // Constantly changing depending on game progress
   public mood: string          = '';  // A string representation of the liklihood value
   public name: string          = '';  // Static - doesn't change
+  public owner: number         = 0    // Changes depending on the game progress
   public points: number        = 0;   // Static - doesn't change
   public proGovernment: number = 0;   // Only used at the starting summary
 
@@ -16,9 +18,11 @@ export class BuildingService {
     /*
     Create a building object with the basic details
     */
+    this.grid          = {'x': 0, 'y': 0}
     this.image         = name.toLowerCase().replace(' ', '_') + '.png'
     this.leaning       = leaning;
     this.name          = name;
+    this.owner         = 0
     this.points        = points
     this.proGovernment = proGovernment;
     
@@ -44,6 +48,8 @@ export class BuildingService {
     moods[5] = 'will not';
 
     this.mood = moods[liklihood];
+    //console.log('new liklihood:', this.liklihood)
+    //console.log('new mood:',this.mood)
   }
 
   getDetails(){
@@ -55,5 +61,7 @@ export class BuildingService {
     }
   }
 
-
+  setGridCoords(x:number, y:number){
+    this.grid = {'x': x, 'y': y};
+  }
 }
