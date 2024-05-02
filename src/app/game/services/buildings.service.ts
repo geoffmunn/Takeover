@@ -28,31 +28,16 @@ export class BuildingsService {
     ]
   }
 
-  calculateLiklihoods(govtPopularity: number, govtType: number, userPopularity: number, userType: number){
+  updateLiklihoods(userPopularity: number, userType: number, govtPopularity: number, govtType: number){
+    /*
+    A bulk initialiser for the buildings liklihood and mood descriptions
+    */
 
     for (let key in this.buildings){
       let building: BuildingService = this.buildings[key]
 
-      let score = 3 - Math.abs(building.leaning - govtType) + Math.abs(building.leaning - userType) + building.proGovernment
-      let liklihood = Math.floor(score + govtPopularity - userPopularity)
-
-      if (liklihood > 5)
-        liklihood = 5
-      if (liklihood < 1)
-        liklihood = 1
-
-      this.buildings[key].liklihood = liklihood
-
-      var moods=Array();
-      moods[1] = 'will';
-      moods[2] = 'probably will';
-      moods[3] = 'might';
-      moods[4] = "probably won't";
-      moods[5] = 'will not';
-
-      this.buildings[key].setMood(moods[liklihood])
+      building.calculateLiklihood(userPopularity, userType, govtPopularity, govtType)
     }
-
   }
 
 }
