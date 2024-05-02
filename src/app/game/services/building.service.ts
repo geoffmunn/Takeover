@@ -4,62 +4,49 @@ import { LowerCasePipe } from '@angular/common';
 
 export class BuildingService {
 
-  public name: string = ''
-  public leaning: number = 0
-  public proGovernment: number = 0
-  public points: number = 0
-  public liklihood: number = 0
-  public mood: string = ''
-  public image: string = ''
+  public image: string         = '';  // Static - doesn't change
+  public leaning: number       = 0;   // Only used at the starting summary
+  public liklihood: number     = 0;   // Constantly changing depending on game progress
+  public mood: string          = '';  // A string representation of the liklihood value
+  public name: string          = '';  // Static - doesn't change
+  public points: number        = 0;   // Static - doesn't change
+  public proGovernment: number = 0;   // Only used at the starting summary
 
   constructor(@Inject(String) name:string, @Inject(Number) leaning:number, @Inject(Number) proGovernment: number, @Inject(Number) points: number) {
-    this.name = name;
-    this.leaning = leaning;
+    /*
+    Create a building object with the basic details
+    */
+    this.image         = name.toLowerCase().replace(' ', '_') + '.png'
+    this.leaning       = leaning;
+    this.name          = name;
+    this.points        = points
     this.proGovernment = proGovernment;
-    this.points = points
-    this.image = name.toLowerCase().replace(' ', '_') + '.png'
+    
   }
 
-  calculateLiklihood(govtType: string, userType: string, govtPopularity: number, userPopularity: number){
+  calculateLiklihood(userPopularity: number, userType: number, govtPopularity: number, govtType: number){
 
-    let govtTypes:any = new GovtTypesService().govtTypes
-
-    let score = 3 - Math.abs(this.leaning - govtTypes[govtType]) + Math.abs(this.leaning - govtTypes[userType]) + this.proGovernment
+    let score = 3 - Math.abs(this.leaning - govtType) + Math.abs(this.leaning - userType) + this.proGovernment
     let liklihood = Math.floor(score + govtPopularity - userPopularity)
 
+    if (liklihood > 5)
+      liklihood = 5
+    if (liklihood < 1)
+      liklihood = 1
+
     this.liklihood = liklihood
-  }
 
-  setMood(mood:string){
-    this.mood = mood;
-  }
+    var moods = Array();
+    moods[1] = 'will';
+    moods[2] = 'probably will';
+    moods[3] = 'might';
+    moods[4] = "probably won't";
+    moods[5] = 'will not';
 
-  getMood(){
-    return this.mood;
+    this.mood = moods[liklihood];
   }
 
   getDetails(){
-
-    /*
-    var score=3-Math.abs(buildings[i]['leaning']-govt_type)+Math.abs(buildings[i]['leaning']-rebel_type)+buildings[i]['pro-government'];
-    var liklihood=Math.floor(score+govt_popularity-rebel_popularity);
-    if(liklihood>5)
-      liklihood=5;
-    if(liklihood<1)
-      liklihood=1;
-    
-    buildings[i]['loyalty']=liklihood;
-    
-    if(liklihood<=2)
-      moodClass=rebel_colour;
-    else if(liklihood>=4)
-      moodClass=govt_colour;
-    else 
-      moodClass=neutral_colour;
-    */
-    //let govtTypes: string[] = ['Communist', 'Socialist', 'Liberal', 'Rightwing', 'Fascist'];
-    //let govtTypes = new GovtTypesService().govtTypes
-
     return {
       'name': this.name,
       'leaning': this.leaning,
