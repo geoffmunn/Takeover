@@ -125,7 +125,7 @@
 </div>
 
 <div *ngIf="showHide['game']" id ="game">
-    <app-game-map (movesChange)="changeValues($event)" (messageChange)="changeMessage($event)" [user]="user" [govt]="govt"></app-game-map>
+    <app-game-map (movesChange)="changeMoves($event)" (scoreChange)="changeScore($event)" (popularityChange)="changePopularity($event)" (messageChange)="changeMessage($event)" [user]="user" [govt]="govt"></app-game-map>
     <app-game-messagebox [message]="message"></app-game-messagebox>
     <app-game-score [userScore]="user.score" [govtScore]="govt.score"></app-game-score>
     <app-game-popularity [userPopularity]="user.popularity" [govtPopularity]="govt.popularity"></app-game-popularity>
