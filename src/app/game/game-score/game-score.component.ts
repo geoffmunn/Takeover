@@ -10,7 +10,11 @@ import { Component, Input } from '@angular/core';
 
 export class GameScoreComponent {
 
-  @Input() userScore: number = 0
-  @Input() govtScore: number = 0
+  @Input({transform: formatScore}) userScore: number = 0
+  @Input({transform: formatScore}) govtScore: number = 0
 
+}
+
+function formatScore(value: any) {
+  return parseFloat(value.toFixed(2));
 }
