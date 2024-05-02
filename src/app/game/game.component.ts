@@ -101,8 +101,7 @@ export class GameComponent{
     let govtPopularity: number = (this.govt!.stability - 1) / 2 + 1.5 + Math.abs(3 - this.govt!.politicalType) / 2
     let userPopularity: number = 2.5 + Math.abs(3 - this.user!.politicalType) / 2
     
-    //this.buildings.calculateLiklihoods(govtPopularity, this.govt.politicalType, userPopularity, this.user.politicalType)
-    this.buildings.updateLiklihoods(userPopularity, this.user.politicalType, govtPopularity, this.govt.politicalType)
+    this.buildings.initialiseLiklihoods(userPopularity, this.user.politicalType, govtPopularity, this.govt.politicalType)
     this.user.popularity = userPopularity
     this.govt.popularity = govtPopularity
   };
