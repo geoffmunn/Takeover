@@ -17,9 +17,32 @@ header,
 .street {
   width: 50px;
   height: 50px;
+  z-index: 100;
+  position: relative;
 }
+
+    .street:hover {
+        transition-delay: 0ms;
+        transform: scale(1.5);
+        z-index: 600;
+    }
+
     .street.neutral {
         background-color: #ccc;
+    }
+
+        .street.neutral:hover {
+            background-color: Orange;
+        }
+
+    .street.left {
+        border: 1px solid #ce0f09;
+        background-color: #6e100d
+    }
+
+    .street.right {
+        border: 1px solid #1b139c;
+        background-color: #041656
     }
 
 .building {
@@ -34,6 +57,7 @@ header,
     box-shadow: 8px 9px 16px -3px gray;
     background: #171314; 
     position: relative;
+    z-index: 100;
 }
 
     .building.neutral {
@@ -98,13 +122,14 @@ header,
             text-align: left;
         }
 
-        .building p.activateBuilding {
+        .building:hover p.activateBuilding.hide {
             display: none;   
         }
 
     .building:hover {
+        transition-delay: 500ms;
         transform: scale(2.0);
-        z-index: 999;
+        z-index: 500;
     }
 
         /*.building:hover .building-background {
