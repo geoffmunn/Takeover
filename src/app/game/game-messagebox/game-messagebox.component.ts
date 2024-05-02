@@ -15,7 +15,7 @@ export class GameMessageboxComponent implements AfterViewInit {
 
   @Input() 
     public set message(val: string) {
-      console.log('new message received!')
+      //console.log('new message received!')
       this.typeText(val)
     }
 
@@ -35,7 +35,7 @@ export class GameMessageboxComponent implements AfterViewInit {
       typeColor: 'blue'
     })
 
-    writer.clearText()
+    //writer.clearText()
 
     writer
       .type(message)
