@@ -84,11 +84,12 @@ export class GameMapComponent implements AfterViewInit  {
     }
     if (y + 1 < this.grid.length){
       squareMood +=  this.grid[y + 1][x]['owner']
-      if (x - 1 >= 0)
+      if (x - 1 >= 0){
         squareMood += this.grid[y + 1][x - 1]['owner']
-      
-      if (x + 1 < this.grid[y + 1].length)
+      }
+      if (x + 1 < this.grid[y + 1].length){
         squareMood +=  this.grid[y + 1][x + 1]['owner']
+      }
     }
 
     if ((x-1) >= 0){
@@ -104,7 +105,7 @@ export class GameMapComponent implements AfterViewInit  {
 		// b=b+this.grid[(y-1)][(x-1)]['owner'] + this.grid[(y+1)][(x+1)]['owner'] + this.grid[(y-1)][(x+1)]['owner']+ this.grid[(y+1)][(x-1)]['owner'];
 			
 		//return b;
-    console.log ('square mood:', squareMood)
+    //console.log ('square mood:', squareMood)
     
     return squareMood;
 	}
@@ -123,28 +124,12 @@ export class GameMapComponent implements AfterViewInit  {
     var x: number = parseInt(curEl.getAttribute('data-col'))
     var y: number = parseInt(curEl.getAttribute('data-row'))
 
-    console.log (building)
-
-    var mood = this.calculateMood(x, y)
-
-    // b=buildings[building_num]['loyalty']+b/2+govt_popularity-rebel_popularity;
-    // console.log('user popularity:', this.user.popularity, 'govt popularity:', this.govt.popularity)
-    var liklihood = Math.floor(building.liklihood +(mood / 2) + this.govt.popularity - this.user.popularity);
-
-    if (liklihood < 1)
-      liklihood = 1
-    if (liklihood > 5)
-      liklihood = 5
-
-    console.log ('liklihood:', liklihood)
-
-    var comparison = Math.floor(Math.random()*3 + 2) 
-    console.log ('comparison:', comparison)
+    var squareMood: number = this.calculateMood(x, y)
+    var liklihood: number = building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
+    var comparison: number = Math.floor(Math.random()*3 + 2) 
 
     if (liklihood < comparison){
-      console.log ('decides to join!')
       //TODO: the success/failure messages don't show!
-      console.log(this.grid[y][x])
       this.messageChange.emit('The ' + building.name + ' votes to join the revolution!')
 
       this.grid[y][x]['owner'] = this.rebel_ownership;
@@ -156,9 +141,7 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.removeClass(curEl, this.govt.position.css)
       this.renderer.addClass(curEl, this.user.position.css);
 
-    } else if (liklihood > comparison){
-      console.log ('will NOT join!')
-    
+    } else if (liklihood > comparison){    
       this.messageChange.emit('The ' + building.name + ' sides with the Government forces!')
 
       this.grid[y][x]['owner'] = this.govt_ownership;
@@ -169,12 +152,7 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.removeClass(curEl, 'neutral');
       this.renderer.removeClass(curEl, this.user.position.css);
       this.renderer.addClass(curEl, this.govt.position.css);
-      // We will update the score at the end
-
-
     } else {
-      console.log ('wishes to remain neutral')
-     
       this.messageChange.emit('The ' + building.name + ' wishes to be neutral for the moment.')
 
       this.grid[y][x]['owner'] = this.neutral_ownership;
@@ -185,27 +163,28 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.removeClass(curEl, this.govt.position.css)
       this.renderer.removeClass(curEl, this.user.position.css)
       this.renderer.addClass(curEl, 'neutral');
-
     }
 
-    //this.buildings.updateLiklihoods(this.user.popularity, this.user.politicalType, this.govt.popularity, this.govt.politicalType)
+    //Go through each building and update the liklihood
+    for (var index=0; index < this.buildings.buildings.length; index++){
+      let building:BuildingService = this.buildings.buildings[index]
+      var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
+      building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
+    }
+
     this.updateRemainingMoves()
     this.updateScore()
 
-    //console.log(this.buildings.buildings)
   }
 
   activateStreet($event: any){
-    //console.log($event.target)
 
     var curEl = $event.target
 
     var x: number = parseInt($event.target.getAttribute('data-col'))
     var y: number = parseInt($event.target.getAttribute('data-row'))
 
-    //console.log($event.target.getAttribute('data-row'), $event.target.getAttribute('data-col'))
-
-    var mood = this.calculateMood(x, y);
+    var mood: number = this.calculateMood(x, y);
 
     if (mood < 0){
       this.grid[y][x]['owner'] = this.rebel_ownership
@@ -220,23 +199,16 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.removeClass(curEl, this.user.position.css);
       this.renderer.addClass(curEl, this.govt.position.css);
     }
-    //35 B=M5(Y-1,X)+M5(Y+1,X)+M5(Y,X+1)+M5(Y,X-1)   ### this looks at the surrounding squares and adds up the value inside
-    //237 B=B+M5(Y-1,X-1)+M5(Y+1,X+1)+M5(Y-1,X+1)+M5(Y+1,X-1)
-
-    //this.messageChange.emit('You clicked on a street!')
-    //this.buildings.updateLiklihoods(this.user.popularity, this.user.politicalType, this.govt.popularity, this.govt.politicalType)
 
     //Go through each building and update the liklihood
     for (var index=0; index < this.buildings.buildings.length; index++){
-      let building = this.buildings.buildings[index]
-
-
+      let building:BuildingService = this.buildings.buildings[index]
+      var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
+      building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
     }
 
     this.updateRemainingMoves()
     this.updateScore()
-
-    //console.log(this.buildings.buildings)
 
   }
 
@@ -358,7 +330,7 @@ export class GameMapComponent implements AfterViewInit  {
     })
 
     const activate = $event.target.querySelector('p.activateBuilding')
-    console.log(activate)
+    //console.log(activate)
     if (this.grid[y][x]['owner'] == this.rebel_ownership) {
       
       this.renderer.addClass(activate, 'hide')
@@ -379,7 +351,7 @@ export class GameMapComponent implements AfterViewInit  {
   }
 
   onMouseOverStreet($event: any){
-    console.log ('over street!')
+    //console.log ('over street!')
   }
 
   constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
