@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: 'game-score.component.html',
   styleUrl: 'game-score.component.css',
 })
+
 export class GameScoreComponent {
 
   @Input() userScore: number = 0
