@@ -23,7 +23,8 @@ header,
     }
 
 .building {
-    height:130px;
+    height:140px;
+    width: 100px;
     border: 1px solid Blue;
     margin: 0 auto;
     margin-top: 56px;
@@ -34,20 +35,31 @@ header,
     background: #171314; 
     position: relative;
 }
+
+    .building.neutral {
+        border: 1px solid gray;
+        background-color: gray
+    }
+
+    .building.left {
+        border: 1px solid #ce0f09;
+        background-color: #6e100d
+    }
+
+    .building.right {
+        border: 1px solid #1b139c;
+        background-color: #041656
+    }
+
     .building-background {
         margin: 2px 2px 0 2px;
         border-top-left-radius: 20px;
         border-top-right-radius: 20px;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
-        /* background-image: url(https://image.ibb.co/e1XKAS/green_background.jpg);
-        background-repeat: no-repeat;
-        background-size: cover; */
-        /*display: flex;*/
-        /*background-color: #bbb;*/
         background-color: White;
         z-index: 0;
-        height: 124px;
+        height: 134px;
         font-family: "DM Sans", sans-serif;
         font-optical-sizing: auto;
         font-weight: 400;
@@ -56,15 +68,16 @@ header,
 
         .building img {
             position: relative;
-            top: -20px;
+            top: -30px;
         }
 
         .building .building-name {
-            margin: -25px 10px 5px 10px;
+            margin: -35px 10px 5px 10px;
             align-self: baseline;
             font-weight: 400;
             font-size: 0.7em;
             text-align: center;
+            min-height: 2.5em;
         }
 
         .building .building-name p {
@@ -79,20 +92,28 @@ header,
             .building .building-points p {
                 margin: 0px;
             }
-
+            
         .building .buildingIntelligence {
             display: none;
             text-align: left;
         }
+
         .building p.activateBuilding {
-            display: none;
-            text-align: center;
+            display: none;   
         }
 
     .building:hover {
         transform: scale(2.0);
         z-index: 999;
     }
+
+        /*.building:hover .building-background {
+            position: absolute;
+        }*/
+
+        .building:hover .building-name {
+            display: none;
+        }
 
         .building:hover .building-name p {
             font-size: 0.75em;
@@ -106,9 +127,21 @@ header,
         .building:hover p.buildingIntelligence {
             display: block;
             font-size: 0.4em;
+            margin: -25px 1em 5px 1em;
         }
 
         .building:hover p.activateBuilding {
             display: block;
+            font-size: 0.4em;
+            text-align: center;
             font-size: 0.5em;
+            padding: 1em 0em;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 70px;
+            border-bottom-right-radius: 70px;
+            background-color: green;
+            position: absolute;
+            top: 92px;
+            width: 75px;
         }
