@@ -39,21 +39,14 @@ export class BuildingsService {
       let score = 3 - Math.abs(building.leaning - govtType) + Math.abs(building.leaning - userType) + building.proGovernment
       let liklihood = Math.floor(score + govtPopularity - userPopularity)
 
-      if (liklihood > 5)
-        liklihood = 5
       if (liklihood < 1)
         liklihood = 1
-
+      if (liklihood > 5)
+        liklihood = 5
+      
+      // NOTE: this is the ONLY place that this value will be set
       building.liklihood = liklihood
-
-      var moods = Array();
-      moods[1] = 'will';
-      moods[2] = 'probably will';
-      moods[3] = 'might';
-      moods[4] = "probably won't";
-      moods[5] = 'will not';
-
-      building.mood = moods[liklihood];
+      building.mood = building.getMoodFromLiklihood(liklihood)
     }
   }
 
