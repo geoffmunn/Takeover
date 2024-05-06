@@ -126,15 +126,23 @@ header,
             display: none;   
         }
 
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
     .building:hover {
-        transition-delay: 500ms;
+        /*transition-delay: 500ms;*/
         transform: scale(2.0);
         z-index: 500;
     }
-
-        /*.building:hover .building-background {
-            position: absolute;
-        }*/
 
         .building:hover .building-name {
             display: none;
@@ -170,3 +178,10 @@ header,
             top: 92px;
             width: 75px;
         }
+
+    .building.inProgress {
+        animation: pulse 2s infinite;
+        animation-iteration-count: 5;
+        /*transform: scale(2.0);
+        z-index: 500;*/
+    }

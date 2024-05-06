@@ -6,8 +6,6 @@ import { GameComponent } from './game/game.component';
   standalone: true,
   imports: [RouterOutlet, GameComponent],
   template: `
-    <h1>Welcome to {{title}}!</h1>
-
     <router-outlet />
     <app-game></app-game>
   `,

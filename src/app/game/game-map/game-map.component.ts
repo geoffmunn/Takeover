@@ -121,6 +121,9 @@ export class GameMapComponent implements AfterViewInit  {
     
     var building:BuildingService = this.grid[curEl.getAttribute('data-row')][curEl.getAttribute('data-col')]['building']
     
+    // Animate this building while we type text
+    this.renderer.addClass(curEl, 'inProgress');
+
     var x: number = parseInt(curEl.getAttribute('data-col'))
     var y: number = parseInt(curEl.getAttribute('data-row'))
 
@@ -130,16 +133,38 @@ export class GameMapComponent implements AfterViewInit  {
 
     if (liklihood < comparison){
       //TODO: the success/failure messages don't show!
-      this.messageChange.emit('The ' + building.name + ' votes to join the revolution!')
+      
+      //this.messageChange.emit('The ' + building.name + ' votes to join the revolution!')
 
-      this.grid[y][x]['owner'] = this.rebel_ownership;
-      building.owner = this.rebel_ownership
+      const target = curEl.querySelector('p.buildingIntelligence')
 
-      this.updatePopularity(0.125, -0.125)
+      console.log (target)
+      target!.innerHTML = ''
 
-      this.renderer.removeClass(curEl, 'neutral')
-      this.renderer.removeClass(curEl, this.govt.position.css)
-      this.renderer.addClass(curEl, this.user.position.css);
+      const writer = new Typewriter(target, {
+        loop: false
+      })
+
+      writer
+        .type('The ' + building.name + ' votes to join the revolution!')
+        .start()
+        
+      
+      setTimeout(() => {
+
+        //this.messageChange.emit('The ' + building.name + ' votes to join the revolution!')
+
+        this.grid[y][x]['owner'] = this.rebel_ownership;
+        building.owner = this.rebel_ownership
+
+        this.updatePopularity(0.125, -0.125)
+        
+        this.renderer.removeClass(curEl, 'neutral')
+        this.renderer.removeClass(curEl, this.govt.position.css)
+        this.renderer.addClass(curEl, this.user.position.css);
+
+        this.renderer.removeClass(curEl, 'inProgress');
+      },5000);
 
     } else if (liklihood > comparison){    
       this.messageChange.emit('The ' + building.name + ' sides with the Government forces!')
@@ -235,7 +260,7 @@ export class GameMapComponent implements AfterViewInit  {
 
       var divBuildingImage = this.renderer.createElement('div')
       var buildingImg = this.renderer.createElement('img')
-      this.renderer.setAttribute(buildingImg, 'src', '/assets/' + randomBuilding.image)
+      this.renderer.setAttribute(buildingImg, 'src', '/assets/buildings/' + randomBuilding.image)
       this.renderer.setAttribute(buildingImg, 'width', '100')
       this.renderer.addClass(divBuildingImage, 'building-image')
       this.renderer.appendChild(divBuildingImage, buildingImg)
@@ -313,13 +338,11 @@ export class GameMapComponent implements AfterViewInit  {
 	}
 
   onMouseOverBuilding($event: any){
-    //console.log ($event)
 
     var x:number = parseInt($event.target.getAttribute('data-col'))
     var y:number = parseInt($event.target.getAttribute('data-row'))
 
     var building:BuildingService = this.grid[y][x]['building']
-    //console.log(building)
 
     const target = $event.target.querySelector('p.buildingIntelligence')
 
@@ -330,7 +353,6 @@ export class GameMapComponent implements AfterViewInit  {
     })
 
     const activate = $event.target.querySelector('p.activateBuilding')
-    //console.log(activate)
     if (this.grid[y][x]['owner'] == this.rebel_ownership) {
       
       this.renderer.addClass(activate, 'hide')

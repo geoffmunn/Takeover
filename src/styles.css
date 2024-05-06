@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+	font-family: "Comics";
+	src: url('/assets/fonts/FtySkradjhuwnNcv1-6dmo.ttf');
+}
+
+@font-face {
+	font-family: "Comics Bold";
+	src: url('/assets/fonts/FtySkradjhuwnNcv3-9WLZ.ttf');
+}
+
+body {
+    background-color: #071329
+}
+
+    div#logo {
+        text-align: center;
+    }

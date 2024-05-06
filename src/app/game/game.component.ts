@@ -13,13 +13,13 @@ import { GameScoreComponent } from './game-score/game-score.component';
 import { GamePopularityComponent } from './game-popularity/game-popularity.component';
 import { GameRemainingMovesComponent } from './game-remaining-moves/game-remaining-moves.component';
 import { GameMessageboxComponent } from './game-messagebox/game-messagebox.component';
-//import { MessageBoxService } from './services/message-box.service';
+
 @Component({
   selector: 'app-game',
   standalone: true,
   imports: [NgIf, NgFor, PoliticalSelection, StabilitySelection, GameMapComponent, GameScoreComponent, GamePopularityComponent, GameRemainingMovesComponent, GameMessageboxComponent],
   templateUrl: 'game.component.html', 
-  styleUrl: 'game.component.css',
+  styleUrl: './game.component.css',
   providers: [BuildingsService]
 })
 
