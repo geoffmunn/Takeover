@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 // })
 export class LeftService {
 
-  colour:string = '#ff0000'
+  colour:string = '#ce0f09'
   colourName:string = 'red'
   description:string = 'left'
   

@@ -187,13 +187,16 @@
 </div>
 
 <div *ngIf="showHide['confirmation']" id="confirmation" class="explainer">
-    <h3>Confirmation</h3>
-    <p>So, you represent a {{user!.getPoliticalType()}} group attempting to overthrow a {{govt!.getPoliticalType()}} government headed by President Xerxes.
+    <div class="panel title">
+        <h3>Confirmation</h3>
+    </div>
+    <div class="panel top">
+        <p>So, you represent a {{user!.getPoliticalType()}} group attempting to overthrow a {{govt!.getPoliticalType()}} government headed by President Xerxes.</p>
 
-    <p>Because you are more to the {{user!.position.description}} than the government, your forces will be {{user!.position.colourName}} and the government will be {{govt!.position.colourName}}.</p>
+        <p>Because you are more to the {{user!.position.description}} than the government, your forces will be <span style="color:{{user.position.colour}};">{{user.position.colourName}}</span> and the government will be <span style="color:{{govt.position.colour}};">{{govt.position.colourName}}</span>.</p>
 
-    <p>Is this correct?</p>
-
+        <p style="margin-bottom: 1em;">Is this correct?</p>
+    </div>
     <div class="buttonContainer">
         <button (click)="nextPage('pickASide')" class="back">No</button>  
         <button (click)="nextPage('summary')" class="next">Yes</button>
@@ -202,16 +205,19 @@
 </div>
 
 <div *ngIf="showHide['summary']" id="summary" class="explainer">
-    <h3>The targets</h3>
-    <p>At the start of the game, will any of the following buildings join the rebels?</p>
-    <p>(Make a note of the likely targets!)</p>
+    <div class="panel title">
+        <h3>The targets</h3>
+    </div>
+    <div class="panel top">
+        <p>At the start of the game, will any of the following buildings join the rebels?</p>
+        <p><strong>(Make a note of the likely targets!)</strong></p>
 
-    <ul>
-        <li *ngFor="let building of buildings.buildings">The {{building.name}} {{building.mood}}</li>
-    </ul>
-
+        <ul>
+            <li *ngFor="let building of buildings.buildings">The {{building.name}} <strong>{{building.mood}}</strong></li>
+        </ul>
+    </div>
     <div class="buttonContainer">
-        <button (click)="nextPage('game')" class="start" >Start</button>
+        <button (click)="nextPage('game')" class="next" >Start</button>
         <br />
     </div>
 </div>

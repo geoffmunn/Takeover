@@ -97,6 +97,14 @@ div.explainer {
             display: block;
         }
 
+        div.panel ul {
+            margin-left: 1em;
+        }
+
+            div.panel ul li {
+                margin-bottom: 0.5em;
+            }
+            
         div.explainer br {
             clear: both;
         }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 export class RightService {
 
-  colour:string = '#0000ff'
+  colour:string = '#1b139c'
   colourName:string = 'blue'
   description:string = 'right'
 
