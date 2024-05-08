@@ -138,15 +138,19 @@
 </div>
 
 <div *ngIf="showHide['scenarios']" id="scenarios" class="explainer">
-    <h3>Scenarios</h3>
-    <p>Each game will be a different scenario.</p>
+    <div class="panel title">
+        <h3>Scenarios</h3>
+    </div>
+    <div class="panel top">
+        <p>Each game will be a different scenario.</p>
 
-    <p>Not only will the city map be changed, you can choose whether you wish to be left or right wing. Remember that allegiances of each building will be different.</p>
+        <p>Not only will the city map be changed, you can choose whether you wish to be left or right wing. Remember that allegiances of each building will be different.</p>
 
-    <p>It all depends on your political colour as well as the Government's politics and strength.</p>
-
-    <p>Watch out. The Government will play a mean game! No one likes to suffer a Takeover.....</p>
-
+        <p style="margin-bottom: 1em">It all depends on your political colour as well as the Government's politics and strength.</p>
+    </div>
+    <div class="panel bottom">
+        <p>Watch out. The Government will play a mean game! <strong>No one likes to suffer a Takeover.....</strong></p>
+    </div>
     <div class="buttonContainer">
         <button (click)="nextPage('theMap')" class="back">Back</button>  
         <button (click)="nextPage('pickASide')" class="next">Next</button>
@@ -155,14 +159,25 @@
 </div>
 
 <div *ngIf="showHide['pickASide']" id="pickASide" class="explainer">
-    <h3>Pick your side</h3>
-    <p>So first of all, define the scenario...</p>
+    <div class="panel title">
+        <h3>Pick your side</h3>
+    </div>
+    <div class="panel top">
+        <p>So first of all, define the scenario...</p>
 
-    <political-selector [title]="'And what sort of rebel group do you represent?'" (change)="registerUserPoliticalSelection($event)"></political-selector>
+        <political-selector [title]="'what sort of rebel group do you represent?'" [group]="'rebelsType'" (click)="registerUserPoliticalSelection($event)"></political-selector>
 
-    <political-selector [title]="'What sort of government are you trying to overthrow?'" (change)="registerGovtPoliticalSelection($event)"></political-selector>
+        <br />
+    </div>
+    <div class="panel top">
+        <political-selector [title]="'What sort of government are you trying to overthrow?'" [group]="'govtType'" (click)="registerGovtPoliticalSelection($event)"></political-selector>
 
-    <stability-selector [title]="'Is President Xerxes\' government:'" (change)="registerGovtStabilitySelection($event)"></stability-selector>
+        <br />
+    </div>
+
+    <div class="panel top">
+        <stability-selector [title]="'Is President Xerxes\' government:'" [group]="'govtStability'" (change)="registerGovtStabilitySelection($event)"></stability-selector>
+    </div>
 
     <div class="buttonContainer">
         <button (click)="nextPage('scenarios')" class="back">Back</button>  

@@ -1,9 +1,14 @@
-<label class="political-selector-options">{{title}}</label>
-<mat-radio-group
-  aria-labelledby="political-side"
-  class="political-radio-group"
-  [(ngModel)]="politicalSelection">
-  @for (govtType of govtTypes; track govtType) {
-    <mat-radio-button class="political-selector-radio-button" [value]="govtType" (change)="select($event)">{{govtType}}</mat-radio-button>
-  }
-</mat-radio-group>
+
+<p><strong>{{title}}</strong></p>
+
+<div class="radioOptionsContainer">
+@for (govtType of govtTypes; track govtType) {
+  <div class="radioOption">
+    <label><input type="radio" class="political-selector-radio-button" name="{{group}}" [value]="govtType" (change)="selectGovtType($event)">{{govtType}}</label>
+  </div>
+}
+</div>
+
+<div class="posterContainer {{group}}">
+  <img src="/assets/posters/communist_poster.png" width="250" height="250" class="politicalPoster" />
+</div>

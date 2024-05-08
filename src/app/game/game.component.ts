@@ -41,6 +41,8 @@ export class GameComponent{
     'game': false
   };
 
+  selectedType: string = ''
+
   changeMoves($event:any){
     this.remainingMoves -= 1;
   }
@@ -64,28 +66,32 @@ export class GameComponent{
     let left = new LeftService();
     let right = new RightService();
 
-    if (this.govt!.politicalType != 0){
-      if (this.user!.politicalType <= this.govt!.politicalType){
-        this.user!.position = left;
-        this.govt!.position = right;
+    if (this.govt.politicalType != 0){
+      if (this.user.politicalType <= this.govt.politicalType){
+        this.user.position = left;
+        this.govt.position = right;
       } else {
-        this.user!.position = right;
-        this.govt!.position = left;
+        this.user.position = right;
+        this.govt.position = left;
       };
     };
   };
 
-  registerUserPoliticalSelection(event:string) {
-    this.user.politicalType = new GovtTypesService().govtTypes.get(event)!
-    this.checkPoliticalSelections();
-  };
-  registerGovtPoliticalSelection(event:string) {
-    this.govt.politicalType = new GovtTypesService().govtTypes.get(event)!;
+  registerUserPoliticalSelection(event:any) {
+    console.log('the selected type is:', event.target.value)
+    this.user.politicalType = new GovtTypesService().govtTypes.get(event.target.value)!
+    console.log('registered user type:', this.user.politicalType)
     this.checkPoliticalSelections();
   };
 
-  registerGovtStabilitySelection(event:string) {
-    this.govt!.stability = new StabilitlyTypesService().stabilityTypes.get(event)!;
+  registerGovtPoliticalSelection(event:any) {
+    this.govt.politicalType = new GovtTypesService().govtTypes.get(event.target.value)!;
+    this.checkPoliticalSelections();
+  };
+
+  registerGovtStabilitySelection(event:any) {
+    console.log (event)
+    this.govt!.stability = new StabilitlyTypesService().stabilityTypes.get(event.target.value)!;
 
     /*
     ##### A = difficulty

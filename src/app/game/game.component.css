@@ -67,6 +67,10 @@ div.explainer {
                 margin-bottom: 1em;
             }
 
+                div.panel p strong {
+                    font-weight: 900;
+                }
+
         div.panel div.revolutionary {
             float: right;
         }
