@@ -165,12 +165,12 @@
     <div class="panel top">
         <p>So first of all, define the scenario...</p>
 
-        <political-selector [title]="'what sort of rebel group do you represent?'" [group]="'rebelsType'" (click)="registerUserPoliticalSelection($event)"></political-selector>
+        <political-selector [title]="'what sort of rebel group do you represent?'" [group]="'rebelsType'" (change)="registerUserPoliticalSelection($event)"></political-selector>
 
         <br />
     </div>
     <div class="panel top">
-        <political-selector [title]="'What sort of government are you trying to overthrow?'" [group]="'govtType'" (click)="registerGovtPoliticalSelection($event)"></political-selector>
+        <political-selector [title]="'What sort of government are you trying to overthrow?'" [group]="'govtType'" (change)="registerGovtPoliticalSelection($event)"></political-selector>
 
         <br />
     </div>

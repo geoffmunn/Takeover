@@ -19,7 +19,9 @@ export class StabilitySelection {
 
   @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
-  select($event: any) {
-    this.change.emit($event);
+  selectStability($event: any) {
+    console.log('selected stability:', $event.target.value)
+    
+    this.change.emit($event.target.value)
   }
 }

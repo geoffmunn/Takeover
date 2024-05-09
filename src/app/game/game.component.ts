@@ -66,6 +66,9 @@ export class GameComponent{
     let left = new LeftService();
     let right = new RightService();
 
+    console.log ('user:', this.user)
+    console.log ('govt:', this.govt)
+
     if (this.govt.politicalType != 0){
       if (this.user.politicalType <= this.govt.politicalType){
         this.user.position = left;
@@ -77,39 +80,53 @@ export class GameComponent{
     };
   };
 
-  registerUserPoliticalSelection(event:any) {
-    console.log('the selected type is:', event.target.value)
-    this.user.politicalType = new GovtTypesService().govtTypes.get(event.target.value)!
-    console.log('registered user type:', this.user.politicalType)
-    this.checkPoliticalSelections();
+  registerUserPoliticalSelection($event:any) {
+    console.log('received political selection for user:', $event)
+    var politicalSelection: number = new GovtTypesService().govtTypes.get($event)!;
+    console.log('resolved:', politicalSelection)
+    if (politicalSelection > 0){
+      console.log('the selected type is:', politicalSelection);
+      this.user.politicalType = politicalSelection;
+      this.checkPoliticalSelections();
+    }
   };
 
-  registerGovtPoliticalSelection(event:any) {
-    this.govt.politicalType = new GovtTypesService().govtTypes.get(event.target.value)!;
-    this.checkPoliticalSelections();
+  registerGovtPoliticalSelection($event:any) {
+    console.log('received political selection for govt:', $event)
+    var politicalSelection: number = new GovtTypesService().govtTypes.get($event)!;
+    console.log('resolved:', politicalSelection)
+    if (politicalSelection > 0){
+      console.log ('user selection is valid!')
+      this.govt.politicalType = politicalSelection
+      this.checkPoliticalSelections();
+    }
   };
 
-  registerGovtStabilitySelection(event:any) {
-    console.log (event)
-    this.govt!.stability = new StabilitlyTypesService().stabilityTypes.get(event.target.value)!;
+  registerGovtStabilitySelection($event:any) {
+    console.log ('received by game component:', $event)
+    var stabilitySelection:number = new StabilitlyTypesService().stabilityTypes.get($event)!;
+    console.log('resolved:', stabilitySelection)
+    if (stabilitySelection > 0){
+      this.govt.stability = stabilitySelection;
+      /*
+      ##### A = difficulty
+      ##### G1 = the government type
+      ##### P1 = the player type 
+      6785 IFA<1ORA>5THEN6780
+      6790 G2=(A-1)/2+1.5+ABS(3-G1)/2
+      6795 P2=2.5+ABS(3-P1)/2:PRINT"ì"
+      6900 RETURN
+      7000 REM ****************
+      */
 
-    /*
-    ##### A = difficulty
-    ##### G1 = the government type
-    ##### P1 = the player type 
-    6785 IFA<1ORA>5THEN6780
-    6790 G2=(A-1)/2+1.5+ABS(3-G1)/2
-    6795 P2=2.5+ABS(3-P1)/2:PRINT"ì"
-    6900 RETURN
-    7000 REM ****************
-    */
-
-    let govtPopularity: number = (this.govt!.stability - 1) / 2 + 1.5 + Math.abs(3 - this.govt!.politicalType) / 2
-    let userPopularity: number = 2.5 + Math.abs(3 - this.user!.politicalType) / 2
-    
-    this.buildings.initialiseLiklihoods(userPopularity, this.user.politicalType, govtPopularity, this.govt.politicalType)
-    this.user.popularity = userPopularity
-    this.govt.popularity = govtPopularity
+      let govtPopularity: number = (this.govt!.stability - 1) / 2 + 1.5 + Math.abs(3 - this.govt!.politicalType) / 2
+      let userPopularity: number = 2.5 + Math.abs(3 - this.user!.politicalType) / 2
+      
+      this.buildings.initialiseLiklihoods(userPopularity, this.user.politicalType, govtPopularity, this.govt.politicalType)
+      this.user.popularity = userPopularity
+      this.govt.popularity = govtPopularity
+      console.log ('popularity calculated!')
+    }
   };
 
   nextPage(nextDiv:string){
@@ -132,6 +149,10 @@ export class GameComponent{
 
     //this.changeMessage('Your turn - start the revolution!')
     //this.child.callMe('calling from the parent')
+
+    // var radioButtons = this.el.nativeElement.querySelector('input.political-selector-radio-button');
+    // console.log (radioButtons)
+    // console.log (radioButtons[0])
     
   }
 

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {AfterViewInit, Component, Input, Output, EventEmitter, ElementRef, Renderer2} from '@angular/core';
 
 @Component({
   selector: 'political-selector',
@@ -8,7 +8,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
   imports: [],
 })
 
-export class PoliticalSelection {
+export class PoliticalSelection implements AfterViewInit {
   //politicalSelection!: string;
   govtTypes: string[] = ['Communist', 'Socialist', 'Liberal', 'Rightwing', 'Fascist'];
 
@@ -16,14 +16,36 @@ export class PoliticalSelection {
 
   @Input() group: string = ''
 
-  @Output() change: EventEmitter<Event> = new EventEmitter<Event>();
+  @Output() change: EventEmitter<string> = new EventEmitter<string>();
 
   selectGovtType($event: any) {
-    this.change.emit($event);
+
+    console.log('user has selected:', $event.target.value)
+
+    this.change.emit($event.target.value);
 
     // Change the image
     var img = $event.target.parentElement.parentElement.parentElement.parentElement.querySelector('img.politicalPoster');
     img.setAttribute('src', '/assets/posters/' + $event.target.value.toLowerCase() + '_poster.png')
   }
 
+  ngAfterViewInit(){
+
+    //console.log(this.group)
+
+    // if (this.group == 'rebelsType'){
+    //   var firstRebel = this.el.nativeElement.querySelector("input.political-selector-radio-button[value='Communist']");
+    //   console.log (firstRebel)
+    //   firstRebel.checked = true
+    // }
+
+    // if (this.group == 'govtType'){
+    //   var lastGovt = this.el.nativeElement.querySelector("input.political-selector-radio-button[value='Fascist']");
+    //   console.log (lastGovt)
+    //   lastGovt.checked = true
+    // }
+  }
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+  }
 }

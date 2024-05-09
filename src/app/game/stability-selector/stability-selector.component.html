@@ -13,7 +13,7 @@
 <div class="radioOptionsContainer">
 @for (govtStability of govtStabilities; track govtStability) {
   <div class="radioOption">
-    <label><input type="radio" class="stability-selector-radio-button" name="{{group}}" [value]="govtStability" (change)="select($event)">{{govtStability}}</label>
+    <label><input type="radio" class="stability-selector-radio-button" name="{{group}}" [value]="govtStability" (change)="selectStability($event)">{{govtStability}}</label>
   </div>
 }
 </div>
