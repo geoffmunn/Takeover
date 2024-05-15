@@ -63,6 +63,7 @@ export class GameMapComponent implements AfterViewInit  {
         this.govt.score += building.points
     }
 
+    console.log('new user score:', this.user.score)
     this.scoreChange.emit({'user': this.user.score, 'govt': this.govt.score})
   }
 
@@ -138,7 +139,7 @@ export class GameMapComponent implements AfterViewInit  {
 
       const target = curEl.querySelector('p.buildingIntelligence')
 
-      console.log (target)
+      //console.log (target)
       target!.innerHTML = ''
 
       const writer = new Typewriter(target, {
@@ -164,7 +165,10 @@ export class GameMapComponent implements AfterViewInit  {
         this.renderer.addClass(curEl, this.user.position.css);
 
         this.renderer.removeClass(curEl, 'inProgress');
-      },5000);
+
+        this.updateRemainingMoves()
+        this.updateScore()
+      }, 5000);
 
     } else if (liklihood > comparison){    
       this.messageChange.emit('The ' + building.name + ' sides with the Government forces!')
@@ -197,8 +201,8 @@ export class GameMapComponent implements AfterViewInit  {
       building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
     }
 
-    this.updateRemainingMoves()
-    this.updateScore()
+    //this.updateRemainingMoves()
+    //this.updateScore()
 
   }
 
@@ -294,6 +298,7 @@ export class GameMapComponent implements AfterViewInit  {
       var activate = this.renderer.createElement('p')
       var activateText = this.renderer.createText('Activate building')
       this.renderer.addClass(activate, 'activateBuilding')
+      this.renderer.addClass(activate, 'hide')
       this.renderer.appendChild(activate, activateText)
       this.renderer.appendChild(divBuildingBackground, activate)
 

@@ -1,187 +1,447 @@
-section {
-  display: table;
-  border-collapse:separate;
-  /*border-spacing:5px;*/
-}
 
-header,
-.line-break,
-.row {
-  display: table-row;
-}
 
-.cell {
-  display: table-cell;
-}
-
-.street {
-  width: 50px;
-  height: 50px;
-  z-index: 100;
-  position: relative;
-}
-
-    .street:hover {
-        transition-delay: 0ms;
-        transform: scale(1.5);
-        z-index: 600;
-    }
-
-    .street.neutral {
-        background-color: #ccc;
-    }
-
-        .street.neutral:hover {
-            background-color: Orange;
-        }
-
-    .street.left {
-        border: 1px solid #ce0f09;
-        background-color: #6e100d
-    }
-
-    .street.right {
-        border: 1px solid #1b139c;
-        background-color: #041656
-    }
-
-.building {
-    height:140px;
-    width: 100px;
-    border: 1px solid Blue;
-    margin: 0 auto;
-    margin-top: 56px;
-    border-radius: 25px;
-    box-sizing: border-box;
-    /*box-shadow: -8px 9px 16px -3px gray;*/
-    box-shadow: 8px 9px 16px -3px gray;
-    background: #171314; 
-    position: relative;
-    z-index: 100;
-}
-
-    .building.neutral {
-        border: 1px solid gray;
-        background-color: gray
-    }
-
-    .building.left {
-        border: 1px solid #ce0f09;
-        background-color: #6e100d
-    }
-
-    .building.right {
-        border: 1px solid #1b139c;
-        background-color: #041656
-    }
-
-    .building-background {
-        margin: 2px 2px 0 2px;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
+    section#map {
+        float: left;
+        display: table;
+        border-collapse:separate;
         background-color: White;
-        z-index: 0;
-        height: 134px;
-        font-family: "DM Sans", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
+        border: 1px solid Black;
     }
 
-        .building img {
-            position: relative;
-            top: -30px;
+    header, .row {
+        display: table-row;
+    }
+
+    div#roadsContainer {
+        width: 100%;
+        height: 100%;
+    }
+
+        div#roadsBackground {
+            position: absolute;
+            z-index: 0;
         }
 
-        .building .building-name {
-            margin: -35px 10px 5px 10px;
-            align-self: baseline;
-            font-weight: 400;
-            font-size: 0.7em;
-            text-align: center;
-            min-height: 2.5em;
+    .cell {
+        display: table-cell;
+    }
+
+    .street {
+        width: 50px;
+        height: 50px;
+        z-index: 100;
+        position: relative;
+    }
+
+        .street:hover {
+            transition-delay: 0ms;
+            transform: scale(1.5);
+            z-index: 600;
         }
 
-        .building .building-name p {
-            margin: 0px;
+        .street.neutral {
+            /*background-color: #ccc;*/
         }
 
-        .building .building-points {
-            text-align: center;
-            font-size: 1.1em;
-        }
-
-            .building .building-points p {
-                margin: 0px;
+            .street.neutral:hover {
+                background-color: #ccc;
             }
-            
-        .building .buildingIntelligence {
-            display: none;
-            text-align: left;
+
+        .street.left {
+            /*border: 1px solid #ce0f09;*/
+            background-color: #6e100d
         }
 
-        .building:hover p.activateBuilding.hide {
-            display: none;   
+        .street.right {
+            /*border: 1px solid #1b139c;*/
+            background-color: #041656
         }
 
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
+        .street.road0_0 {
+            background: url('/assets/map/road0_0.png') top left no-repeat;
         }
-        50% {
-            transform: scale(1.1);
+
+        .street.road0_1 {
+            background: url('/assets/map/road0_1.png') top left no-repeat;
         }
-        100% {
-            transform: scale(1);
+
+        .street.road0_2 {
+            background: url('/assets/map/road0_2.png') top left no-repeat;
         }
+
+        .street.road0_3 {
+            background: url('/assets/map/road0_3.png') top left no-repeat;
+        }
+
+        .street.road0_4 {
+            background: url('/assets/map/road0_4.png') top left no-repeat;
+        }
+
+        .street.road0_5 {
+            background: url('/assets/map/road0_5.png') top left no-repeat;
+        }
+
+        .street.road0_6 {
+            background: url('/assets/map/road0_6.png') top left no-repeat;
+        }
+
+        .street.road0_7 {
+            background: url('/assets/map/road0_7.png') top left no-repeat;
+        }
+
+        .street.road0_8 {
+            background: url('/assets/map/road0_8.png') top left no-repeat;
+        }
+
+        .street.road0_9 {
+            background: url('/assets/map/road0_9.png') top left no-repeat;
+        }
+
+        .street.road0_10 {
+            background: url('/assets/map/road0_10.png') top left no-repeat;
+        }
+
+        .street.road1_0 {
+            background: url('/assets/map/road1_0.png') top left no-repeat;
+        }
+
+        .street.road1_2 {
+            background: url('/assets/map/road1_2.png') top left no-repeat;
+        }
+
+        .street.road1_4 {
+            background: url('/assets/map/road1_4.png') top left no-repeat;
+        }
+
+        .street.road1_6 {
+            background: url('/assets/map/road1_6.png') top left no-repeat;
+        }
+
+        .street.road1_8 {
+            background: url('/assets/map/road1_8.png') top left no-repeat;
+        }
+
+        .street.road1_10 {
+            background: url('/assets/map/road1_10.png') top left no-repeat;
+        }
+
+        .street.road2_0 {
+            background: url('/assets/map/road2_0.png') top left no-repeat;
+        }
+
+        .street.road2_1 {
+            background: url('/assets/map/road2_1.png') top left no-repeat;
+        }
+
+        .street.road2_2 {
+            background: url('/assets/map/road2_2.png') top left no-repeat;
+        }
+
+        .street.road2_3 {
+            background: url('/assets/map/road2_3.png') top left no-repeat;
+        }
+
+        .street.road2_4 {
+            background: url('/assets/map/road2_4.png') top left no-repeat;
+        }
+
+        .street.road2_5 {
+            background: url('/assets/map/road2_5.png') top left no-repeat;
+        }
+
+        .street.road2_6 {
+            background: url('/assets/map/road2_6.png') top left no-repeat;
+        }
+
+        .street.road2_7 {
+            background: url('/assets/map/road2_7.png') top left no-repeat;
+        }
+
+        .street.road2_8 {
+            background: url('/assets/map/road2_8.png') top left no-repeat;
+        }
+
+        .street.road2_9 {
+            background: url('/assets/map/road2_9.png') top left no-repeat;
+        }
+
+        .street.road2_10 {
+            background: url('/assets/map/road2_10.png') top left no-repeat;
+        }
+
+        .street.road3_0 {
+            background: url('/assets/map/road3_0.png') top left no-repeat;
+        }
+
+        .street.road3_2 {
+            background: url('/assets/map/road3_2.png') top left no-repeat;
+        }
+
+        .street.road3_4 {
+            background: url('/assets/map/road3_4.png') top left no-repeat;
+        }
+
+        .street.road3_6 {
+            background: url('/assets/map/road3_6.png') top left no-repeat;
+        }
+
+        .street.road3_8 {
+            background: url('/assets/map/road3_8.png') top left no-repeat;
+        }
+
+        .street.road3_10 {
+            background: url('/assets/map/road3_10.png') top left no-repeat;
+        }
+
+        .street.road4_0 {
+            background: url('/assets/map/road4_0.png') top left no-repeat;
+        }
+
+        .street.road4_1 {
+            background: url('/assets/map/road4_1.png') top left no-repeat;
+        }
+
+        .street.road4_2 {
+            background: url('/assets/map/road4_2.png') top left no-repeat;
+        }
+
+        .street.road4_3 {
+            background: url('/assets/map/road4_3.png') top left no-repeat;
+        }
+
+        .street.road4_4 {
+            background: url('/assets/map/road4_4.png') top left no-repeat;
+        }
+
+        .street.road4_5 {
+            background: url('/assets/map/road4_5.png') top left no-repeat;
+        }
+
+        .street.road4_6 {
+            background: url('/assets/map/road4_6.png') top left no-repeat;
+        }
+
+        .street.road4_7 {
+            background: url('/assets/map/road4_7.png') top left no-repeat;
+        }
+
+        .street.road4_8 {
+            background: url('/assets/map/road4_8.png') top left no-repeat;
+        }
+
+        .street.road4_9 {
+            background: url('/assets/map/road4_9.png') top left no-repeat;
+        }
+
+        .street.road4_10 {
+            background: url('/assets/map/road4_10.png') top left no-repeat;
+        }
+
+        .street.road5_0 {
+            background: url('/assets/map/road5_0.png') top left no-repeat;
+        }
+
+        .street.road5_2 {
+            background: url('/assets/map/road5_2.png') top left no-repeat;
+        }
+
+        .street.road5_4 {
+            background: url('/assets/map/road5_4.png') top left no-repeat;
+        }
+
+        .street.road5_6 {
+            background: url('/assets/map/road5_6.png') top left no-repeat;
+        }
+
+        .street.road5_8 {
+            background: url('/assets/map/road5_8.png') top left no-repeat;
+        }
+
+        .street.road5_10 {
+            background: url('/assets/map/road5_10.png') top left no-repeat;
+        }
+
+        .street.road6_0 {
+            background: url('/assets/map/road6_0.png') top left no-repeat;
+        }
+
+        .street.road6_1 {
+            background: url('/assets/map/road6_1.png') top left no-repeat;
+        }
+
+        .street.road6_2 {
+            background: url('/assets/map/road6_2.png') top left no-repeat;
+        }
+
+        .street.road6_3 {
+            background: url('/assets/map/road6_3.png') top left no-repeat;
+        }
+
+        .street.road6_4 {
+            background: url('/assets/map/road6_4.png') top left no-repeat;
+        }
+
+        .street.road6_5 {
+            background: url('/assets/map/road6_5.png') top left no-repeat;
+        }
+
+        .street.road6_6 {
+            background: url('/assets/map/road6_6.png') top left no-repeat;
+        }
+
+        .street.road6_7 {
+            background: url('/assets/map/road6_7.png') top left no-repeat;
+        }
+
+        .street.road6_8 {
+            background: url('/assets/map/road6_8.png') top left no-repeat;
+        }
+
+        .street.road6_9 {
+            background: url('/assets/map/road6_9.png') top left no-repeat;
+        }
+
+        .street.road6_10 {
+            background: url('/assets/map/road6_10.png') top left no-repeat;
+        }
+
+    .building {
+        height:140px;
+        width: 100px;
+        /*border: 1px solid Blue;*/
+        margin: 0 auto;
+        margin-top: 56px;
+        border-radius: 25px;
+        box-sizing: border-box;
+        /*box-shadow: -8px 9px 16px -3px gray;*/
+        box-shadow: 8px 9px 16px -3px gray;
+        background: #171314; 
+        position: relative;
+        z-index: 100;
     }
-    
-    .building:hover {
-        /*transition-delay: 500ms;*/
-        transform: scale(2.0);
-        z-index: 500;
-    }
 
-        .building:hover .building-name {
-            display: none;
+        .building.neutral {
+            /*border: 1px solid gray;*/
+            background-color: gray
         }
 
-        .building:hover .building-name p {
-            font-size: 0.75em;
-        }
-        
-        .building:hover .building-points p {
-            /*font-size: 0.6em;*/
-            display: none;
+        .building.left {
+            border: 1px solid #ce0f09;
+            background-color: #6e100d
         }
 
-        .building:hover p.buildingIntelligence {
-            display: block;
-            font-size: 0.4em;
-            margin: -25px 1em 5px 1em;
+        .building.right {
+            border: 1px solid #1b139c;
+            background-color: #041656
         }
 
-        .building:hover p.activateBuilding {
-            display: block;
-            font-size: 0.4em;
-            text-align: center;
-            font-size: 0.5em;
-            padding: 1em 0em;
+        .building-background {
+            margin: 2px 2px 0 2px;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
-            border-bottom-left-radius: 70px;
-            border-bottom-right-radius: 70px;
-            background-color: green;
-            position: absolute;
-            top: 92px;
-            width: 75px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            background-color: White;
+            z-index: 0;
+            height: 134px;
+            font-family: "DM Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
         }
 
-    .building.inProgress {
-        animation: pulse 2s infinite;
-        animation-iteration-count: 5;
-        /*transform: scale(2.0);
-        z-index: 500;*/
-    }
+            .building img {
+                position: relative;
+                top: -30px;
+            }
+
+            .building .building-name {
+                margin: -35px 10px 5px 10px;
+                align-self: baseline;
+                font-weight: 400;
+                font-size: 0.7em;
+                text-align: center;
+                min-height: 2.5em;
+            }
+
+            .building .building-name p {
+                margin: 0px;
+            }
+
+            .building .building-points {
+                text-align: center;
+                font-size: 1.1em;
+            }
+
+                .building .building-points p {
+                    margin: 0px;
+                }
+                
+            .building .buildingIntelligence {
+                display: none;
+                text-align: left;
+            }
+
+            .building:hover p.activateBuilding.hide, .building p.activateBuilding.hide {
+                display: none;   
+            }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .building:hover {
+            /*transition-delay: 500ms;*/
+            transform: scale(2.0);
+            z-index: 500;
+        }
+
+            .building:hover .building-name {
+                display: none;
+            }
+
+            .building:hover .building-name p {
+                font-size: 0.75em;
+            }
+            
+            .building:hover .building-points p {
+                /*font-size: 0.6em;*/
+                display: none;
+            }
+
+            .building:hover p.buildingIntelligence {
+                display: block;
+                font-size: 0.4em;
+                margin: -25px 1em 5px 1em;
+            }
+
+            .building:hover p.activateBuilding {
+                display: block;
+                font-size: 0.4em;
+                text-align: center;
+                font-size: 0.5em;
+                padding: 1em 0em;
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+                border-bottom-left-radius: 70px;
+                border-bottom-right-radius: 70px;
+                background-color: green;
+                position: absolute;
+                top: 92px;
+                width: 75px;
+            }
+
+        .building.inProgress {
+            animation: pulse 2s infinite;
+            animation-iteration-count: 5;
+            /*transform: scale(2.0);
+            z-index: 500;*/
+        }
