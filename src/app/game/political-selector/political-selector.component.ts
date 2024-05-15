@@ -31,19 +31,22 @@ export class PoliticalSelection implements AfterViewInit {
 
   ngAfterViewInit(){
 
-    //console.log(this.group)
+    console.log(this.group)
 
-    // if (this.group == 'rebelsType'){
-    //   var firstRebel = this.el.nativeElement.querySelector("input.political-selector-radio-button[value='Communist']");
-    //   console.log (firstRebel)
-    //   firstRebel.checked = true
-    // }
+    if (this.group == 'rebelsType'){
+      var firstRebel = this.el.nativeElement.querySelector("input.political-selector-radio-button[value='Communist']");
+      console.log (firstRebel)
+      firstRebel.checked = true
+      this.change.emit(firstRebel.value);
+    }
 
-    // if (this.group == 'govtType'){
-    //   var lastGovt = this.el.nativeElement.querySelector("input.political-selector-radio-button[value='Fascist']");
-    //   console.log (lastGovt)
-    //   lastGovt.checked = true
-    // }
+    if (this.group == 'govtType'){
+      var lastGovt = this.el.nativeElement.querySelector("input.political-selector-radio-button[value='Fascist']");
+      console.log (lastGovt.value)
+      lastGovt.checked = true
+
+      this.change.emit(lastGovt.value);
+    }
   }
 
   constructor(private el: ElementRef, private renderer: Renderer2) {

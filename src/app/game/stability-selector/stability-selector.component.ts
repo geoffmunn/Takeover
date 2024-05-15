@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, AfterViewInit, ElementRef, Renderer2} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
 
@@ -10,7 +10,7 @@ import {MatRadioChange, MatRadioModule} from '@angular/material/radio';
   imports: [MatRadioModule, FormsModule],
 })
 
-export class StabilitySelection {
+export class StabilitySelection implements AfterViewInit {
   politicalStability!: string;
   govtStabilities: string[] = ['Very weak & about to fall', 'Weak & unpopular', 'Reasonably secure', 'Stable & strong', 'Very secure & highly popular'];
 
@@ -23,5 +23,16 @@ export class StabilitySelection {
     console.log('selected stability:', $event.target.value)
     
     this.change.emit($event.target.value)
+  }
+
+  ngAfterViewInit(){
+
+    var firstStability = this.el.nativeElement.querySelector("input.stability-selector-radio-button[value='Very weak & about to fall']");
+    firstStability.checked = true
+    this.change.emit(firstStability.value);
+
+  }
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {
   }
 }

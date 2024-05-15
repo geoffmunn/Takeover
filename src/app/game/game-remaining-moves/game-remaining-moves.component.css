@@ -1,0 +1,37 @@
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_1_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: italic;
+    font-weight: 400;
+}
+
+section#remainingMovesContainer {
+    width: 100%;
+    border: 1px solid Black;
+}
+
+    section#remainingMovesContainer div#remainingMoves {
+        text-align: center;
+    }
+
+        section#remainingMovesContainer span.remainingMoves {
+            font-family: 'SequentialistBB';
+            display: block;
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        section#remainingMovesContainer span.text {
+            font-family: 'SequentialistBB';
+            display: block;
+            font-size: 1em;
+        }

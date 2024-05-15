@@ -1,10 +1,19 @@
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_1_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: normal;
+    font-weight: 400;
+}
 
-/* h2 {
-    font-family: Comics;
-    color: White;
-    font-size: 3em;
-    text-align: center;
-} */
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: italic;
+    font-weight: 400;
+}
+
 
 div.explainer {
     width: 750px;
@@ -104,7 +113,7 @@ div.explainer {
             div.panel ul li {
                 margin-bottom: 0.5em;
             }
-            
+
         div.explainer br {
             clear: both;
         }
@@ -190,95 +199,24 @@ div.explainer {
         transition-duration: .1s;
     }
 
-/* @media (min-width: 768px) {
-  .button {
-    padding: 0 2.6rem;
-  }
-}
-    } */
-
-    @font-face {
-		font-family: 'SequentialistBB';
-		src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_1_0.woff2') format('woff2'),
-		url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
-		font-style: normal;
-		font-weight: 400;
-		}
-	@font-face {
-		font-family: 'SequentialistBB';
-		src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff2') format('woff2'),
-		url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
-		font-style: italic;
-		font-weight: 400;
-		}
-/* * { 
-  box-sizing: border-box;
-} */
-/* body { 
-    font-family: SequentialistBB, cursive; 
-    font-size: 2.5vw; 
-    margin: 0;
-} */
-/* section { 
-  min-height: 100vh; 
-  display: flex;
-  justify-content: center;
-  align-content: center;
-} */
-/* section { 
-  padding: 3rem; 
-}
-section:nth-of-type(1) {
-    background: #d52b21;
-}
-section:nth-of-type(2) {
-    background: #fff;
-}
-section:nth-of-type(3) {
-  background: #0388fe;
-} */
-
-
-/* blockquote.bubble { 
-	background-position: center;
-  background-repeat: no-repeat !important;
-	background-size: 100% 100%;
-  margin: 0 auto;
-	text-align: center;
-	height: 0;
-	box-sizing: content-box;
-	line-height: 1;
-}
-blockquote.speech {
-  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/speech-bubble.svg); 
-  width: 25%;
-  padding-top: 6%;
-	padding-bottom: 20%;
-}
-blockquote.whisper {
-  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/whisper.svg); 
-  width: 25%;
-  font-size: 2vw;
-  color: #ccc;
-  font-style: italic;
-  padding: 6% 5% 15%;
-} */
-
-/* div.explainer div.speech_bubble_right {
-  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/electric.svg); 
-  width: 650px;
-  font-family: 'SequentialistBB';
-  font-size: 2.4vw;
-  font-style: italic;
-  padding: 4% 6% 12% 0%;
+section#gameContainer {
+    background-color: White;
 }
 
-    div.explainer div.speech_bubble_right p {
-        margin: 50px;
+    section#leftCol {
+        display: block;
+        width: 150px;
+        background-color: Green;
+        float: left;
     }
 
-    div.explainer div.speech_bubble_right span {
-  display: block;
-  font-size: 3vw;
-  font-weight: bold;
-} */
+    section#rightCol {
+        display: block;
+        width: 150px;
+        background-color: Yellow;
+        float: left;
+    }
+
+br {
+    clear: both;
+}
