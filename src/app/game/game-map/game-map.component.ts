@@ -24,10 +24,10 @@ export class GameMapComponent implements AfterViewInit  {
   counter = 0;
 
   //mapBuildings: BuildingsService
-  grid = new Array()
-  rebel_ownership: number  = -1
-  neutral_ownership: number = 0
-  govt_ownership: number = 1
+  grid = new Array();
+  rebel_ownership: number  = -1;
+  neutral_ownership: number = 0;
+  govt_ownership: number = 1;
 
   updateRemainingMoves() {
     this.counter = this.counter + 1;

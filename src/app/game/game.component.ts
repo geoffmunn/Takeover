@@ -71,9 +71,6 @@ export class GameComponent{
     let left = new LeftService();
     let right = new RightService();
 
-    console.log ('user:', this.user)
-    console.log ('govt:', this.govt)
-
     if (this.govt.politicalType != 0){
       if (this.user.politicalType <= this.govt.politicalType){
         this.user.position = left;

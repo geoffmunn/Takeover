@@ -16,7 +16,5 @@ export class GameRemainingMovesComponent {
 }
 
 function updateClass(value: PlayerService) {
-  console.log('remaining moves:', value)
-
   return value.position.css;
 }

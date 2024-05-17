@@ -16,7 +16,6 @@ export class PlayerService {
     var result: string = ''
     var govtTypes = new GovtTypesService().govtTypes
 
-    console.log('user type:', this.politicalType)
     govtTypes.forEach((value: number, key: string) => {
       if (value == this.politicalType)
         result = key

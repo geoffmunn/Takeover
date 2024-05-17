@@ -145,6 +145,14 @@ div.explainer {
                 left: 120px;
             }
 
+            span.confirmation.left {
+                color: #ce0f09;
+            }
+
+            span.confirmation.right {
+                color: #1b139c
+            }
+
     div.buttonContainer {
         border: 2px solid black;
         background-color: White;

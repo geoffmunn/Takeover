@@ -193,7 +193,7 @@
     <div class="panel top">
         <p>So, you represent a {{user!.getPoliticalType()}} group attempting to overthrow a {{govt!.getPoliticalType()}} government headed by President Xerxes.</p>
 
-        <p>Because you are more to the {{user!.position.description}} than the government, your forces will be <span style="color:{{user.position.colour}};">{{user.position.colourName}}</span> and the government will be <span style="color:{{govt.position.colour}};">{{govt.position.colourName}}</span>.</p>
+        <p>Because you are more to the {{user!.position.description}} than the government, your forces will be <span class="confirmation {{user.position.css}}">{{user.position.colourName}}</span> and the government will be <span class="confirmation {{govt.position.css}}">{{govt.position.colourName}}</span>.</p>
 
         <p style="margin-bottom: 1em;">Is this correct?</p>
     </div>
@@ -226,7 +226,7 @@
     <section id="gameContainer">
         <section id="leftCol">
             <app-game-score [userScore]="user.score" [govtScore]="govt.score"></app-game-score>
-            <app-game-popularity [userPopularity]="user.popularity" [govtPopularity]="govt.popularity"></app-game-popularity>
+            <app-game-popularity [userPopularity]="user.popularity" [user]="user" [govtPopularity]="govt.popularity" [govt]="govt"></app-game-popularity>
             <app-game-remaining-moves [remainingMoves]="remainingMoves" [currentPlayer]="currentPlayer"></app-game-remaining-moves>
         </section>
         <app-game-map (movesChange)="changeMoves($event)" (scoreChange)="changeScore($event)" (popularityChange)="changePopularity($event)" (messageChange)="changeMessage($event)" [user]="user" [govt]="govt"></app-game-map>
