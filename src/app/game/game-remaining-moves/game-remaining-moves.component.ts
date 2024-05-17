@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { PlayerService } from '../services/player.service';
 
 @Component({
   selector: 'app-game-remaining-moves',
@@ -10,4 +11,12 @@ import { Component, Input } from '@angular/core';
 
 export class GameRemainingMovesComponent {
   @Input() remainingMoves: number = 0
+  @Input({transform: updateClass}) currentPlayer!: string
+
+}
+
+function updateClass(value: PlayerService) {
+  console.log('remaining moves:', value)
+
+  return value.position.css;
 }

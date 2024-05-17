@@ -206,14 +206,12 @@ section#gameContainer {
     section#leftCol {
         display: block;
         width: 150px;
-        background-color: Green;
         float: left;
     }
 
     section#rightCol {
         display: block;
         width: 150px;
-        background-color: Yellow;
         float: left;
     }
 

@@ -30,6 +30,14 @@ section#remainingMovesContainer {
             font-weight: bold;
         }
 
+            span.remainingMoves.left {
+                color: #ce0f09;
+            }
+
+            span.remainingMoves.right {
+                color: #1b139c
+            }
+
         section#remainingMovesContainer span.text {
             font-family: 'SequentialistBB';
             display: block;

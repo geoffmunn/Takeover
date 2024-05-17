@@ -29,6 +29,7 @@ export class GameComponent{
   public govt: PlayerService;
   public remainingMoves: number = 0;
   public message:string = '';
+  public currentPlayer: PlayerService;
 
   public showHide = {
     'intro': true,
@@ -45,6 +46,10 @@ export class GameComponent{
 
   changeMoves($event:any){
     this.remainingMoves -= 1;
+
+    if (this.remainingMoves == 0){
+      this.currentPlayer = this.govt;
+    }
   }
 
   changeScore($event:any){
@@ -147,13 +152,7 @@ export class GameComponent{
 
     this.remainingMoves = 5;
 
-    //this.changeMessage('Your turn - start the revolution!')
-    //this.child.callMe('calling from the parent')
-
-    // var radioButtons = this.el.nativeElement.querySelector('input.political-selector-radio-button');
-    // console.log (radioButtons)
-    // console.log (radioButtons[0])
-    
+    this.currentPlayer = this.user;
   }
 
 }
