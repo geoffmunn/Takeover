@@ -14,215 +14,229 @@
     font-weight: 400;
 }
 
-
-div.explainer {
-    width: 750px;
-    margin: auto;
+section#border {
+    width: 754px;
+    background-color: White;
+    margin: 0px auto;
+    padding: 2px;
 }
-
-    div.explainer div.panel {
-        border: 2px solid black;
-        font-family: SequentialistBB;
-        font-size: 2.0vw;
-        font-style: italic;
-        clear: both;
+    div.explainer {
+        width: 750px;
+        border: 2px solid Black;
     }
 
-        div.panel.title {
-            background: #ffffff url('/assets/panel_background1.png') top left no-repeat;
-            
-        }
-
-            div.panel.title h2, div.panel.title h3 {
-                margin: 0.1em;
-                color: Black;
-                font-weight: bold;
-                font-size: 2.5vw;
-                font-family: Comics;
-                text-align: center;
-            }
-
-                div.panel.title h2, div.panel.title h3 {
-                    font-size: 5vw;
-                    margin-bottom: -0.1em;
-                }
-
-                div.panel.title h3 {
-                    font-size: 3vw;
-                }
-
-        div.panel {
-            background: #ffffff url('/assets/panel_background1.png') top left no-repeat;
-        }
-
-        div.panel.top {
-            background: #ffffff url('/assets/panel_background2.png') top left no-repeat;
-        }
-
-        div.panel.bottom {
-            background: #ffffff url('/assets/panel_background3.png') top left no-repeat;
-        }
-
-            div.panel p {
-                margin: 0px;
-            }
-
-            div.panel.top p {
-                padding: 1em 1em 0em 1em;
-            }
-
-            div.panel.bottom p:first-of-type {
-                padding: 1em 1em 0em 1em;
-                margin-bottom: 1em;
-            }
-
-                div.panel p strong {
-                    font-weight: 900;
-                }
-
-        div.panel div.revolutionary {
-            float: right;
-        }
-
-            div.revolutionary img {
-                display: block;
-            }
-
-        div.panel div.xerxes {
-            float: left;
-        }
-
-            div.xerxes img {
-                display: block;
-            }
-
-        div.panel div.governmentLarge {
-            float: left;
-            border-right: 2px solid Black;
-            margin-right: 1em;
-        }
-
-        div.panel div.governmentLarge img {
-            display: block;
-        }
-
-        div.panel ul {
-            margin-left: 1em;
-        }
-
-            div.panel ul li {
-                margin-bottom: 0.5em;
-            }
-
-        div.explainer br {
+        div.explainer div.panel {
+            border: 2px solid black;
+            font-family: SequentialistBB;
+            font-size: 2.0vw;
+            font-style: italic;
             clear: both;
         }
 
-        div.explainer div#exampleBuildingList {
-            float: left;
-            width: 50%;
+            div.panel.title {
+                background: #ffffff url('/assets/panel_background1.png') top left no-repeat;
+                
+            }
+
+                div.panel.title h2, div.panel.title h3 {
+                    margin: 0.1em;
+                    color: Black;
+                    font-weight: bold;
+                    font-size: 2.5vw;
+                    font-family: Comics;
+                    text-align: center;
+                }
+
+                    div.panel.title h2, div.panel.title h3 {
+                        font-size: 5vw;
+                        margin-bottom: -0.1em;
+                    }
+
+                    div.panel.title h3 {
+                        font-size: 3vw;
+                    }
+
+            div.panel {
+                background: #ffffff url('/assets/panel_background1.png') top left no-repeat;
+            }
+
+            div.panel.top {
+                background: #ffffff url('/assets/panel_background2.png') top left no-repeat;
+            }
+
+            div.panel.bottom {
+                background: #ffffff url('/assets/panel_background3.png') top left no-repeat;
+            }
+
+                div.panel p {
+                    margin: 0px;
+                }
+
+                div.panel.top p {
+                    padding: 1em 1em 0em 1em;
+                }
+
+                div.panel.bottom p:first-of-type {
+                    padding: 1em 1em 0em 1em;
+                    margin-bottom: 1em;
+                }
+
+                    div.panel p strong {
+                        font-weight: 900;
+                    }
+
+            div.panel div.revolutionary {
+                float: right;
+            }
+
+                div.revolutionary img {
+                    display: block;
+                }
+
+            div.panel div.xerxes {
+                float: left;
+            }
+
+                div.xerxes img {
+                    display: block;
+                }
+
+            div.panel div.governmentLarge {
+                float: left;
+                border-right: 2px solid Black;
+                margin-right: 1em;
+            }
+
+            div.panel div.governmentLarge img {
+                display: block;
+            }
+
+            div.panel ul {
+                margin-left: 1em;
+            }
+
+                div.panel ul li {
+                    margin-bottom: 0.5em;
+                }
+
+            div.explainer br {
+                clear: both;
+            }
+
+            div.explainer div#exampleBuildingList {
+                float: left;
+                width: 50%;
+            }
+
+            div.explainer div#exampleBuildingPictures {
+                width: 50%;
+                float: right;
+            }
+
+                div.explainer div#exampleBuildingPictures img#img1 {
+                    position: relative;
+                    top: 50px;
+                    left: 50px;
+                }
+
+                div.explainer div#exampleBuildingPictures img#img2 {
+                    position: relative;
+                    top: 20px;
+                    left: 40px;
+                }
+
+                div.explainer div#exampleBuildingPictures img#img3 {
+                    position: relative;
+                    left: 120px;
+                }
+
+                span.confirmation.left {
+                    color: #ce0f09;
+                }
+
+                span.confirmation.right {
+                    color: #1b139c
+                }
+
+        div.buttonContainer {
+            border: 2px solid black;
+            background-color: White;
+            /*font-family: SequentialistBB;
+            font-size: 2.0vw;
+            font-style: italic;
+            clear: both;*/
         }
 
-        div.explainer div#exampleBuildingPictures {
-            width: 50%;
-            float: right;
+        button {
+            /*background-image: linear-gradient(45deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);*/
+            border-radius: 8px;
+            border-style: none;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            flex-shrink: 0;
+            /*font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;*/
+            font-family: "SequentialistBB";
+            font-size: 16px;
+            font-weight: 500;
+            /*height: 4rem;
+            padding: 0 1.6rem;*/
+            text-align: center;
+            text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+            transition: all .5s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            font-size: 2vw;
+            font-weight: bold;
+            font-style: italic;
+            margin: 0.5em;
         }
 
-            div.explainer div#exampleBuildingPictures img#img1 {
-                position: relative;
-                top: 50px;
-                left: 50px;
+            button.back {
+                background-image: linear-gradient(45deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);
+                float: left;
             }
 
-            div.explainer div#exampleBuildingPictures img#img2 {
-                position: relative;
-                top: 20px;
-                left: 40px;
+            button.next {
+                background-image: linear-gradient(315deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);
+                float: right;
             }
 
-            div.explainer div#exampleBuildingPictures img#img3 {
-                position: relative;
-                left: 120px;
+            button.start {
+                background-image: linear-gradient(0deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);
             }
 
-            span.confirmation.left {
-                color: #ce0f09;
-            }
+        button:hover {
+            box-shadow: rgba(183, 206, 219, 0.5) 0 1px 30px;
+            transition-duration: .1s;
+        }
 
-            span.confirmation.right {
-                color: #1b139c
-            }
-
-    div.buttonContainer {
-        border: 2px solid black;
+    section#gameBorder {
         background-color: White;
-        /*font-family: SequentialistBB;
-        font-size: 2.0vw;
-        font-style: italic;
-        clear: both;*/
+        width: 984px;
+        padding: 2px;
+        margin: 0px auto;
     }
-
-    button {
-        /*background-image: linear-gradient(45deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);*/
-        border-radius: 8px;
-        border-style: none;
-        box-sizing: border-box;
-        color: #FFFFFF;
-        cursor: pointer;
-        flex-shrink: 0;
-        /*font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;*/
-        font-family: "SequentialistBB";
-        font-size: 16px;
-        font-weight: 500;
-        /*height: 4rem;
-        padding: 0 1.6rem;*/
-        text-align: center;
-        text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
-        transition: all .5s;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        font-size: 2vw;
-        font-weight: bold;
-        font-style: italic;
-        margin: 0.5em;
-    }
-
-        button.back {
-            background-image: linear-gradient(45deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);
-            float: left;
+        section#gameContainer {
+            background-color: White;
+            border: 4px solid Black;
+            width: 975px;
+            margin: 0px auto;
         }
 
-        button.next {
-            background-image: linear-gradient(315deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);
-            float: right;
+            section#leftCol {
+                display: block;
+                width: 150px;
+                float: left;
+            }
+
+            /* section#rightCol {
+                display: block;
+                width: 150px;
+                float: left;
+            } */
+
+        br {
+            clear: both;
         }
-
-        button.start {
-            background-image: linear-gradient(0deg, #0f628e 9.16%, #083d67 43.89%, #092c52 64.72%);
-        }
-
-    button:hover {
-        box-shadow: rgba(183, 206, 219, 0.5) 0 1px 30px;
-        transition-duration: .1s;
-    }
-
-section#gameContainer {
-    background-color: White;
-}
-
-    section#leftCol {
-        display: block;
-        width: 150px;
-        float: left;
-    }
-
-    section#rightCol {
-        display: block;
-        width: 150px;
-        float: left;
-    }
-
-br {
-    clear: both;
-}
