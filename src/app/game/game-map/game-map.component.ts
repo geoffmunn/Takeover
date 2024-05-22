@@ -19,7 +19,7 @@ export class GameMapComponent implements AfterViewInit  {
   @Output() movesChange      = new EventEmitter();
   @Output() scoreChange      = new EventEmitter();
   @Output() messageChange    = new EventEmitter();
-  @Output() popularityChange = new EventEmitter()
+  @Output() popularityChange = new EventEmitter();
 
   counter = 0;
 
@@ -111,16 +111,18 @@ export class GameMapComponent implements AfterViewInit  {
     return squareMood;
 	}
 
-  activateBuilding($event: any){
+  /**
+   * Activate the selected building.
+   * @param $event 
+   */
+  activateBuilding($event: Event){
 
-    var curEl = $event.target
+    var curEl: any = $event.target;
 
     while (!curEl.getAttribute('data-building-name'))
       curEl = curEl.parentElement
-
-    //console.log(curEl.getAttribute('data-building-name'))
     
-    var building:BuildingService = this.grid[curEl.getAttribute('data-row')][curEl.getAttribute('data-col')]['building']
+    var building:BuildingService = this.grid[curEl!.getAttribute('data-row')][curEl.getAttribute('data-col')]['building']
     
     // Animate this building while we type text
     this.renderer.addClass(curEl, 'inProgress');
@@ -133,28 +135,10 @@ export class GameMapComponent implements AfterViewInit  {
     var comparison: number = Math.floor(Math.random()*3 + 2) 
 
     if (liklihood < comparison){
-      //TODO: the success/failure messages don't show!
-      
-      //this.messageChange.emit('The ' + building.name + ' votes to join the revolution!')
 
-      const target = curEl.querySelector('p.buildingIntelligence')
+      this.messageChange.emit({'msg': 'The ' + building.name + ' votes to join the revolution!'})
 
-      //console.log (target)
-      target!.innerHTML = ''
-
-      const writer = new Typewriter(target, {
-        loop: false
-      })
-
-      writer
-        .type('The ' + building.name + ' votes to join the revolution!')
-        .start()
-        
-      
       setTimeout(() => {
-
-        //this.messageChange.emit('The ' + building.name + ' votes to join the revolution!')
-
         this.grid[y][x]['owner'] = this.rebel_ownership;
         building.owner = this.rebel_ownership
 
@@ -170,28 +154,44 @@ export class GameMapComponent implements AfterViewInit  {
         this.updateScore()
       }, 5000);
 
-    } else if (liklihood > comparison){    
-      this.messageChange.emit('The ' + building.name + ' sides with the Government forces!')
+    } else if (liklihood > comparison){
 
-      this.grid[y][x]['owner'] = this.govt_ownership;
-      building.owner = this.govt_ownership
+      this.messageChange.emit({'msg': 'The ' + building.name + ' sides with the Government forces!'})
 
-      this.updatePopularity(-0.125, 0.125)
+      setTimeout(() => {
+        this.grid[y][x]['owner'] = this.govt_ownership;
+        building.owner = this.govt_ownership
 
-      this.renderer.removeClass(curEl, 'neutral');
-      this.renderer.removeClass(curEl, this.user.position.css);
-      this.renderer.addClass(curEl, this.govt.position.css);
+        this.updatePopularity(-0.125, 0.125)
+
+        this.renderer.removeClass(curEl, 'neutral');
+        this.renderer.removeClass(curEl, this.user.position.css);
+        this.renderer.addClass(curEl, this.govt.position.css);
+
+        this.renderer.removeClass(curEl, 'inProgress');
+
+        this.updateRemainingMoves()
+        this.updateScore()
+      }, 5000);
     } else {
-      this.messageChange.emit('The ' + building.name + ' wishes to be neutral for the moment.')
 
-      this.grid[y][x]['owner'] = this.neutral_ownership;
-      building.owner = this.neutral_ownership
+      setTimeout(() => {
+        this.messageChange.emit({'msg': 'The ' + building.name + ' wishes to be neutral for the moment.'})
 
-      this.updatePopularity(0, -0.15);
+        this.grid[y][x]['owner'] = this.neutral_ownership;
+        building.owner = this.neutral_ownership
 
-      this.renderer.removeClass(curEl, this.govt.position.css)
-      this.renderer.removeClass(curEl, this.user.position.css)
-      this.renderer.addClass(curEl, 'neutral');
+        this.updatePopularity(0, -0.15);
+
+        this.renderer.removeClass(curEl, this.govt.position.css)
+        this.renderer.removeClass(curEl, this.user.position.css)
+        this.renderer.addClass(curEl, 'neutral');
+
+        this.renderer.removeClass(curEl, 'inProgress');
+
+        this.updateRemainingMoves()
+        this.updateScore()
+      }, 5000);
     }
 
     //Go through each building and update the liklihood
@@ -200,33 +200,56 @@ export class GameMapComponent implements AfterViewInit  {
       var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
       building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
     }
-
-    //this.updateRemainingMoves()
-    //this.updateScore()
-
   }
 
   activateStreet($event: any){
 
-    var curEl = $event.target
+    var curEl: any = $event.target
 
-    var x: number = parseInt($event.target.getAttribute('data-col'))
-    var y: number = parseInt($event.target.getAttribute('data-row'))
+    while (!curEl.getAttribute('data-col'))
+      curEl = curEl.parentElement
+
+    this.renderer.addClass(curEl, 'inProgress');
+
+    var x: number = parseInt(curEl.getAttribute('data-col'))
+    var y: number = parseInt(curEl.getAttribute('data-row'))
 
     var mood: number = this.calculateMood(x, y);
 
     if (mood < 0){
-      this.grid[y][x]['owner'] = this.rebel_ownership
 
-      this.renderer.removeClass(curEl, 'neutral')
-      this.renderer.removeClass(curEl, this.govt.position.css)
-      this.renderer.addClass(curEl, this.user.position.css);
+      console.log('emitting join message')
+      this.messageChange.emit({'msg':'The street joins the revolution!', 'random': Math.random()})
+
+      setTimeout(() => {
+        this.grid[y][x]['owner'] = this.rebel_ownership
+
+        this.renderer.removeClass(curEl, 'neutral')
+        this.renderer.removeClass(curEl, this.govt.position.css)
+        this.renderer.addClass(curEl, this.user.position.css);
+
+        this.renderer.removeClass(curEl, 'inProgress');
+
+        this.updateRemainingMoves()
+        //this.updateScore()
+      }, 5000);
+
     } else {
-      this.grid[y][x]['owner'] = this.govt_ownership
 
-      this.renderer.removeClass(curEl, 'neutral');
-      this.renderer.removeClass(curEl, this.user.position.css);
-      this.renderer.addClass(curEl, this.govt.position.css);
+      this.messageChange.emit({'msg': 'The street chooses to join the government!', 'random': Math.random()})
+
+      setTimeout(() => {
+        this.grid[y][x]['owner'] = this.govt_ownership
+
+        this.renderer.removeClass(curEl, 'neutral');
+        this.renderer.removeClass(curEl, this.user.position.css);
+        this.renderer.addClass(curEl, this.govt.position.css);
+
+        this.renderer.removeClass(curEl, 'inProgress');
+
+        this.updateRemainingMoves()
+        //this.updateScore()
+      }, 5000);
     }
 
     //Go through each building and update the liklihood
@@ -236,8 +259,8 @@ export class GameMapComponent implements AfterViewInit  {
       building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
     }
 
-    this.updateRemainingMoves()
-    this.updateScore()
+    // this.updateRemainingMoves()
+    //this.updateScore()
 
   }
 
@@ -296,10 +319,13 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.appendChild(divBuildingBackground, intelligence)
 
       var activate = this.renderer.createElement('p')
-      var activateText = this.renderer.createText('Activate building')
+      var activateImg = this.renderer.createElement('img')
+      this.renderer.setAttribute(activateImg, 'src', '/assets/activate_symbol.png');
+      this.renderer.setAttribute(activateImg, 'width', '25');
+      this.renderer.setAttribute(activateImg, 'height', '25');
       this.renderer.addClass(activate, 'activateBuilding')
       this.renderer.addClass(activate, 'hide')
-      this.renderer.appendChild(activate, activateText)
+      this.renderer.appendChild(activate, activateImg)
       this.renderer.appendChild(divBuildingBackground, activate)
 
       this.renderer.appendChild(buildingDiv, divBuildingBackground)
@@ -330,15 +356,16 @@ export class GameMapComponent implements AfterViewInit  {
 			}
 		}
     
-    //console.log (this.grid)
-
-    //this.messageChange.emit('Your turn - start the revolution!')
-
     var streetDivs = this.el.nativeElement.querySelectorAll('div.street');
 
     streetDivs.forEach((streetDiv: any) => {
       streetDiv.addEventListener('mouseenter', this.onMouseOverStreet.bind(this));
-      streetDiv.addEventListener('click', this.activateStreet.bind(this));
+      //streetDiv.addEventListener('click', this.activateStreet.bind(this));
+    })
+
+    var streetDivsImgs = this.el.nativeElement.querySelectorAll('div.street img');
+    streetDivsImgs.forEach((streetImg: any) => {
+      streetImg.addEventListener('click', this.activateStreet.bind(this));
     })
 	}
 
