@@ -16,7 +16,8 @@
 
 section#scoreContainer {
     width: 100%;
-    border: 1px solid Black;
+    border-bottom: 4px solid Black;
+    padding-bottom: 1em;
 }
 
     section#scoreContainer div#userScore {
