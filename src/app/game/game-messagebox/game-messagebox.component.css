@@ -1,0 +1,38 @@
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_1_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: italic;
+    font-weight: 400;
+}
+
+section#messageBoxContainer {
+    font-family: 'SequentialistBB';
+    min-height: 200px;
+    padding: 0.5em;
+}
+
+    section#messageBoxContainer img {
+        float: right;
+    }
+
+    /* section#messageBoxContainer.rebels {
+        background: url('/assets/revolutionary_speech_small.png') bottom right no-repeat;
+    }
+
+    section#messageBoxContainer.govt {
+        background: url('/assets/xerxes_speech_small.png') bottom left no-repeat;
+    } */
+
+    section#scoreContainer div#messageBox {
+        font-family: 'SequentialistBB';
+        font-size: 1em;
+    }

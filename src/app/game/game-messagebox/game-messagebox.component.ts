@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import Typewriter from '@philio/t-writer.js'
 
 @Component({
@@ -6,36 +6,48 @@ import Typewriter from '@philio/t-writer.js'
   standalone: true,
   imports: [],
   template: `
-    <div id="messageBox"></div>
+    <section id="messageBoxContainer" class="rebels"><div id="messageBox"></div></section>
   `,
-  styles: ``
+  styleUrl: 'game-messagebox.component.css',
 })
 
 export class GameMessageboxComponent implements AfterViewInit {
 
   @Input() 
-    public set message(val: string) {
+    public set message(val: any) {
       this.typeText(val)
     }
 
-  typeText(message:string){
-    const target = document.querySelector('#messageBox')
+  typeText(message:any){
+
+    // var msgboxContainer = this.el.nativeElement.querySelector('section#messageBoxContainer')
+    // msgboxContainer.removeChild(msgboxContainer.firstElementChild)
+
+    // var msgbox:HTMLDivElement = this.renderer.createElement('div')
+    // this.renderer.setAttribute(msgbox, 'id', 'messageBox')
+
+    // this.renderer.appendChild(msgboxContainer, msgbox)
+
+    const target = document.querySelector('div#messageBox')
 
     target!.innerHTML = ''
 
     const writer = new Typewriter(target, {
-      loop: false,
-      typeColor: 'blue'
+      loop: false
     })
 
     writer
-      .type(message)
+      .type(message.msg)
       .rest(500)
       .start()
 
   }
 
   ngAfterViewInit(){
-    this.typeText('Your turn - start the revolution!')
+    this.typeText({'msg': 'Your turn - start the revolution!'})
+  }
+
+  constructor(private el: ElementRef, private renderer: Renderer2) {
+    
   }
 }
