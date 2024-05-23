@@ -52,6 +52,10 @@
                 display: block;
             }
 
+            .street:hover img.hide {
+                display: none;
+            }
+
         .street.neutral {
             /*background-color: #ccc;*/
         }
@@ -409,8 +413,11 @@
                 position: absolute;
                 top: 93px;
                 left: 40px;
-            
             }
+
+                .building:hover p.activateBuilding.hide {
+                    display: none;
+                }
 
         @keyframes pulse {
             0% {

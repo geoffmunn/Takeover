@@ -313,7 +313,7 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.appendChild(divBuildingBackground, divBuildingPoints)
 
       var intelligence = this.renderer.createElement('p')
-      var intelligenceText = this.renderer.createText('This building probably won\'t join the revolution!')
+      var intelligenceText = this.renderer.createText('')
       this.renderer.addClass(intelligence, 'buildingIntelligence')
       this.renderer.appendChild(intelligence, intelligenceText)
       this.renderer.appendChild(divBuildingBackground, intelligence)
@@ -389,10 +389,12 @@ export class GameMapComponent implements AfterViewInit  {
       
       this.renderer.addClass(activate, 'hide')
 
-      writer
-        .type('The ' + building.name + ' has already joined the revolution.')
-        .rest(500)
-        .start()
+      target.innerHTML = 'The ' + building.name + ' has already joined the revolution.'
+
+      // writer
+      //   .type('The ' + building.name + ' has already joined the revolution.')
+      //   .rest(500)
+      //   .start()
     } else {
       
       this.renderer.removeClass(activate, 'hide')
@@ -405,7 +407,17 @@ export class GameMapComponent implements AfterViewInit  {
   }
 
   onMouseOverStreet($event: any){
-    //console.log ('over street!')
+
+    var x:number = parseInt($event.target.getAttribute('data-col'))
+    var y:number = parseInt($event.target.getAttribute('data-row'))
+
+    const activate = $event.target.querySelector('img')
+
+    if (this.grid[y][x]['owner'] == this.rebel_ownership) {
+      this.renderer.addClass(activate, 'hide')
+    } else {
+      this.renderer.removeClass(activate, 'hide')
+    }
   }
 
   constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
