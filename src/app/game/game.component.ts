@@ -83,31 +83,23 @@ export class GameComponent{
   };
 
   registerUserPoliticalSelection($event:any) {
-    console.log('received political selection for user:', $event)
     var politicalSelection: number = new GovtTypesService().govtTypes.get($event)!;
-    console.log('resolved:', politicalSelection)
     if (politicalSelection > 0){
-      console.log('the selected type is:', politicalSelection);
       this.user.politicalType = politicalSelection;
       this.checkPoliticalSelections();
     }
   };
 
   registerGovtPoliticalSelection($event:any) {
-    console.log('received political selection for govt:', $event)
     var politicalSelection: number = new GovtTypesService().govtTypes.get($event)!;
-    console.log('resolved:', politicalSelection)
     if (politicalSelection > 0){
-      console.log ('user selection is valid!')
       this.govt.politicalType = politicalSelection
       this.checkPoliticalSelections();
     }
   };
 
   registerGovtStabilitySelection($event:any) {
-    console.log ('received by game component:', $event)
     var stabilitySelection:number = new StabilitlyTypesService().stabilityTypes.get($event)!;
-    console.log('resolved:', stabilitySelection)
     if (stabilitySelection > 0){
       this.govt.stability = stabilitySelection;
       /*
