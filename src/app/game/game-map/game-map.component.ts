@@ -11,6 +11,7 @@ import Typewriter from '@philio/t-writer.js'
   templateUrl: 'game-map.component.html',
   styleUrl: 'game-map.component.css',
 })
+
 export class GameMapComponent implements AfterViewInit  {
 
   @Input() user!: PlayerService
@@ -21,185 +22,153 @@ export class GameMapComponent implements AfterViewInit  {
   @Output() messageChange    = new EventEmitter();
   @Output() popularityChange = new EventEmitter();
 
-  counter = 0;
-
-  //mapBuildings: BuildingsService
-  grid = new Array();
-  rebel_ownership: number  = -1;
+  // Shared variables
+  govt_ownership: number    = 1;
+  grid:any                  = new Array();
   neutral_ownership: number = 0;
-  govt_ownership: number = 1;
+  rebel_ownership: number   = -1;
+  max_moves: number         = 4;
+  remaining_moves: number   = this.max_moves;
+  current_player: PlayerService = this.user;
 
-  updateRemainingMoves() {
-    this.counter = this.counter + 1;
-    this.movesChange.emit(this.counter);
-  }
+  // async waitForPromise() {
+  //   // let result = await any Promise, like:
+  //   let result: Promise<string> = await Promise.resolve('this is a sample promise');
+  // }
 
-  updatePopularity(userChange: number, govtChange: number) {
-    this.user.popularity += userChange
-    this.govt.popularity += govtChange
+  
+  
+  // async myFunc() {
 
-    if (this.user.popularity < 0) {
-      this.user.popularity = 0
-    }
-    if (this.govt.popularity < 0) {
-      this.govt.popularity = 0
-    }
-
-    this.popularityChange.emit({'user': this.user.popularity, 'govt': this.govt.popularity})
-  }
-
-  updateScore() {
-    // It's not great, but we'll cycle through all the buildings and calculate the correct scores for both players
-
-    this.user.score = 0;
-    this.govt.score = 0;
-
-    for (var index=0; index < this.buildings.buildings.length; index++){
-      let building = this.buildings.buildings[index]
-      
-      if (building.owner == this.rebel_ownership)
-        this.user.score += building.points
-      else if (building.owner == this.govt_ownership)
-        this.govt.score += building.points
-    }
-
-    console.log('new user score:', this.user.score)
-    this.scoreChange.emit({'user': this.user.score, 'govt': this.govt.score})
-  }
-
-  calculateMood(x: number, y: number){				
-		var squareMood: number = 0
+  //   console.log('starting async function')
+  //   const wait5s = () => {
+  //     return new Promise<void>(resolve => {
+  //       console.log('blah blah blah')
+  //       setTimeout(() => resolve(), 5000)
+  //     })
+  //   }
     
-    if (y - 1 >= 0){
-      //console.log (this.grid);
-      //console.log (y-1);
-
-      squareMood += this.grid[(y-1)][x]['owner']
-      if (x - 1 >= 0){
-        squareMood += this.grid[(y - 1)][x - 1]['owner']
-      }
-
-      if (x + 1 < this.grid[(y - 1)].length){
-        squareMood += this.grid[(y - 1)][(x + 1)]['owner']
-      }
-    }
-    if (y + 1 < this.grid.length){
-      squareMood +=  this.grid[y + 1][x]['owner']
-      if (x - 1 >= 0){
-        squareMood += this.grid[y + 1][x - 1]['owner']
-      }
-      if (x + 1 < this.grid[y + 1].length){
-        squareMood +=  this.grid[y + 1][x + 1]['owner']
-      }
-    }
-
-    if ((x-1) >= 0){
-      squareMood += this.grid[y][(x-1)]['owner']
-    }
-
-    if (x + 1 < this.grid[y].length){
-      squareMood += this.grid[y][x+1]['owner']
-    }
-
-		// var b=this.grid[(y-1)][x]['owner'] + this.grid[(y+1)][x]['owner'] + this.grid[y][(x+1)]['owner'] + this.grid[y][(x-1)]['owner'];
-
-		// b=b+this.grid[(y-1)][(x-1)]['owner'] + this.grid[(y+1)][(x+1)]['owner'] + this.grid[(y-1)][(x+1)]['owner']+ this.grid[(y+1)][(x-1)]['owner'];
-			
-		//return b;
-    //console.log ('square mood:', squareMood)
-    
-    return squareMood;
-	}
-
+  //   await wait5s()
+  //   // Call you method here
+  //   console.log('finished')
+  // }
+  
   /**
    * Activate the selected building.
+   * 
    * @param $event 
    */
-  activateBuilding($event: Event){
+  async activateBuilding(building:BuildingService){
 
-    var curEl: any = $event.target;
+    // Get the HTML element
+    var rows: Array<HTMLElement> =  this.el.nativeElement.querySelectorAll('section#map div.row')
+    var cols: any = rows[building.grid['y']].querySelectorAll('div.cell')
+    var curEl: HTMLElement = cols[building.grid['x']]
 
-    while (!curEl.getAttribute('data-building-name'))
-      curEl = curEl.parentElement
-    
-    var building:BuildingService = this.grid[curEl!.getAttribute('data-row')][curEl.getAttribute('data-col')]['building']
-    
-    // Animate this building while we type text
+    // Animate this building while we type the intelligence message
     this.renderer.addClass(curEl, 'inProgress');
 
-    var x: number = parseInt(curEl.getAttribute('data-col'))
-    var y: number = parseInt(curEl.getAttribute('data-row'))
+    // Get the coordinates of this building
+    var x: number = parseInt(building.grid['x'])
+    var y: number = parseInt(building.grid['y'])
 
+    // Values we need to figure out if the building will make the switch
     var squareMood: number = this.calculateMood(x, y)
-    var liklihood: number = building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
+    var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
     var comparison: number = Math.floor(Math.random()*3 + 2) 
 
+    // Hide the activate button.
+    const activate:HTMLElement = curEl.querySelector('p.activateBuilding')!
+    this.renderer.addClass(activate, 'hide')
+    
     if (liklihood < comparison){
 
       this.messageChange.emit({'msg': 'The ' + building.name + ' votes to join the revolution!'})
 
-      setTimeout(() => {
-        this.grid[y][x]['owner'] = this.rebel_ownership;
-        building.owner = this.rebel_ownership
+      const wait5s = () => {        
+        return new Promise<void>(resolve => {
+          setTimeout(() => resolve(), 5000)
+        })
+      }
+      await wait5s()
 
-        this.updatePopularity(0.125, -0.125)
-        
-        this.renderer.removeClass(curEl, 'neutral')
-        this.renderer.removeClass(curEl, this.govt.position.css)
-        this.renderer.addClass(curEl, this.user.position.css);
+      this.grid[y][x]['owner'] = this.rebel_ownership;
+      building.owner = this.rebel_ownership
 
-        this.renderer.removeClass(curEl, 'inProgress');
+      this.updatePopularity(0.125, -0.125)
+      
+      this.renderer.removeClass(curEl, 'inProgress');
 
-        this.updateRemainingMoves()
-        this.updateScore()
-      }, 5000);
+      this.renderer.removeClass(curEl, 'neutral')
+      this.renderer.removeClass(curEl, this.govt.position.css)
+      this.renderer.addClass(curEl, this.user.position.css);
 
     } else if (liklihood > comparison){
 
       this.messageChange.emit({'msg': 'The ' + building.name + ' sides with the Government forces!'})
 
-      setTimeout(() => {
-        this.grid[y][x]['owner'] = this.govt_ownership;
-        building.owner = this.govt_ownership
+      const wait5s = () => {        
+        return new Promise<void>(resolve => {
+          setTimeout(() => resolve(), 5000)
+        })
+      }
+      await wait5s()
 
-        this.updatePopularity(-0.125, 0.125)
+      this.grid[y][x]['owner'] = this.govt_ownership;
+      building.owner = this.govt_ownership
 
-        this.renderer.removeClass(curEl, 'neutral');
-        this.renderer.removeClass(curEl, this.user.position.css);
-        this.renderer.addClass(curEl, this.govt.position.css);
+      this.updatePopularity(-0.125, 0.125)
 
-        this.renderer.removeClass(curEl, 'inProgress');
+      this.renderer.removeClass(curEl, 'inProgress');
 
-        this.updateRemainingMoves()
-        this.updateScore()
-      }, 5000);
+      this.renderer.removeClass(curEl, 'neutral');
+      this.renderer.removeClass(curEl, this.user.position.css);
+      this.renderer.addClass(curEl, this.govt.position.css);
+
     } else {
 
-      setTimeout(() => {
-        this.messageChange.emit({'msg': 'The ' + building.name + ' wishes to be neutral for the moment.'})
+      this.messageChange.emit({'msg': 'The ' + building.name + ' wishes to be neutral for the moment.'})
 
-        this.grid[y][x]['owner'] = this.neutral_ownership;
-        building.owner = this.neutral_ownership
+      const wait5s = () => {        
+        return new Promise<void>(resolve => {
+          setTimeout(() => resolve(), 5000)
+        })
+      }
+      await wait5s()
 
-        this.updatePopularity(0, -0.15);
+      this.grid[y][x]['owner'] = this.neutral_ownership;
+      building.owner = this.neutral_ownership
 
-        this.renderer.removeClass(curEl, this.govt.position.css)
-        this.renderer.removeClass(curEl, this.user.position.css)
-        this.renderer.addClass(curEl, 'neutral');
+      this.updatePopularity(0, -0.15);
 
-        this.renderer.removeClass(curEl, 'inProgress');
+      this.renderer.removeClass(curEl, 'inProgress');
+      
+      this.renderer.removeClass(curEl, this.govt.position.css)
+      this.renderer.removeClass(curEl, this.user.position.css)
+      this.renderer.addClass(curEl, 'neutral');
 
-        this.updateRemainingMoves()
-        this.updateScore()
-      }, 5000);
+      
+      
+      // setTimeout(() => {
+      //   this.messageChange.emit({'msg': 'The ' + building.name + ' wishes to be neutral for the moment.'})
+
+      //   this.grid[y][x]['owner'] = this.neutral_ownership;
+      //   building.owner = this.neutral_ownership
+
+      //   this.updatePopularity(0, -0.15);
+
+      //   this.renderer.removeClass(curEl, this.govt.position.css)
+      //   this.renderer.removeClass(curEl, this.user.position.css)
+      //   this.renderer.addClass(curEl, 'neutral');
+
+      //   this.renderer.removeClass(curEl, 'inProgress');
+
+      //   this.updateRemainingMoves()
+      //   this.updateScore()
+      // }, 5000);
     }
 
-    //Go through each building and update the liklihood
-    for (var index=0; index < this.buildings.buildings.length; index++){
-      let building:BuildingService = this.buildings.buildings[index]
-      var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
-      building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
-    }
+    return true;
   }
 
   activateStreet($event: any){
@@ -213,6 +182,10 @@ export class GameMapComponent implements AfterViewInit  {
 
     var x: number = parseInt(curEl.getAttribute('data-col'))
     var y: number = parseInt(curEl.getAttribute('data-row'))
+
+    // Hide the activate button.
+    const activate = curEl.querySelector('img')
+    this.renderer.addClass(activate, 'hide')
 
     var mood: number = this.calculateMood(x, y);
 
@@ -259,8 +232,172 @@ export class GameMapComponent implements AfterViewInit  {
       building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
     }
 
-    // this.updateRemainingMoves()
-    //this.updateScore()
+  }
+
+  calculateMood(x: number, y: number){				
+		var squareMood: number = 0
+    
+    if (y - 1 >= 0){
+      //console.log (this.grid);
+      //console.log (y-1);
+
+      squareMood += this.grid[(y-1)][x]['owner']
+      if (x - 1 >= 0){
+        squareMood += this.grid[(y - 1)][x - 1]['owner']
+      }
+
+      if (x + 1 < this.grid[(y - 1)].length){
+        squareMood += this.grid[(y - 1)][(x + 1)]['owner']
+      }
+    }
+    if (y + 1 < this.grid.length){
+      squareMood +=  this.grid[y + 1][x]['owner']
+      if (x - 1 >= 0){
+        squareMood += this.grid[y + 1][x - 1]['owner']
+      }
+      if (x + 1 < this.grid[y + 1].length){
+        squareMood +=  this.grid[y + 1][x + 1]['owner']
+      }
+    }
+
+    if ((x-1) >= 0){
+      squareMood += this.grid[y][(x-1)]['owner']
+    }
+
+    if (x + 1 < this.grid[y].length){
+      squareMood += this.grid[y][x+1]['owner']
+    }
+
+		// var b=this.grid[(y-1)][x]['owner'] + this.grid[(y+1)][x]['owner'] + this.grid[y][(x+1)]['owner'] + this.grid[y][(x-1)]['owner'];
+
+		// b=b+this.grid[(y-1)][(x-1)]['owner'] + this.grid[(y+1)][(x+1)]['owner'] + this.grid[(y-1)][(x+1)]['owner']+ this.grid[(y+1)][(x-1)]['owner'];
+			
+		//return b;
+    //console.log ('square mood:', squareMood)
+    
+    return squareMood;
+	}
+
+  computerTurn(){
+
+    //for(var q = 0; q < 4; q++){
+      /*
+      FORL=1TO15					##### go through all 15 buildings
+      2030 X=INT(RND(1)*5+1)*2:Y=INT(RND(1)*3+1)*2	##### randomly pick one from the list
+      2035 J=B5(Y,X)					##### what is the b5 array?
+      2036 IFM5(Y,X)>0THEN2030			##### if the govt. already owns this, then try again
+      2038 B=M5(Y-1,X)+M5(Y+1,X)+M5(Y,X+1)+M5(Y,X-1)			##### calculate the mood of this building
+      2039 B=B+M5(Y-1,X-1)+M5(Y+1,X+1)+M5(Y-1,X+1)+M5(Y+1,X-1)
+      2040 B=INT(B(J)+B/2+G2-P2):IFB<1THENB=1
+      2045 IFB>5THENB=5
+      ##### if Q is greater than this calculated value, then activate this building.... Q is the turn number! WTF
+      2050 IFB>=(5-Q/2)THEN2200			##### activate the building in questio
+
+
+      */
+    var q: number = 1
+    for (var l = 0; l < this.buildings.buildings.length; l++){
+      //var x = Math.random() * 5 + 1;
+      //var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1 + 1) + 1);
+      var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1));
+
+      var building:BuildingService = this.buildings.buildings[randomBuilding]
+      console.log('random building index:', randomBuilding)
+      console.log(building)
+      if (building.owner != this.govt_ownership){
+        var mood: number = this.calculateMood(building.grid['x'], building.grid['y'])
+        var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, mood)
+
+        console.log ('mood:', mood)
+        console.log ('liklihood:', liklihood)
+        // console.log ((5 - (q / 2)))
+        //liklihood = 5
+        //if (liklihood >= (5 - (q / 2))){
+        console.log ('govt activating:', building.name) 
+        this.activateBuilding(building)
+
+        this.updateRemainingMoves()
+        this.updateScore()
+        //}
+
+        break;
+      }
+    }
+    //}
+  }
+
+  updatePopularity(userChange: number, govtChange: number) {
+    this.user.popularity += userChange
+    this.govt.popularity += govtChange
+
+    if (this.user.popularity < 0) {
+      this.user.popularity = 0
+    }
+    if (this.govt.popularity < 0) {
+      this.govt.popularity = 0
+    }
+
+    this.popularityChange.emit({'user': this.user.popularity, 'govt': this.govt.popularity})
+  }
+
+  updateRemainingMoves() {
+    //this.counter = this.counter + 1;
+    this.remaining_moves -= 1;
+    this.movesChange.emit({'remaining_moves': this.remaining_moves, 'current_player': this.current_player});
+  }
+
+  updateScore() {
+    // It's not great, but we'll cycle through all the buildings and calculate the correct scores for both players
+
+    this.user.score = 0;
+    this.govt.score = 0;
+
+    for (var index=0; index < this.buildings.buildings.length; index++){
+      let building = this.buildings.buildings[index]
+      
+      if (building.owner == this.rebel_ownership)
+        this.user.score += building.points
+      else if (building.owner == this.govt_ownership)
+        this.govt.score += building.points
+    }
+
+    console.log('new user score:', this.user.score)
+    this.scoreChange.emit({'user': this.user.score, 'govt': this.govt.score})
+  }
+
+  /**
+   * The user has clicked on a building.
+   * We need to find the HTML element that holds this building,
+   * and then run the activation process.
+   * At the end, update the remaining moves and score
+   * 
+   * @param $event
+   */
+  async userBuildingSelect($event:Event){
+    var curEl: any = $event.target;
+
+    while (!curEl.getAttribute('data-building-name'))
+      curEl = curEl.parentElement
+    
+    var building:BuildingService = this.grid[curEl!.getAttribute('data-row')][curEl.getAttribute('data-col')]['building']
+
+    await this.activateBuilding(building)
+    
+    //Go through each building and update the liklihood
+    for (var index=0; index < this.buildings.buildings.length; index++){
+      let building:BuildingService = this.buildings.buildings[index]
+      var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
+      building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
+    }
+
+    // Update the remaining moves and score
+    this.updateRemainingMoves()
+    this.updateScore()
+
+    // If the score is now 0, then it's the government's turn
+  }
+
+  userStreetSelect($event:Event){
 
   }
 
@@ -324,7 +461,7 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.setAttribute(activateImg, 'width', '25');
       this.renderer.setAttribute(activateImg, 'height', '25');
       this.renderer.addClass(activate, 'activateBuilding')
-      this.renderer.addClass(activate, 'hide')
+      //this.renderer.addClass(activate, 'hide')
       this.renderer.appendChild(activate, activateImg)
       this.renderer.appendChild(divBuildingBackground, activate)
 
@@ -333,7 +470,7 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.setAttribute(buildingDiv, 'data-building-name', randomBuilding.name)
 
       buildingDiv.addEventListener('mouseenter', this.onMouseOverBuilding.bind(this));
-      activate.addEventListener('click', this.activateBuilding.bind(this));
+      activate.addEventListener('click', this.userBuildingSelect.bind(this));
 
       count += 1;
 
@@ -367,6 +504,13 @@ export class GameMapComponent implements AfterViewInit  {
     streetDivsImgs.forEach((streetImg: any) => {
       streetImg.addEventListener('click', this.activateStreet.bind(this));
     })
+
+    this.user.player = 'user';
+    this.govt.player = 'govt';
+
+    this.current_player = this.user;
+
+    this.movesChange.emit({'remaining_moves': this.remaining_moves, 'current_player': this.current_player});
 	}
 
   onMouseOverBuilding($event: any){
@@ -385,6 +529,7 @@ export class GameMapComponent implements AfterViewInit  {
     })
 
     const activate = $event.target.querySelector('p.activateBuilding')
+
     if (this.grid[y][x]['owner'] == this.rebel_ownership) {
       
       this.renderer.addClass(activate, 'hide')
@@ -421,6 +566,14 @@ export class GameMapComponent implements AfterViewInit  {
   }
 
   constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
-    //this.mapBuildings = buildings
+    // console.log(buildings)
+    // console.log(buildings.buildings.length)
+    // for (var x = 0; x<3; x++){
+    //   var randomBuilding = Math.floor(Math.random() * (this.buildings.buildings.length - 1 + 1) + 1);
+    //   console.log ('random building:', randomBuilding)
+    //   console.log (this.buildings.buildings[randomBuilding])
+    // }
+
+    
   }
 }
