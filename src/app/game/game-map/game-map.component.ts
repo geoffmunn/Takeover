@@ -57,8 +57,10 @@ export class GameMapComponent implements AfterViewInit  {
    * Activate the selected building.
    * 
    * @param $event 
+   * 
+   * @returns Promise<boolean>
    */
-  async activateBuilding(building:BuildingService){
+  async activateBuilding(building:BuildingService): Promise<boolean>{
 
     // Get the HTML element
     var rows: Array<HTMLElement> =  this.el.nativeElement.querySelectorAll('section#map div.row')
@@ -82,8 +84,6 @@ export class GameMapComponent implements AfterViewInit  {
     this.renderer.addClass(activate, 'hide')
     
     var result: boolean;  // Depending on the result, we will return a value
-
-    console.log ('current player:', this.current_player);
 
     if (liklihood < comparison){
 
@@ -171,12 +171,14 @@ export class GameMapComponent implements AfterViewInit  {
     return result;
   }
 
-  activateStreet($event: any){
-
-    var curEl: any = $event.target
-
-    while (!curEl.getAttribute('data-col'))
-      curEl = curEl.parentElement
+  /**
+   * Activate the selected street. This requires a valid street parent element to be provided.
+   * 
+   * @param curEl The street element that was clicked
+   * 
+   * @returns Promise<boolean>
+   */
+  async activateStreet(curEl: any): Promise<boolean>{
 
     this.renderer.addClass(curEl, 'inProgress');
 
@@ -189,48 +191,68 @@ export class GameMapComponent implements AfterViewInit  {
 
     var mood: number = this.calculateMood(x, y);
 
+    var result: boolean;  // Depending on the result, we will return a value
+    
     if (mood < 0){
 
-      console.log('emitting join message')
       this.messageChange.emit({'msg':'The street joins the revolution!', 'random': Math.random()})
 
-      setTimeout(() => {
-        this.grid[y][x]['owner'] = this.rebel_ownership
+      const wait5s = () => {        
+        return new Promise<void>(resolve => {
+          setTimeout(() => resolve(), 5000)
+        })
+      }
+      await wait5s()
 
-        this.renderer.removeClass(curEl, 'neutral')
-        this.renderer.removeClass(curEl, this.govt.position.css)
-        this.renderer.addClass(curEl, this.user.position.css);
+      this.grid[y][x]['owner'] = this.rebel_ownership
 
-        this.renderer.removeClass(curEl, 'inProgress');
+      this.renderer.removeClass(curEl, 'inProgress');
 
-        this.updateRemainingMoves()
-        //this.updateScore()
-      }, 5000);
+      this.renderer.removeClass(curEl, 'neutral');
+      this.renderer.removeClass(curEl, this.govt.position.css);
+      this.renderer.addClass(curEl, this.user.position.css);
+
+      if (this.current_player.player = 'user'){
+        result = true;
+      } else {
+        result = false;
+      }
+
+      //this.updateRemainingMoves()
 
     } else {
 
       this.messageChange.emit({'msg': 'The street chooses to join the government!', 'random': Math.random()})
 
-      setTimeout(() => {
-        this.grid[y][x]['owner'] = this.govt_ownership
+      const wait5s = () => {        
+        return new Promise<void>(resolve => {
+          setTimeout(() => resolve(), 5000)
+        })
+      }
+      await wait5s()
 
-        this.renderer.removeClass(curEl, 'neutral');
-        this.renderer.removeClass(curEl, this.user.position.css);
-        this.renderer.addClass(curEl, this.govt.position.css);
+      this.grid[y][x]['owner'] = this.govt_ownership
 
-        this.renderer.removeClass(curEl, 'inProgress');
-
-        this.updateRemainingMoves()
-        //this.updateScore()
-      }, 5000);
+      this.renderer.removeClass(curEl, 'inProgress');
+      
+      this.renderer.removeClass(curEl, 'neutral');
+      this.renderer.removeClass(curEl, this.user.position.css);
+      this.renderer.addClass(curEl, this.govt.position.css);
+      
+      if (this.current_player.player = 'user'){
+        result = false;
+      } else {
+        result = true;
+      }
     }
 
-    //Go through each building and update the liklihood
-    for (var index=0; index < this.buildings.buildings.length; index++){
-      let building:BuildingService = this.buildings.buildings[index]
-      var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
-      building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
-    }
+    // //Go through each building and update the liklihood
+    // for (var index=0; index < this.buildings.buildings.length; index++){
+    //   let building:BuildingService = this.buildings.buildings[index]
+    //   var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
+    //   building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
+    // }
+    return result
 
   }
 
@@ -408,6 +430,60 @@ export class GameMapComponent implements AfterViewInit  {
 
     var activation_result: boolean = await this.activateBuilding(building)
     
+    this.userSelectionFollowup(activation_result)
+
+    // //Go through each building and update the liklihood
+    // for (var index=0; index < this.buildings.buildings.length; index++){
+    //   let building:BuildingService = this.buildings.buildings[index]
+    //   var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
+    //   building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
+    // }
+
+    // // Update the remaining moves and score
+    // this.updateRemainingMoves()
+    // this.updateScore()
+
+    // // If the activation result was false, then switch users and reset the move count
+    // // Also, if the score is now 0, then it's the government's turn
+    // if (activation_result == false || this.remaining_moves == 0){
+    //   this.current_player = this.govt;
+    //   this.remaining_moves = this.max_moves;
+
+    //   this.computerTurn()
+    // }
+    
+  }
+
+  /**
+   * The user has clicked on a street.
+   * We need to find the HTML element that holds this street,
+   * and then run the activation process.
+   * At the end, update the remaining moves and score
+   * 
+   * @param $event
+   */
+  async userStreetSelect($event: Event){
+    var curEl: any = $event.target
+
+    console.log('curEl at event level:', curEl)
+
+    while (!curEl.getAttribute('data-col'))
+      curEl = curEl.parentElement
+
+    var activation_result: boolean = await this.activateStreet(curEl);
+
+    this.userSelectionFollowup(activation_result)
+  }
+
+  /**
+   * After the street or building has been activated, do some standard recalculations.
+   * If the result was a failure, or there are no moves left, then switch players.
+   * 
+   * @param activation_result boolean
+   * 
+   * @returns void
+   */
+  userSelectionFollowup(activation_result: boolean): void{
     //Go through each building and update the liklihood
     for (var index=0; index < this.buildings.buildings.length; index++){
       let building:BuildingService = this.buildings.buildings[index]
@@ -427,11 +503,6 @@ export class GameMapComponent implements AfterViewInit  {
 
       this.computerTurn()
     }
-    
-  }
-
-  userStreetSelect($event:Event){
-
   }
 
   ngAfterViewInit() {
@@ -520,12 +591,11 @@ export class GameMapComponent implements AfterViewInit  {
 
     streetDivs.forEach((streetDiv: any) => {
       streetDiv.addEventListener('mouseenter', this.onMouseOverStreet.bind(this));
-      //streetDiv.addEventListener('click', this.activateStreet.bind(this));
     })
 
     var streetDivsImgs = this.el.nativeElement.querySelectorAll('div.street img');
     streetDivsImgs.forEach((streetImg: any) => {
-      streetImg.addEventListener('click', this.activateStreet.bind(this));
+      streetImg.addEventListener('click', this.userStreetSelect.bind(this));
     })
 
     this.user.player = 'user';
