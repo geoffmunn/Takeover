@@ -81,49 +81,66 @@ export class GameMapComponent implements AfterViewInit  {
     const activate:HTMLElement = curEl.querySelector('p.activateBuilding')!
     this.renderer.addClass(activate, 'hide')
     
+    var result: boolean;  // Depending on the result, we will return a value
+
+    console.log ('current player:', this.current_player);
+
     if (liklihood < comparison){
 
-      this.messageChange.emit({'msg': 'The ' + building.name + ' votes to join the revolution!'})
+      this.messageChange.emit({'msg': 'The ' + building.name + ' votes to join the revolution!'});
 
       const wait5s = () => {        
         return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000)
+          setTimeout(() => resolve(), 5000);
         })
       }
-      await wait5s()
+
+      await wait5s();
 
       this.grid[y][x]['owner'] = this.rebel_ownership;
-      building.owner = this.rebel_ownership
+      building.owner = this.rebel_ownership;
 
-      this.updatePopularity(0.125, -0.125)
+      this.updatePopularity(0.125, -0.125);
       
       this.renderer.removeClass(curEl, 'inProgress');
 
-      this.renderer.removeClass(curEl, 'neutral')
-      this.renderer.removeClass(curEl, this.govt.position.css)
+      this.renderer.removeClass(curEl, 'neutral');
+      this.renderer.removeClass(curEl, this.govt.position.css);
       this.renderer.addClass(curEl, this.user.position.css);
+
+      if (this.current_player.player = 'user'){
+        result = true;
+      } else {
+        result = false;
+      }
 
     } else if (liklihood > comparison){
 
-      this.messageChange.emit({'msg': 'The ' + building.name + ' sides with the Government forces!'})
+      this.messageChange.emit({'msg': 'The ' + building.name + ' sides with the Government forces!'});
 
       const wait5s = () => {        
         return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000)
+          setTimeout(() => resolve(), 5000);
         })
       }
-      await wait5s()
+      await wait5s();
 
       this.grid[y][x]['owner'] = this.govt_ownership;
-      building.owner = this.govt_ownership
+      building.owner = this.govt_ownership;
 
-      this.updatePopularity(-0.125, 0.125)
+      this.updatePopularity(-0.125, 0.125);
 
       this.renderer.removeClass(curEl, 'inProgress');
 
       this.renderer.removeClass(curEl, 'neutral');
       this.renderer.removeClass(curEl, this.user.position.css);
       this.renderer.addClass(curEl, this.govt.position.css);
+
+      if (this.current_player.player = 'user'){
+        result = false;
+      } else {
+        result = true;
+      }
 
     } else {
 
@@ -142,33 +159,16 @@ export class GameMapComponent implements AfterViewInit  {
       this.updatePopularity(0, -0.15);
 
       this.renderer.removeClass(curEl, 'inProgress');
-      
+
       this.renderer.removeClass(curEl, this.govt.position.css)
       this.renderer.removeClass(curEl, this.user.position.css)
       this.renderer.addClass(curEl, 'neutral');
 
-      
-      
-      // setTimeout(() => {
-      //   this.messageChange.emit({'msg': 'The ' + building.name + ' wishes to be neutral for the moment.'})
-
-      //   this.grid[y][x]['owner'] = this.neutral_ownership;
-      //   building.owner = this.neutral_ownership
-
-      //   this.updatePopularity(0, -0.15);
-
-      //   this.renderer.removeClass(curEl, this.govt.position.css)
-      //   this.renderer.removeClass(curEl, this.user.position.css)
-      //   this.renderer.addClass(curEl, 'neutral');
-
-      //   this.renderer.removeClass(curEl, 'inProgress');
-
-      //   this.updateRemainingMoves()
-      //   this.updateScore()
-      // }, 5000);
+      // This is a bad result for everyone:
+      result = false;
     }
 
-    return true;
+    return result;
   }
 
   activateStreet($event: any){
@@ -295,6 +295,8 @@ export class GameMapComponent implements AfterViewInit  {
 
 
       */
+
+    
     var q: number = 1
     for (var l = 0; l < this.buildings.buildings.length; l++){
       //var x = Math.random() * 5 + 1;
@@ -324,6 +326,29 @@ export class GameMapComponent implements AfterViewInit  {
       }
     }
     //}
+  }
+  
+  /**
+   * Returns an array of numbers betwen 0 and 14, randomised.
+   * This is so we can pick random buildings.
+   * 
+   * @returns number[]
+   */
+  randomNumbers():number[]{
+    
+    var nums: number[] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+    
+    random_numbers: number[] = [],
+    i = nums.length,
+    j = 0;
+
+    while (i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        random_numbers.push(nums[j]);
+        nums.splice(j, 1);
+    }
+
+    return random_numbers
   }
 
   updatePopularity(userChange: number, govtChange: number) {
@@ -381,7 +406,7 @@ export class GameMapComponent implements AfterViewInit  {
     
     var building:BuildingService = this.grid[curEl!.getAttribute('data-row')][curEl.getAttribute('data-col')]['building']
 
-    await this.activateBuilding(building)
+    var activation_result: boolean = await this.activateBuilding(building)
     
     //Go through each building and update the liklihood
     for (var index=0; index < this.buildings.buildings.length; index++){
@@ -394,7 +419,15 @@ export class GameMapComponent implements AfterViewInit  {
     this.updateRemainingMoves()
     this.updateScore()
 
-    // If the score is now 0, then it's the government's turn
+    // If the activation result was false, then switch users and reset the move count
+    // Also, if the score is now 0, then it's the government's turn
+    if (activation_result == false || this.remaining_moves == 0){
+      this.current_player = this.govt;
+      this.remaining_moves = this.max_moves;
+
+      this.computerTurn()
+    }
+    
   }
 
   userStreetSelect($event:Event){
@@ -404,20 +437,10 @@ export class GameMapComponent implements AfterViewInit  {
   ngAfterViewInit() {
     var buildingDivs = this.el.nativeElement.querySelectorAll('div.building');
 
-    var nums = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
-    randomNums: number[] = [],
-    i = nums.length,
-    j = 0;
-
-    while (i--) {
-        j = Math.floor(Math.random() * (i+1));
-        randomNums.push(nums[j]);
-        nums.splice(j,1);
-    }
-
+    var random_numbers: number[] = this.randomNumbers()
     var count: number = 0
     buildingDivs.forEach((buildingDiv: any) => {
-      let randomBuilding = this.buildings.buildings[randomNums[count]]
+      let randomBuilding = this.buildings.buildings[random_numbers[count]]
 
       var divBuildingBackground = this.renderer.createElement('div')
       this.renderer.addClass(divBuildingBackground, 'building-background')
@@ -485,8 +508,8 @@ export class GameMapComponent implements AfterViewInit  {
 				this.grid[y][x]['owner'] = this.neutral_ownership;
         if (y % 2 == 1 && x % 2 == 1){
 					this.grid[y][x]['type'] = 'building';
-          this.grid[y][x]['building'] = this.buildings.buildings[randomNums[count]]
-          this.buildings.buildings[randomNums[count]].setGridCoords(x, y)
+          this.grid[y][x]['building'] = this.buildings.buildings[random_numbers[count]]
+          this.buildings.buildings[random_numbers[count]].setGridCoords(x, y)
           count += 1;
         } else
 					this.grid[y][x]['type'] = 'square';
