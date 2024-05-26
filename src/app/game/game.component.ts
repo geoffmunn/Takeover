@@ -45,11 +45,9 @@ export class GameComponent{
   selectedType: string = ''
 
   changeMoves($event:any){
-    this.remainingMoves -= 1;
 
-    if (this.remainingMoves == 0){
-      this.currentPlayer = this.govt;
-    }
+    this.remainingMoves = $event['remaining_moves'];
+    this.currentPlayer = $event['current_player'];
   }
 
   changeScore($event:any){
@@ -139,8 +137,7 @@ export class GameComponent{
     this.user = new PlayerService();
     this.govt = new PlayerService();
 
-    this.remainingMoves = 5;
-
+    // By default, the starting player is the user
     this.currentPlayer = this.user;
   }
 
