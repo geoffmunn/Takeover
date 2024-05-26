@@ -3,6 +3,7 @@ import { GovtTypesService } from './govt-types.service';
 
 export class PlayerService {
 
+  player: string        = ''
   politicalType: number = 0;
   popularity: number    = 0
   position: any
