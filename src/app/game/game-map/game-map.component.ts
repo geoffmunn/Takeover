@@ -3,6 +3,7 @@ import { BuildingsService } from '../services/buildings.service';
 import { BuildingService } from '../services/building.service';
 import { PlayerService } from '../services/player.service';
 import Typewriter from '@philio/t-writer.js'
+import { StreetService } from '../services/street.service';
 
 @Component({
   selector: 'app-game-map',
@@ -23,13 +24,14 @@ export class GameMapComponent implements AfterViewInit  {
   @Output() popularityChange = new EventEmitter();
 
   // Shared variables
-  govt_ownership: number    = 1;
-  grid:any                  = new Array();
-  neutral_ownership: number = 0;
-  rebel_ownership: number   = -1;
-  max_moves: number         = 4;
-  remaining_moves: number   = this.max_moves;
   current_player: PlayerService = this.user;
+  govt_ownership: number        = 1;
+  grid:any                      = new Array();
+  neutral_ownership: number     = 0;
+  rebel_ownership: number       = -1;
+  max_moves: number             = 4;
+  remaining_moves: number       = this.max_moves;
+  streets: StreetService[]      = []
 
   // async waitForPromise() {
   //   // let result = await any Promise, like:
@@ -256,13 +258,18 @@ export class GameMapComponent implements AfterViewInit  {
 
   }
 
-  calculateMood(x: number, y: number){				
+  /**
+   * Calculate the mood of the building at the provided grid coordinates.
+   * 
+   * @param x 
+   * @param y 
+   * 
+   * @returns number
+   */
+  calculateMood(x: number, y: number): number{				
 		var squareMood: number = 0
     
     if (y - 1 >= 0){
-      //console.log (this.grid);
-      //console.log (y-1);
-
       squareMood += this.grid[(y-1)][x]['owner']
       if (x - 1 >= 0){
         squareMood += this.grid[(y - 1)][x - 1]['owner']
@@ -290,14 +297,7 @@ export class GameMapComponent implements AfterViewInit  {
       squareMood += this.grid[y][x+1]['owner']
     }
 
-		// var b=this.grid[(y-1)][x]['owner'] + this.grid[(y+1)][x]['owner'] + this.grid[y][(x+1)]['owner'] + this.grid[y][(x-1)]['owner'];
-
-		// b=b+this.grid[(y-1)][(x-1)]['owner'] + this.grid[(y+1)][(x+1)]['owner'] + this.grid[(y-1)][(x+1)]['owner']+ this.grid[(y+1)][(x-1)]['owner'];
-			
-		//return b;
-    //console.log ('square mood:', squareMood)
-    
-    return squareMood;
+		return squareMood;
 	}
 
   computerTurn(){
@@ -318,36 +318,83 @@ export class GameMapComponent implements AfterViewInit  {
 
       */
 
-    
-    var q: number = 1
-    for (var l = 0; l < this.buildings.buildings.length; l++){
-      //var x = Math.random() * 5 + 1;
-      //var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1 + 1) + 1);
-      var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1));
+      // for i = 1 to 4:
+      // # randomly pick a building
+      // if b>=(5-q/2) then activate the building
+      // otherwise activate a square
+      //   randomly pick a square that the government doesn't already own
+      
+    console.log ('STARTING COMPUTER TURN')
+    var random_numbers: number[] = this.randomNumbers();
 
-      var building:BuildingService = this.buildings.buildings[randomBuilding]
-      console.log('random building index:', randomBuilding)
-      console.log(building)
-      if (building.owner != this.govt_ownership){
-        var mood: number = this.calculateMood(building.grid['x'], building.grid['y'])
-        var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, mood)
+    for (var i = 0; i < this.max_moves; i++){
+      console.log ('turn #', i)
+      // Select a random building and check if it's not owned by the government
+      var selected_building:BuildingService
+      for (var j = 0; j < random_numbers.length; j++){
+        if (this.buildings.buildings[j].owner != this.govt_ownership){
+          selected_building = this.buildings.buildings[j];
 
-        console.log ('mood:', mood)
-        console.log ('liklihood:', liklihood)
-        // console.log ((5 - (q / 2)))
-        //liklihood = 5
-        //if (liklihood >= (5 - (q / 2))){
-        console.log ('govt activating:', building.name) 
-        this.activateBuilding(building)
+          console.log ('the computer wants to activate', selected_building)
 
-        this.updateRemainingMoves()
-        this.updateScore()
-        //}
+          var squareMood: number = this.calculateMood(selected_building.grid['x'], selected_building.grid['y'])
+          var liklihood: number  = selected_building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
 
-        break;
+          console.log ('liklihood:', liklihood)
+          if (liklihood >= (5 - (i / 2))){
+            console.log ('activate a building')
+            this.activateBuilding(selected_building)
+          } else {
+            // We'll activate a street instead
+            console.log ('activating a street')
+            // FORL=1TO100				##### Loop 100 times
+            // 2105 X=INT(RND(1)*11)+1:Y=INT(RND(1)*7)+1	##### randomly pick a row and column
+            // 2110 IFM5(Y,X)>0ORB5(Y,X)>0THEN2105		##### if the govt. owns this, then try again
+            // 2115 B=M5(Y-1,X)+M5(Y+1,X)+M5(Y,X+1)+M5(Y,X-1)
+            // 2117 B=B+M5(Y-1,X-1)+M5(Y+1,X+1)+M5(Y-1,X+1)+M5(Y+1,X-1)
+            // 2120 IFB>0THEN2600				##### if B>0, then the govt. wins this square
+
+            for (var k = 0; k < 100; k++){
+
+            }
+          }
+          break;
+        }
       }
+
+      
+
     }
-    //}
+    
+    // var q: number = 1
+    // for (var l = 0; l < this.buildings.buildings.length; l++){
+    //   //var x = Math.random() * 5 + 1;
+    //   //var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1 + 1) + 1);
+    //   var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1));
+
+    //   var building:BuildingService = this.buildings.buildings[randomBuilding]
+    //   console.log('random building index:', randomBuilding)
+    //   console.log(building)
+    //   if (building.owner != this.govt_ownership){
+    //     var mood: number = this.calculateMood(building.grid['x'], building.grid['y'])
+    //     var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, mood)
+
+    //     console.log ('mood:', mood)
+    //     console.log ('liklihood:', liklihood)
+    //     // console.log ((5 - (q / 2)))
+    //     //liklihood = 5
+    //     //if (liklihood >= (5 - (q / 2))){
+    //     console.log ('govt activating:', building.name) 
+    //     this.activateBuilding(building)
+
+    //     this.updateRemainingMoves()
+    //     this.updateScore()
+    //     //}
+
+    //     break;
+    //   }
+    // }
+    // //}
   }
   
   /**
@@ -373,7 +420,16 @@ export class GameMapComponent implements AfterViewInit  {
     return random_numbers
   }
 
-  updatePopularity(userChange: number, govtChange: number) {
+  /**
+   * Update the popularity with the changes for each player.
+   * Then send the results to the parent component.
+   * 
+   * @param userChange 
+   * @param govtChange 
+   * 
+   * @returns void
+   */
+  updatePopularity(userChange: number, govtChange: number): void {
     this.user.popularity += userChange
     this.govt.popularity += govtChange
 
@@ -387,14 +443,23 @@ export class GameMapComponent implements AfterViewInit  {
     this.popularityChange.emit({'user': this.user.popularity, 'govt': this.govt.popularity})
   }
 
-  updateRemainingMoves() {
-    //this.counter = this.counter + 1;
+  /**
+   * Send a message to the parent component with the remaining moves for the current player.
+   * 
+   * @returns void
+   */
+  updateRemainingMoves(): void {
     this.remaining_moves -= 1;
     this.movesChange.emit({'remaining_moves': this.remaining_moves, 'current_player': this.current_player});
   }
 
-  updateScore() {
-    // It's not great, but we'll cycle through all the buildings and calculate the correct scores for both players
+  /**
+   * Calculate the scores for both players, and send it to the parent component.
+   * It's not great, but we'll cycle through all the buildings and calculate the correct scores for both players
+   * 
+   * @returns void
+   */
+  updateScore(): void {
 
     this.user.score = 0;
     this.govt.score = 0;
@@ -408,7 +473,6 @@ export class GameMapComponent implements AfterViewInit  {
         this.govt.score += building.points
     }
 
-    console.log('new user score:', this.user.score)
     this.scoreChange.emit({'user': this.user.score, 'govt': this.govt.score})
   }
 
@@ -419,8 +483,10 @@ export class GameMapComponent implements AfterViewInit  {
    * At the end, update the remaining moves and score
    * 
    * @param $event
+   * 
+   * @returns Promise<void>
    */
-  async userBuildingSelect($event:Event){
+  async userBuildingSelect($event:Event): Promise<void>{
     var curEl: any = $event.target;
 
     while (!curEl.getAttribute('data-building-name'))
@@ -431,48 +497,7 @@ export class GameMapComponent implements AfterViewInit  {
     var activation_result: boolean = await this.activateBuilding(building)
     
     this.userSelectionFollowup(activation_result)
-
-    // //Go through each building and update the liklihood
-    // for (var index=0; index < this.buildings.buildings.length; index++){
-    //   let building:BuildingService = this.buildings.buildings[index]
-    //   var squareMood = this.calculateMood(building.grid['x'],building.grid['y']);
-    //   building.calculateLiklihood(this.user.popularity, this.govt.popularity, squareMood)
-    // }
-
-    // // Update the remaining moves and score
-    // this.updateRemainingMoves()
-    // this.updateScore()
-
-    // // If the activation result was false, then switch users and reset the move count
-    // // Also, if the score is now 0, then it's the government's turn
-    // if (activation_result == false || this.remaining_moves == 0){
-    //   this.current_player = this.govt;
-    //   this.remaining_moves = this.max_moves;
-
-    //   this.computerTurn()
-    // }
     
-  }
-
-  /**
-   * The user has clicked on a street.
-   * We need to find the HTML element that holds this street,
-   * and then run the activation process.
-   * At the end, update the remaining moves and score
-   * 
-   * @param $event
-   */
-  async userStreetSelect($event: Event){
-    var curEl: any = $event.target
-
-    console.log('curEl at event level:', curEl)
-
-    while (!curEl.getAttribute('data-col'))
-      curEl = curEl.parentElement
-
-    var activation_result: boolean = await this.activateStreet(curEl);
-
-    this.userSelectionFollowup(activation_result)
   }
 
   /**
@@ -503,6 +528,27 @@ export class GameMapComponent implements AfterViewInit  {
 
       this.computerTurn()
     }
+  }
+
+  /**
+   * The user has clicked on a street.
+   * We need to find the HTML element that holds this street,
+   * and then run the activation process.
+   * At the end, update the remaining moves and score
+   * 
+   * @param $event
+   * 
+   * @returns Promise<void>
+   */
+  async userStreetSelect($event: Event): Promise<void>{
+    var curEl: any = $event.target
+
+    while (!curEl.getAttribute('data-col'))
+      curEl = curEl.parentElement
+
+    var activation_result: boolean = await this.activateStreet(curEl);
+
+    this.userSelectionFollowup(activation_result)
   }
 
   ngAfterViewInit() {
@@ -577,13 +623,14 @@ export class GameMapComponent implements AfterViewInit  {
 			for(var x = 0; x < 11; x ++){
 			  this.grid[y][x] = new Array();
 				this.grid[y][x]['owner'] = this.neutral_ownership;
+        this.grid[y][x].owner = this.neutral_ownership;
         if (y % 2 == 1 && x % 2 == 1){
 					this.grid[y][x]['type'] = 'building';
           this.grid[y][x]['building'] = this.buildings.buildings[random_numbers[count]]
           this.buildings.buildings[random_numbers[count]].setGridCoords(x, y)
           count += 1;
         } else
-					this.grid[y][x]['type'] = 'square';
+					this.grid[y][x]['type'] = 'street';
 			}
 		}
     
@@ -591,8 +638,16 @@ export class GameMapComponent implements AfterViewInit  {
 
     streetDivs.forEach((streetDiv: any) => {
       streetDiv.addEventListener('mouseenter', this.onMouseOverStreet.bind(this));
+
+      var x: number = streetDiv.getAttribute('data-col');
+      var y: number = streetDiv.getAttribute('data-row');
+
+      var street:StreetService = new StreetService(x, y);
+      this.streets.push(street);
+      this.grid[y][x]['street'] = street;
     })
 
+    console.log ('streets:', this.streets)
     var streetDivsImgs = this.el.nativeElement.querySelectorAll('div.street img');
     streetDivsImgs.forEach((streetImg: any) => {
       streetImg.addEventListener('click', this.userStreetSelect.bind(this));
@@ -651,7 +706,7 @@ export class GameMapComponent implements AfterViewInit  {
 
     const activate = $event.target.querySelector('img')
 
-    if (this.grid[y][x]['owner'] == this.rebel_ownership) {
+    if (this.grid[y][x].owner == this.rebel_ownership) {
       this.renderer.addClass(activate, 'hide')
     } else {
       this.renderer.removeClass(activate, 'hide')
