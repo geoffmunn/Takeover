@@ -99,7 +99,7 @@ export class GameMapComponent implements AfterViewInit  {
 
       await wait5s();
 
-      this.grid[y][x]['owner'] = this.rebel_ownership;
+      this.grid[y][x].owner = this.rebel_ownership;
       building.owner = this.rebel_ownership;
 
       this.updatePopularity(0.125, -0.125);
@@ -127,7 +127,7 @@ export class GameMapComponent implements AfterViewInit  {
       }
       await wait5s();
 
-      this.grid[y][x]['owner'] = this.govt_ownership;
+      this.grid[y][x].owner = this.govt_ownership;
       building.owner = this.govt_ownership;
 
       this.updatePopularity(-0.125, 0.125);
@@ -155,7 +155,7 @@ export class GameMapComponent implements AfterViewInit  {
       }
       await wait5s()
 
-      this.grid[y][x]['owner'] = this.neutral_ownership;
+      this.grid[y][x].owner = this.neutral_ownership;
       building.owner = this.neutral_ownership
 
       this.updatePopularity(0, -0.15);
@@ -206,7 +206,7 @@ export class GameMapComponent implements AfterViewInit  {
       }
       await wait5s()
 
-      this.grid[y][x]['owner'] = this.rebel_ownership
+      this.grid[y][x].owner = this.rebel_ownership
 
       this.renderer.removeClass(curEl, 'inProgress');
 
@@ -233,7 +233,7 @@ export class GameMapComponent implements AfterViewInit  {
       }
       await wait5s()
 
-      this.grid[y][x]['owner'] = this.govt_ownership
+      this.grid[y][x].owner = this.govt_ownership
 
       this.renderer.removeClass(curEl, 'inProgress');
       
@@ -270,31 +270,31 @@ export class GameMapComponent implements AfterViewInit  {
 		var squareMood: number = 0
     
     if (y - 1 >= 0){
-      squareMood += this.grid[(y-1)][x]['owner']
+      squareMood += this.grid[(y-1)][x].owner
       if (x - 1 >= 0){
-        squareMood += this.grid[(y - 1)][x - 1]['owner']
+        squareMood += this.grid[(y - 1)][x - 1].owner
       }
 
       if (x + 1 < this.grid[(y - 1)].length){
-        squareMood += this.grid[(y - 1)][(x + 1)]['owner']
+        squareMood += this.grid[(y - 1)][(x + 1)].owner
       }
     }
     if (y + 1 < this.grid.length){
-      squareMood +=  this.grid[y + 1][x]['owner']
+      squareMood +=  this.grid[y + 1][x].owner
       if (x - 1 >= 0){
-        squareMood += this.grid[y + 1][x - 1]['owner']
+        squareMood += this.grid[y + 1][x - 1].owner
       }
       if (x + 1 < this.grid[y + 1].length){
-        squareMood +=  this.grid[y + 1][x + 1]['owner']
+        squareMood +=  this.grid[y + 1][x + 1].owner
       }
     }
 
     if ((x-1) >= 0){
-      squareMood += this.grid[y][(x-1)]['owner']
+      squareMood += this.grid[y][(x-1)].owner
     }
 
     if (x + 1 < this.grid[y].length){
-      squareMood += this.grid[y][x+1]['owner']
+      squareMood += this.grid[y][x+1].owner
     }
 
 		return squareMood;
@@ -622,7 +622,6 @@ export class GameMapComponent implements AfterViewInit  {
 			this.grid[y] = new Array();
 			for(var x = 0; x < 11; x ++){
 			  this.grid[y][x] = new Array();
-				this.grid[y][x]['owner'] = this.neutral_ownership;
         this.grid[y][x].owner = this.neutral_ownership;
         if (y % 2 == 1 && x % 2 == 1){
 					this.grid[y][x]['type'] = 'building';
@@ -678,7 +677,7 @@ export class GameMapComponent implements AfterViewInit  {
 
     const activate = $event.target.querySelector('p.activateBuilding')
 
-    if (this.grid[y][x]['owner'] == this.rebel_ownership) {
+    if (this.grid[y][x].owner == this.rebel_ownership) {
       
       this.renderer.addClass(activate, 'hide')
 
