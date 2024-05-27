@@ -405,11 +405,11 @@ export class GameMapComponent implements AfterViewInit  {
    */
   randomNumbers():number[]{
     
-    var nums: number[] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+    var nums: number[] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14];
     
-    random_numbers: number[] = [],
-    i = nums.length,
-    j = 0;
+    var random_numbers: number[] = [];
+    var i: number = nums.length;
+    var j: number = 0;
 
     while (i--) {
         j = Math.floor(Math.random() * (i + 1));
@@ -418,6 +418,32 @@ export class GameMapComponent implements AfterViewInit  {
     }
 
     return random_numbers
+  }
+
+  /**
+   * Returns a randomised list of streets
+   * 
+   * @returns StreetService[]
+   */
+  randomStreets(): StreetService[] {
+
+    var nums: number[] = [];
+
+    for (var i = 0; i < this.streets.length; i ++){
+      nums.push(i);
+    }
+    
+    var random_streets: StreetService[] = [];
+    var i: number = nums.length;
+    var j: number = 0;
+
+    while (i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        random_streets.push(this.streets[nums[j]])
+        nums.splice(j, 1);
+    }
+
+    return random_streets;
   }
 
   /**
@@ -646,7 +672,6 @@ export class GameMapComponent implements AfterViewInit  {
       this.grid[y][x]['street'] = street;
     })
 
-    console.log ('streets:', this.streets)
     var streetDivsImgs = this.el.nativeElement.querySelectorAll('div.street img');
     streetDivsImgs.forEach((streetImg: any) => {
       streetImg.addEventListener('click', this.userStreetSelect.bind(this));
