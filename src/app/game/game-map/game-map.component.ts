@@ -504,7 +504,6 @@ export class GameMapComponent implements AfterViewInit  {
    * @returns void
    */
   updateRemainingMoves(): void {
-    console.log ('updating remaining moves:', {'remaining_moves': this.remaining_moves, 'current_player': this.current_player})
     this.movesChange.emit({'remaining_moves': this.remaining_moves, 'current_player': this.current_player});
   }
 
@@ -542,12 +541,12 @@ export class GameMapComponent implements AfterViewInit  {
    * @returns Promise<void>
    */
   async userBuildingSelect($event:Event): Promise<void>{
-    var curEl: any = $event.target;
+    var cur_el: any = $event.target;
 
-    while (!curEl.getAttribute('data-building-name'))
-      curEl = curEl.parentElement
+    while (!cur_el.getAttribute('data-building-name'))
+      cur_el = cur_el.parentElement
     
-    var building:BuildingService = this.grid[Number(curEl.getAttribute('data-row'))][Number(curEl.getAttribute('data-col'))]['building']
+    var building:BuildingService = this.grid[Number(cur_el.getAttribute('data-row'))][Number(cur_el.getAttribute('data-col'))]['building']
 
     var activation_result: boolean = await this.activateBuilding(building)
     
@@ -594,12 +593,12 @@ export class GameMapComponent implements AfterViewInit  {
    */
   async userStreetSelect($event: Event): Promise<void>{
 
-    var curEl: any = $event.target;
+    var cur_el: any = $event.target;
 
-    while (!curEl.getAttribute('data-col'))
-      curEl = curEl.parentElement
+    while (!cur_el.getAttribute('data-col'))
+      cur_el = cur_el.parentElement
     
-    var street:StreetService = this.grid[Number(curEl.getAttribute('data-row'))][Number(curEl.getAttribute('data-col'))]['street']
+    var street:StreetService = this.grid[Number(cur_el.getAttribute('data-row'))][Number(cur_el.getAttribute('data-col'))]['street']
 
     var activation_result: boolean = await this.activateStreet(street)
 
@@ -613,67 +612,66 @@ export class GameMapComponent implements AfterViewInit  {
   }
 
   ngAfterViewInit() {
-    var buildingDivs = this.el.nativeElement.querySelectorAll('div.building');
+    var building_divs = this.el.nativeElement.querySelectorAll('div.building');
 
     var random_numbers: number[] = this.randomNumbers()
     var count: number = 0
-    buildingDivs.forEach((buildingDiv: any) => {
-      let randomBuilding = this.buildings.buildings[random_numbers[count]]
+    building_divs.forEach((building_div: any) => {
+      let random_building = this.buildings.buildings[random_numbers[count]]
 
-      var divBuildingBackground = this.renderer.createElement('div')
-      this.renderer.addClass(divBuildingBackground, 'building-background')
+      var div_building_background = this.renderer.createElement('div')
+      this.renderer.addClass(div_building_background, 'building-background')
 
-      var divBuildingImage = this.renderer.createElement('div')
-      var buildingImg = this.renderer.createElement('img')
-      this.renderer.setAttribute(buildingImg, 'src', '/assets/buildings/' + randomBuilding.image)
-      this.renderer.setAttribute(buildingImg, 'width', '100')
-      this.renderer.addClass(divBuildingImage, 'building-image')
-      this.renderer.appendChild(divBuildingImage, buildingImg)
-      this.renderer.appendChild(divBuildingBackground, divBuildingImage)
+      var div_building_image = this.renderer.createElement('div')
+      var building_img = this.renderer.createElement('img')
+      this.renderer.setAttribute(building_img, 'src', '/assets/buildings/' + random_building.image)
+      this.renderer.setAttribute(building_img, 'width', '100')
+      this.renderer.addClass(div_building_image, 'building-image')
+      this.renderer.appendChild(div_building_image, building_img)
+      this.renderer.appendChild(div_building_background, div_building_image)
 
-      var divBuildingName = this.renderer.createElement('div')
-      this.renderer.addClass(divBuildingName, 'building-name')
+      var div_building_name = this.renderer.createElement('div')
+      this.renderer.addClass(div_building_name, 'building-name')
 
-      var buildingName = this.renderer.createElement('p')
-      var buildingText = this.renderer.createText(randomBuilding.name)
-      this.renderer.appendChild(buildingName, buildingText)
-      this.renderer.appendChild(divBuildingName, buildingName)
-      this.renderer.appendChild(divBuildingBackground, divBuildingName)
+      var building_name = this.renderer.createElement('p')
+      var building_text = this.renderer.createText(random_building.name)
+      this.renderer.appendChild(building_name, building_text)
+      this.renderer.appendChild(div_building_name, building_name)
+      this.renderer.appendChild(div_building_background, div_building_name)
 
-      var divBuildingPoints = this.renderer.createElement('div')
-      this.renderer.addClass(divBuildingPoints, 'building-points')
+      var div_building_points = this.renderer.createElement('div')
+      this.renderer.addClass(div_building_points, 'building-points')
 
-      var buildingPoints = this.renderer.createElement('p')
-      var pointsText = this.renderer.createText(randomBuilding.points)
+      var building_points = this.renderer.createElement('p')
+      var points_text = this.renderer.createText(String(random_building.points))
 
-      this.renderer.appendChild(buildingPoints, pointsText)
-      this.renderer.appendChild(divBuildingPoints, buildingPoints)
-      this.renderer.appendChild(divBuildingBackground, divBuildingPoints)
+      this.renderer.appendChild(building_points, points_text)
+      this.renderer.appendChild(div_building_points, building_points)
+      this.renderer.appendChild(div_building_background, div_building_points)
 
       var intelligence = this.renderer.createElement('p')
-      var intelligenceText = this.renderer.createText('')
+      var intelligence_text = this.renderer.createText('')
       this.renderer.addClass(intelligence, 'buildingIntelligence')
-      this.renderer.appendChild(intelligence, intelligenceText)
-      this.renderer.appendChild(divBuildingBackground, intelligence)
+      this.renderer.appendChild(intelligence, intelligence_text)
+      this.renderer.appendChild(div_building_background, intelligence)
 
       var activate = this.renderer.createElement('p')
-      var activateImg = this.renderer.createElement('img')
-      this.renderer.setAttribute(activateImg, 'src', '/assets/activate_symbol.png');
-      this.renderer.setAttribute(activateImg, 'width', '25');
-      this.renderer.setAttribute(activateImg, 'height', '25');
+      var activate_img = this.renderer.createElement('img')
+      this.renderer.setAttribute(activate_img, 'src', '/assets/activate_symbol.png');
+      this.renderer.setAttribute(activate_img, 'width', '25');
+      this.renderer.setAttribute(activate_img, 'height', '25');
       this.renderer.addClass(activate, 'activateBuilding')
-      //this.renderer.addClass(activate, 'hide')
-      this.renderer.appendChild(activate, activateImg)
-      this.renderer.appendChild(divBuildingBackground, activate)
+      this.renderer.appendChild(activate, activate_img)
+      this.renderer.appendChild(div_building_background, activate)
 
-      this.renderer.appendChild(buildingDiv, divBuildingBackground)
+      this.renderer.appendChild(building_div, div_building_background)
       
-      this.renderer.setAttribute(buildingDiv, 'data-building-name', randomBuilding.name)
+      this.renderer.setAttribute(building_div, 'data-building-name', random_building.name)
 
-      buildingDiv.addEventListener('mouseenter', this.onMouseOverBuilding.bind(this));
+      building_div.addEventListener('mouseenter', this.onMouseOverBuilding.bind(this));
       activate.addEventListener('click', this.userBuildingSelect.bind(this));
 
-      count += 1;
+     count += 1;
 
     })
 
@@ -694,22 +692,22 @@ export class GameMapComponent implements AfterViewInit  {
 			}
 		}
     
-    var streetDivs = this.el.nativeElement.querySelectorAll('div.street');
+    var street_divs = this.el.nativeElement.querySelectorAll('div.street');
 
-    streetDivs.forEach((streetDiv: any) => {
-      streetDiv.addEventListener('mouseenter', this.onMouseOverStreet.bind(this));
+    street_divs.forEach((street_div: any) => {
+      street_div.addEventListener('mouseenter', this.onMouseOverStreet.bind(this));
 
-      var x: number = streetDiv.getAttribute('data-col');
-      var y: number = streetDiv.getAttribute('data-row');
+      var x: number = street_div.getAttribute('data-col');
+      var y: number = street_div.getAttribute('data-row');
 
       var street:StreetService = new StreetService(x, y);
       this.streets.push(street);
       this.grid[y][x]['street'] = street;
     })
 
-    var streetDivsImgs = this.el.nativeElement.querySelectorAll('div.street img');
-    streetDivsImgs.forEach((streetImg: any) => {
-      streetImg.addEventListener('click', this.userStreetSelect.bind(this));
+    var street_divs_imgs = this.el.nativeElement.querySelectorAll('div.street img');
+    street_divs_imgs.forEach((street_img: any) => {
+      street_img.addEventListener('click', this.userStreetSelect.bind(this));
     })
 
     this.user.player = 'user';
@@ -738,19 +736,10 @@ export class GameMapComponent implements AfterViewInit  {
     const activate = $event.target.querySelector('p.activateBuilding')
 
     if (this.grid[y][x].owner == this.rebel_ownership) {
-      
       this.renderer.addClass(activate, 'hide')
-
       target.innerHTML = 'The ' + building.name + ' has already joined the revolution.'
-
-      // writer
-      //   .type('The ' + building.name + ' has already joined the revolution.')
-      //   .rest(500)
-      //   .start()
     } else {
-      
       this.renderer.removeClass(activate, 'hide')
-
       writer
         .type('The ' + building.name + ' ' + building.mood + ' join the revolution.')
         .rest(500)
@@ -772,15 +761,5 @@ export class GameMapComponent implements AfterViewInit  {
     }
   }
 
-  constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {
-    // console.log(buildings)
-    // console.log(buildings.buildings.length)
-    // for (var x = 0; x<3; x++){
-    //   var randomBuilding = Math.floor(Math.random() * (this.buildings.buildings.length - 1 + 1) + 1);
-    //   console.log ('random building:', randomBuilding)
-    //   console.log (this.buildings.buildings[randomBuilding])
-    // }
-
-    
-  }
+  constructor(public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {}
 }
