@@ -14,10 +14,16 @@ export class BuildingService {
   public points: number        = 0;   // Static - doesn't change
   public proGovernment: number = 0;   // Only used at the starting summary
 
+  /**
+   * Create a building object with the basic details
+   * 
+   * @param name 
+   * @param leaning 
+   * @param proGovernment 
+   * @param points 
+   */
   constructor(@Inject(String) name:string, @Inject(Number) leaning:number, @Inject(Number) proGovernment: number, @Inject(Number) points: number) {
-    /*
-    Create a building object with the basic details
-    */
+    
     this.grid          = {'x': 0, 'y': 0}
     this.image         = name.toLowerCase().replace(' ', '_') + '.png'
     this.leaning       = leaning;
@@ -38,9 +44,9 @@ export class BuildingService {
    * 
    * @returns void
    */
-  setInitialValues(userType: number, userPopularity: number, govtType: number, govtPopularity: number): void{
-    let score: number     = 3 - Math.abs(this.leaning - govtType) + Math.abs(this.leaning - userType) + this.proGovernment
-    let liklihood: number = Math.floor(score + govtPopularity - userPopularity)
+  setInitialValues(user_type: number, user_popularity: number, govt_type: number, govt_popularity: number): void{
+    let score: number     = 3 - Math.abs(this.leaning - govt_type) + Math.abs(this.leaning - user_type) + this.proGovernment
+    let liklihood: number = Math.floor(score + govt_popularity - user_popularity)
 
     if (liklihood < 1)
       liklihood = 1
@@ -62,9 +68,9 @@ export class BuildingService {
    * 
    * @returns number
    */
-  calculateLiklihood(userPopularity: number, govtPopularity: number, squareMood: number): number{
+  calculateLiklihood(user_popularity: number, govt_popularity: number, square_mood: number): number{
 
-    var liklihood:number = Math.floor(this.liklihood + (squareMood / 2) + govtPopularity - userPopularity);
+    var liklihood:number = Math.floor(this.liklihood + (square_mood / 2) + govt_popularity - user_popularity);
 
     if (liklihood > 5)
       liklihood = 5
