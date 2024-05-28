@@ -33,28 +33,6 @@ export class GameMapComponent implements AfterViewInit  {
   remaining_moves: number       = this.max_moves;
   streets: StreetService[]      = []
 
-  // async waitForPromise() {
-  //   // let result = await any Promise, like:
-  //   let result: Promise<string> = await Promise.resolve('this is a sample promise');
-  // }
-
-  
-  
-  // async myFunc() {
-
-  //   console.log('starting async function')
-  //   const wait5s = () => {
-  //     return new Promise<void>(resolve => {
-  //       console.log('blah blah blah')
-  //       setTimeout(() => resolve(), 5000)
-  //     })
-  //   }
-    
-  //   await wait5s()
-  //   // Call you method here
-  //   console.log('finished')
-  // }
-  
   /**
    * Activate the selected building.
    * 
@@ -327,6 +305,12 @@ export class GameMapComponent implements AfterViewInit  {
       // otherwise activate a square
       //   randomly pick a square that the government doesn't already own
       
+    const wait5s = () => {        
+      return new Promise<void>(resolve => {
+        setTimeout(() => resolve(), 5000);
+      })
+    }
+    
     console.log ('STARTING COMPUTER TURN')
 
     // Set up the remaining moves and assign the correct current_player
@@ -340,24 +324,27 @@ export class GameMapComponent implements AfterViewInit  {
 
     var cont: boolean = true;
 
+    // The computer has 4 moves, unless one of them fails
     for (var i = 0; i < this.max_moves; i++){
       console.log ('turn #', i)
-      // Select a random building and check if it's not owned by the government
+      
+      // First, we'll try and find a building to take
       var random_buildings: BuildingService[] = this.randomBuildings() 
       var selected_building:BuildingService
       for (var j = 0; j < random_buildings.length; j++){
+        // Select a random building and check if it's not owned by the government
         selected_building = random_buildings[j]
         if (selected_building.owner != this.govt_ownership){
-          console.log ('the computer wants to activate', selected_building)
-
+          
+          // Check to see if this was successful
           var square_mood: number = this.calculateMood(Number(selected_building.grid['x']), Number(selected_building.grid['y']))
           var liklihood: number  = selected_building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
-
-          console.log ('liklihood:', liklihood, 'vs', (5 - Math.floor(((i+1) / 2))))
           if (liklihood >= (5 - Math.floor(((i + 1) / 2)))){
-            console.log ('activating the ', selected_building.name)
+
+            this.messageChange.emit({'msg': 'The government tries to take the ' + selected_building.name + '...'});
+            await wait5s();
+            
             activation_result = await this.activateBuilding(selected_building)
-            console.log ('result:', activation_result)
             
             // Update the remaining moves
             this.userSelectionFollowup(activation_result);
@@ -370,84 +357,47 @@ export class GameMapComponent implements AfterViewInit  {
           }
         }
       }
+
+      // Now that we've checked the buildings, try and take some streets
+      if (cont == true){
+        var random_streets: StreetService[] = this.randomStreets()
+        var selected_street:StreetService
+        for (var k = 0; k < random_streets.length; k++){
+          selected_street = random_streets[k];
+          if (selected_street.owner != this.govt_ownership){
+            var squareMood: number = this.calculateMood(Number(selected_street.grid['x']), Number(selected_street.grid['y']))
+
+            if (squareMood > 0){
+              this.messageChange.emit({'msg': 'The government tries to take a street...'});
+              await wait5s();
+
+              activation_result = await this.activateStreet(selected_street)
+              this.userSelectionFollowup(activation_result);
+
+              if (activation_result == false || this.remaining_moves == 0){
+                cont = false;
+                break;
+              }
+
+            }
+          }
+        }
+      }
+
       if (cont == false){
         console.log ('END OF COMPUTER TURN')
         
         break;
       }
-          
-      
-      // // We'll activate a street instead
-      // console.log ('activating a street')
-      
-      // var random_streets: StreetService[] = this.randomStreets()
-      // var selected_street:StreetService
-      // for (var k = 0; k < random_streets.length; k++){
-      //   selected_street = random_streets[k];
-      //   if (selected_street.owner != this.govt_ownership){
-      //     console.log ('activating street:', selected_street)
-      //     var squareMood: number = this.calculateMood(Number(selected_street.grid['x']), Number(selected_street.grid['y']))
-      //     console.log ('square mood:', squareMood)
-
-      //     if (squareMood > 0){
-      //       activation_result = await this.activateStreet(selected_street)
-      //       console.log ('result:', activation_result)
-
-      //       this.userSelectionFollowup(activation_result);
-
-
-      //       break;
-      //     }
-
-      //   }
-      // }
-          
-
-        //   if (activation_result == true){
-        //     console.log ('the computer turn was successful, try another turn')
-        //     break;
-        //   }
-        //   break;
-        // }
-     // }
     }
     
     console.log ('USER TURN NOW')
     this.messageChange.emit({'msg': 'Your turn - continue the revolution!'});
-    
+
     // Set up the remaining moves and assign the correct current_player
     this.remaining_moves = this.max_moves;
     this.current_player = this.user;
     this.updateRemainingMoves()
-    // var q: number = 1
-    // for (var l = 0; l < this.buildings.buildings.length; l++){
-    //   //var x = Math.random() * 5 + 1;
-    //   //var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1 + 1) + 1);
-    //   var randomBuilding: number = Math.floor(Math.random() * (this.buildings.buildings.length - 1));
-
-    //   var building:BuildingService = this.buildings.buildings[randomBuilding]
-    //   console.log('random building index:', randomBuilding)
-    //   console.log(building)
-    //   if (building.owner != this.govt_ownership){
-    //     var mood: number = this.calculateMood(building.grid['x'], building.grid['y'])
-    //     var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, mood)
-
-    //     console.log ('mood:', mood)
-    //     console.log ('liklihood:', liklihood)
-    //     // console.log ((5 - (q / 2)))
-    //     //liklihood = 5
-    //     //if (liklihood >= (5 - (q / 2))){
-    //     console.log ('govt activating:', building.name) 
-    //     this.activateBuilding(building)
-
-    //     this.updateRemainingMoves()
-    //     this.updateScore()
-    //     //}
-
-    //     break;
-    //   }
-    // }
-    // //}
   }
 
   /**
