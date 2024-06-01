@@ -57,7 +57,7 @@ export class GameMapComponent implements AfterViewInit  {
     // Values we need to figure out if the building will make the switch
     var square_mood: number = this.calculateMood(x, y)
     var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
-    var comparison: number = Math.floor(Math.random()*3 + 2) 
+    var comparison: number = Math.floor(Math.random() * 3 + 2) 
 
     // Hide the activate button.
     const activate:HTMLElement = cur_el.querySelector('p.activateBuilding')!
@@ -67,7 +67,7 @@ export class GameMapComponent implements AfterViewInit  {
 
     if (liklihood < comparison){
 
-      this.messageChange.emit({'msg': 'The ' + building.name + ' votes to join the revolution!'});
+      this.messageChange.emit({'msg': building.getName() + ' votes to join the revolution!'});
 
       const wait5s = () => {        
         return new Promise<void>(resolve => {
@@ -96,7 +96,7 @@ export class GameMapComponent implements AfterViewInit  {
 
     } else if (liklihood > comparison){
 
-      this.messageChange.emit({'msg': 'The ' + building.name + ' sides with the Government forces!'});
+      this.messageChange.emit({'msg': building.getName() + ' sides with the Government forces!'});
 
       const wait5s = () => {        
         return new Promise<void>(resolve => {
@@ -124,7 +124,7 @@ export class GameMapComponent implements AfterViewInit  {
 
     } else {
 
-      this.messageChange.emit({'msg': 'The ' + building.name + ' wishes to be neutral for the moment.'})
+      this.messageChange.emit({'msg': building.getName() + ' wishes to be neutral for the moment.'})
 
       const wait5s = () => {        
         return new Promise<void>(resolve => {
@@ -161,15 +161,9 @@ export class GameMapComponent implements AfterViewInit  {
   async activateStreet(street:StreetService): Promise<boolean>{
 
     console.log ('street to activate:', street)
-    // Get the HTML element
-    var rows: Array<HTMLElement> =  this.el.nativeElement.querySelectorAll('section#map div.row')
-    var cols: any = rows[street.grid['y']].querySelectorAll('div.cell')
-    var cur_el: HTMLElement = cols[street.grid['x']]
+    var cur_el: HTMLElement = street.element
 
     this.renderer.addClass(cur_el, 'inProgress');
-
-    //var x: number = parseInt(curEl.getAttribute('data-col'))
-    //var y: number = parseInt(curEl.getAttribute('data-row'))
 
     var x: number = Number(street.grid['x'])
     var y: number = Number(street.grid['y'])
@@ -193,14 +187,15 @@ export class GameMapComponent implements AfterViewInit  {
       }
       await wait5s()
 
-      this.grid[y][x].owner = this.rebel_ownership
-      this.grid[y][x].street.owner = this.rebel_ownership;
+      // this.grid[y][x].owner = this.rebel_ownership
+      // this.grid[y][x].street.owner = this.rebel_ownership;
 
-      this.renderer.removeClass(cur_el, 'inProgress');
+      // this.renderer.removeClass(cur_el, 'inProgress');
 
-      this.renderer.removeClass(cur_el, 'neutral');
-      this.renderer.removeClass(cur_el, this.govt.position.css);
-      this.renderer.addClass(cur_el, this.user.position.css);
+      // this.renderer.removeClass(cur_el, 'neutral');
+      // this.renderer.removeClass(cur_el, this.govt.position.css);
+      // this.renderer.addClass(cur_el, this.user.position.css);
+      this.changeStreetOwnership(x, y, cur_el, this.rebel_ownership)
 
       if (this.current_player.player == 'user'){
         result = true;
@@ -219,14 +214,15 @@ export class GameMapComponent implements AfterViewInit  {
       }
       await wait5s()
 
-      this.grid[y][x].owner = this.govt_ownership
-      this.grid[y][x].street.owner = this.govt_ownership;
+      // this.grid[y][x].owner = this.govt_ownership
+      // this.grid[y][x].street.owner = this.govt_ownership;
 
-      this.renderer.removeClass(cur_el, 'inProgress');
+      // this.renderer.removeClass(cur_el, 'inProgress');
       
-      this.renderer.removeClass(cur_el, 'neutral');
-      this.renderer.removeClass(cur_el, this.user.position.css);
-      this.renderer.addClass(cur_el, this.govt.position.css);
+      // this.renderer.removeClass(cur_el, 'neutral');
+      // this.renderer.removeClass(cur_el, this.user.position.css);
+      // this.renderer.addClass(cur_el, this.govt.position.css);
+      this.changeStreetOwnership(x, y, cur_el, this.govt_ownership)
       
       if (this.current_player.player == 'user'){
         result = false;
@@ -236,6 +232,413 @@ export class GameMapComponent implements AfterViewInit  {
     }
 
     return result
+  }
+
+  /**
+   * At the end of the computer turn, broadcast the news...
+   */
+  async broadcastNews(){
+
+    const wait5s = () => {        
+      return new Promise<void>(resolve => {
+        setTimeout(() => resolve(), 5000);
+      })
+    }
+
+    this.messageChange.emit({'msg': 'And now here is the news...'});
+    await wait5s();
+
+    // pick a number between 1 and 10
+
+    // radio is 1,2,3
+    // forces change sides
+    // 1 - 20
+
+    // newspaper is 4,5
+    // forces change sides
+    // 1 - 12
+
+    // airport is 6
+    // popularity drops
+
+    // cathedral is 7
+    // forces change sides. If neutral, random forces from either side
+    // 1 - 10
+
+    // hospital is 8
+    // popularity drops
+
+    // xerxes palace is 9
+    // forces change sides
+    // 1 - 12
+
+    // bank is 10
+    // popularity drops
+
+    // if the selected building is NOT the cathedral and it is neutral, then exit this step
+    // The cathedral can make a 'neutral' broadcast
+    // other buildings report that all remains calm
+
+    var influencers: BuildingService[] = [
+      this.getBuildingByName('Radio station'),
+      this.getBuildingByName('Radio station'),
+      this.getBuildingByName('Radio station'),
+      this.getBuildingByName('Newspaper office'),
+      this.getBuildingByName('Newspaper office'),
+      this.getBuildingByName('Airport'),
+      this.getBuildingByName('Cathedral'),
+      this.getBuildingByName('Hospital'),
+      this.getBuildingByName('Xerxes palace'),
+      this.getBuildingByName('Bank')
+    ]
+
+    var random_number:number = Math.floor(Math.random() * 10);
+
+    random_number = 1;
+    // Select the building:
+    var selected_building:BuildingService = influencers[random_number];
+
+    console.log('influencer building:', selected_building)
+
+    const wait2s = () => {        
+      return new Promise<void>(resolve => {
+        setTimeout(() => resolve(), 5000)
+      })
+    }
+
+    console.log ('selected building owner:', selected_building.owner)
+    if (selected_building.owner != 0) {
+      var action: string = selected_building.getAction();
+      var consequence: string = selected_building.getConsequence();
+
+      console.log ('action:', action)
+      console.log ('consequence:', consequence)
+
+      this.messageChange.emit({'msg': action + '...'})
+      await wait5s();
+
+      this.messageChange.emit({'msg': consequence + '...'})
+      await wait5s();
+
+      if (selected_building.streetDefection > 0){
+        // Randomly select some streets to swap sides
+        for (var i = 0; i < selected_building.streetDefection; i ++){
+          var y: number = Math.floor(Math.random() * this.grid.length)
+          var x: number = Math.floor(Math.random() * this.grid[y].length)
+
+          if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != selected_building.owner){
+            var cur_el: HTMLElement = this.grid[y][x].street.element
+            this.renderer.addClass(cur_el, 'inProgress');
+            await wait2s()
+            this.changeStreetOwnership(x, y, cur_el, selected_building.owner)
+          }
+        }
+      } else {
+        // This is a popularity change
+        if (selected_building.owner == this.rebel_ownership){
+          this.updatePopularity(0.2, -0.2)
+        } else {
+          this.updatePopularity(-0.2, 0.2)
+        }
+      }
+    } else {
+      // all remains calm
+      if (selected_building.name.toLowerCase() != 'cathedral'){
+        var msg: string = 'The ' + selected_building.name + ' reports that all remains calm...';
+        
+        if (selected_building.name.toLowerCase() == 'xerxes palace'){
+          msg = msg.replace('The', '');
+        }
+
+        this.messageChange.emit({'msg': msg});
+        await wait5s();
+
+      } else {
+        var msg: string = 'The Cathedral makes a plea for an end to hostilities...';
+        this.messageChange.emit({'msg': msg});
+
+        for (var i = 0; i < selected_building.streetDefection; i ++){
+          var y: number = Math.floor(Math.random() * this.grid.length)
+          var x: number = Math.floor(Math.random() * this.grid[y].length)
+
+          if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != selected_building.owner){
+            var cur_el: HTMLElement = this.grid[y][x].street.element
+            this.renderer.addClass(cur_el, 'inProgress');
+            await wait2s()
+            this.changeStreetOwnership(x, y, cur_el, selected_building.owner)
+          }
+        }
+
+      }
+    }
+    //     for (var i = 0; i < 20; i ++){
+    //       // Pick a random row and a random column
+    //       var y: number = Math.floor(Math.random() * this.grid.length)
+    //       var x: number = Math.floor(Math.random() * this.grid[y].length)
+
+    //       if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != this.rebel_ownership){
+    //         var cur_el: HTMLElement = this.grid[y][x].street.element
+    //         this.renderer.addClass(cur_el, 'inProgress');
+    //         await wait2s()
+    //         this.changeStreetOwnership(x, y, cur_el, true)
+    //       }
+    //     }
+    //}
+    // var msg: string = ''
+    // if (selected_building.name.toLowerCase() == 'radio station'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     this.messageChange.emit({'msg': 'The radio station makes a pro-rebel broadcast...'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Some government forces may change sides...'});
+    //     await wait5s();
+  
+    //     // Randomly select some streets
+    //     for (var i = 0; i < 20; i ++){
+    //       // Pick a random row and a random column
+    //       var y: number = Math.floor(Math.random() * this.grid.length)
+    //       var x: number = Math.floor(Math.random() * this.grid[y].length)
+
+    //       if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != this.rebel_ownership){
+    //         var cur_el: HTMLElement = this.grid[y][x].street.element
+    //         this.renderer.addClass(cur_el, 'inProgress');
+    //         await wait2s()
+    //         this.changeStreetOwnership(x, y, cur_el, true)
+    //       }
+    //     }
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     this.messageChange.emit({'msg': 'The radio station makes a pro-government broadcast...'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Some rebel forces may change sides...'});
+    //     await wait5s();
+
+    //     // Randomly select some streets
+    //     for (var i = 0; i < 20; i ++){
+    //       // Pick a random row and a random column
+    //       var y: number = Math.floor(Math.random() * this.grid.length)
+    //       var x: number = Math.floor(Math.random() * this.grid[y].length)
+
+    //       if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != this.govt_ownership){
+    //         var cur_el: HTMLElement = this.grid[y][x].street.element
+    //         this.renderer.addClass(cur_el, 'inProgress');
+    //         await wait2s()
+    //         this.changeStreetOwnership(x, y, cur_el, false)
+    //       }
+    //     }
+    //   } else {
+    //     this.messageChange.emit({'msg': 'The radio station reports that all remains calm'});
+    //     await wait5s();
+    //   }
+    // } else if (selected_building.name.toLowerCase() == 'newspaper office'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     msg = 'The newspaper office releases a pro-rebel newsflash...';
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     msg = 'The newspaper office releases a pro-government newsflash...';
+    //   } else {
+    //     msg = 'The newspaper office reports that all remains calm';
+    //   }
+    // } else if (selected_building.name.toLowerCase() == 'airport'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     this.messageChange.emit({'msg': 'The airport flies supplies in to the rebels...'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Government popularity falls.'});
+    //     await wait5s();
+    //     this.updatePopularity(0.2, -0.2)
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     this.messageChange.emit({'msg': 'The airport flies supplies in to the government...'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Rebel popularity falls.'});
+    //     await wait5s();
+    //     this.updatePopularity(-0.2, 0.2)
+    //   } else {
+    //     this.messageChange.emit({'msg': 'The airport reports that all remains calm'});
+    //     await wait5s();
+    //   }
+    // } else if (selected_building.name.toLowerCase() == 'cathedral'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     msg = 'The cathedral preaches a pro-rebel sermon..';
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     msg = 'The cathedral preaches a pro-government sermon...';
+    //   } else {
+    //     msg = 'The cathedral makes a plea for an end to hostilities...';
+    //   }
+    // } else if (selected_building.name.toLowerCase() == 'hospital'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     this.messageChange.emit({'msg': 'The hospital gives help to the rebel forces..'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Government popularity falls.'});
+    //     await wait5s();
+    //     this.updatePopularity(0.2, -0.2)
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     this.messageChange.emit({'msg': 'The hospital gives help to the government forces..'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Rebel popularity falls.'});
+    //     await wait5s();
+    //     this.updatePopularity(-0.2, 0.2)
+    //   } else {
+    //     this.messageChange.emit({'msg': 'The hospital reports that all remains calm'});
+    //     await wait5s();
+    //   }
+    // } else if (selected_building.name.toLowerCase() == 'xerxes palace'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     msg = 'Xerxes palace receives rebel reinforcements...';
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     msg = 'Xerxes palace receives govenment reinforcements...';
+    //   } else {
+    //     msg = 'Xerxes palace reports that all remains calm...';
+    //   }
+    // } else if (selected_building.name.toLowerCase() == 'bank'){
+    //   if (selected_building.owner == this.rebel_ownership){
+    //     this.messageChange.emit({'msg': 'The bank freezes government assets...'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Government popularity falls.'});
+    //     await wait5s();
+    //     this.updatePopularity(0.2, -0.2)
+    //   } else if (selected_building.owner == this.govt_ownership){
+    //     this.messageChange.emit({'msg': 'The bank freezes rebel assets...'});
+    //     await wait5s();
+    //     this.messageChange.emit({'msg': 'Rebel popularity falls.'});
+    //     await wait5s();
+    //     this.updatePopularity(-0.2, 0.2)
+    //   } else {
+    //     this.messageChange.emit({'msg': 'The bank reports that all remains calm...'});
+    //     await wait5s();
+    //   }
+    //}
+
+    
+
+    /*
+    3000 REM NEWS EVENT
+    3002 GOSUB8200
+    3005 N$="AND NOW HERE IS THE NEWS................"
+    3010 FORJ=1TOLEN(N$):PRINTU0$;MID$(N$,J,1);
+    3012 POKEUV,15:POKEUA,9:POKEUD,0:POKEUH,30
+    3014 POKEUL,0:POKEUW,129
+    3020 POKEUV,0:POKEUA,0:POKEUD,0:POKEUH,0:POKEUL,0:POKEUW,0
+    3025 NEXTJ
+    3050 K=INT(RND(1)*10+1)							##### pick a number between 1 and 10
+    3055 PRINT:GOSUB8200
+    3060 ONKGOSUB3090,3090,3090,3092,3092,3094,3096,3097,3098,3099
+    3070 FORX=2TO10STEP2:FORY=2TO6STEP2
+    3072 IFB5(Y,X)=JTHEN3080
+    3074 NEXTY:NEXTX:GOTO3050
+    3080 FORL=1TO4:D9$=U1$:GOSUB8110:D9$="":GOSUB8110:NEXTL
+    3083 IFM5(Y,X)=0ANDJ<>13THEN3800					##### If this building is neutral, then bail if j=13... WTF?
+    3085 M5=0:PRINT""UM$;:IFM5(Y,X)>0THENPRINTUN$;:M5=1
+    3086 PRINT"THE "B$(J)"                           "
+    3089 ONKGOTO3100,3100,3100,3200,3200,3300,3400,3500,3600,3700
+    3090 J=2:RETURN
+    3092 J=3:RETURN
+    3094 J=9:RETURN
+    3096 J=13:RETURN
+    3097 J=10:RETURN
+    3098 J=7:RETURN
+    3099 J=11:RETURN
+    3100 REM RADIO STATION
+    3110 IFM5=1THEN3130
+    3120 PRINT"MAKES A PRO-REBEL BROADCAST"
+    3125 GOTO3140
+    3130 PRINT"MAKES A PRO-GOVERNMENT BROADCAST"
+    3140 GOSUB8050:GOSUB8200
+    3150 IFM5=1THEN3170
+    3160 FORK=1TO20:GOSUB4200:NEXTK:GOSUB8050:RETURN
+    3170 FORK=1TO20:GOSUB4300:NEXTK:GOSUB8050:RETURN
+    3200 REM NEWSPAPER OFFICE
+    3210 IFM5=1THEN3230
+    3220 PRINT"RELEASES A PRO-REBEL NEWSFLASH"
+    3225 GOTO3240
+    3230 PRINT"RELEASES A PRO-GOVERNMENT NEWSFLASH"
+    3240 GOSUB8050:GOSUB8200
+    3250 IFM5=1THEN3270
+    3260 FORK=1TO12:GOSUB4200:NEXTK:GOSUB8050:RETURN
+    3270 FORK=1TO12:GOSUB4300:NEXTK:GOSUB8050:RETURN
+    3300 REM AIRPORT
+    3310 IFM5=1THEN3330
+    3320 PRINT"FLIES SUPPLIES IN TO THE REBELS"
+    3325 GOTO3340
+    3330 PRINT"FLIES SUPPLIES IN TO THE GOVERNMENT"
+    3340 GOSUB8050:GOSUB8200
+    3350 IFM5=1THEN3370
+    3360 GOSUB4000:GOSUB8050:RETURN
+    3370 GOSUB4100:GOSUB8050:RETURN
+    3400 REM CATHEDRAL
+    3402 IFM5(Y,X)<>0THEN3410
+    3405 PRINTUF$"MAKES A PLEA FOR AN END TO HOSTILITIES"
+    3408 GOTO3440
+    3410 IFM5=1THEN3430
+    3420 PRINT"PREACHES A PRO-REBEL SERMON"
+    3425 GOTO3440
+    3430 PRINT"PREACHES A PRO-GOVERNMENT SERMON"
+    3440 GOSUB8050:GOSUB8200
+    3450 IFM5(Y,X)=0THENFORK=1TO20:GOSUB4400:NEXTK:GOSUB8050:RETURN
+    3455 IFM5=1THEN3470
+    3460 FORK=1TO10:GOSUB4200:NEXTK:GOSUB8050:RETURN
+    3470 FORK=1TO10:GOSUB4300:NEXTK:GOSUB8050:RETURN
+    3500 REM HOSPITAL
+    3510 IFM5=1THEN3530
+    3520 PRINT"GIVES HELP TO THE REBEL FORCES"
+    3525 GOTO3540
+    3530 PRINT"GIVES HELP TO THE GOVERNMENT FORCES"
+    3540 GOSUB8050:GOSUB8200
+    3550 IFM5=1THEN3570
+    3560 GOSUB4000:GOSUB8050:RETURN
+    3570 GOSUB4100:GOSUB8050:RETURN
+    3600 REM XERXES PALACE
+    3610 IFM5=1THEN3630
+    3620 PRINT"RECEIVES REBEL REINFORCEMENTS"
+    3625 GOTO3640
+    3630 PRINT"RECEIVES GOVERNMENT REINFORCEMENTS"
+    3640 GOSUB8050:GOSUB8200
+    3650 IFM5=1THEN3670
+    3660 FORK=1TO12:GOSUB4200:NEXTK:GOSUB8050:RETURN
+    3670 FORK=1TO12:GOSUB4300:NEXTK:GOSUB8050:RETURN
+    3700 REM BANK
+    3710 IFM5=1THEN3730
+    3720 PRINT"FREEZES GOVERNMENT ASSETS"
+    3725 GOTO3740
+    3730 PRINT"FREEZES REBEL ASSETS"
+    3740 GOSUB8050:GOSUB8200
+    3750 IFM5=1THEN3770
+    3760 GOSUB4000:GOSUB8050:RETURN
+    3770 GOSUB4100:GOSUB8050:RETURN
+    3800 REM NO NEWS
+    3805 GOSUB8200
+    3810 PRINTUF$"";
+    3820 PRINT"THE "B$(J)" REPORTS THAT"
+    3830 PRINT"ALL REMAINS CALM."
+    3840 GOSUB8050
+    3850 RETURN
+    4000 REM GOVERNMENT POPULARITY DROPS
+    4010 PRINTUM$"GOVERNMENT POPULARITY FALLS..........."
+    4020 G2=G2-.2:P2=P2+.2:GOSUB8350:RETURN
+    4100 REM REBEL POPULARITY DROPS
+    4110 PRINTUN$"REBEL POPULARITY FALLS..........."
+    4120 P2=P2-.2:G2=G2+.2:GOSUB8350:RETURN
+    4200 REM GOVERNMENT FORCES CHANGE SIDES
+    4210 PRINTUM$"SOME GOVERNMENT FORCES MAY CHANGE SIDES"
+    4220 X=INT(RND(1)*11)+1:Y=INT(RND(1)*7)+1
+    4225 IFM5(Y,X)<=0ORB5(Y,X)>0THENRETURN
+    4240 D9$=U1$:GOSUB8110:D9$="":GOSUB8110
+    4245 M5(Y,X)=-1
+    4250 D9$=U1$:GOSUB8110:D9$="":GOSUB8110
+    4260 RETURN
+    4300 REM REBEL FORCES CHANGE SIDES
+    4310 PRINTUN$"SOME REBEL FORCES MAY CHANGE SIDES"
+    4320 X=INT(RND(1)*11)+1:Y=INT(RND(1)*7)+1
+    4325 IFM5(Y,X)>=0ORB5(Y,X)>0THENRETURN
+    4340 D9$=U1$:GOSUB8110:D9$="":GOSUB8110
+    4345 M5(Y,X)=1
+    4350 D9$=U1$:GOSUB8110:D9$="":GOSUB8110
+    4360 RETURN
+    4400 REM RANDOM FORCES DESERT
+    4410 PRINTUF$"SOME FORCES FROM EITHER SIDE MAY DESERT"
+    4420 X=INT(RND(1)*11)+1:Y=INT(RND(1)*7)+1
+    4425 IFM5(Y,X)=0ORB5(Y,X)>0THENRETURN
+    4440 D9$=U1$:GOSUB8110:D9$="":GOSUB8110
+    4445 M5(Y,X)=0
+    4450 D9$=U1$:GOSUB8110:D9$="":GOSUB8110
+    4460 RETURN
+    */
   }
 
   /**
@@ -280,6 +683,33 @@ export class GameMapComponent implements AfterViewInit  {
 
 		return square_mood;
 	}
+
+  changeStreetOwnership(x: number, y: number, cur_el: HTMLElement, new_ownership: number): boolean{
+
+    this.renderer.removeClass(cur_el, 'inProgress');
+
+    this.renderer.removeClass(cur_el, 'neutral');
+    console.log ('new ownership for this street:', new_ownership)
+    if (new_ownership == this.rebel_ownership) {
+      this.grid[y][x].owner = this.rebel_ownership
+      this.grid[y][x].street.owner = this.rebel_ownership;
+      this.renderer.removeClass(cur_el, this.govt.position.css);
+      this.renderer.addClass(cur_el, this.user.position.css);
+    } else if (new_ownership == this.govt_ownership) {
+      this.grid[y][x].owner = this.govt_ownership
+      this.grid[y][x].street.owner = this.govt_ownership;
+      this.renderer.removeClass(cur_el, this.user.position.css);
+      this.renderer.addClass(cur_el, this.govt.position.css);
+    } else {
+      this.grid[y][x].owner = this.neutral_ownership;
+      this.grid[y][x].street.owner = this.neutral_ownership;
+      this.renderer.removeClass(cur_el, this.user.position.css);
+      this.renderer.removeClass(cur_el, this.govt.position.css);
+      this.renderer.addClass(cur_el, 'neutral');
+    }
+
+    return true
+  }
 
   async computerTurn(){
 
@@ -341,7 +771,7 @@ export class GameMapComponent implements AfterViewInit  {
           var liklihood: number  = selected_building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
           if (liklihood >= (5 - Math.floor(((i + 1) / 2)))){
 
-            this.messageChange.emit({'msg': 'The government tries to take the ' + selected_building.name + '...'});
+            this.messageChange.emit({'msg': 'The government tries to take ' + selected_building.getName() + '...'});
             await wait5s();
             
             activation_result = await this.activateBuilding(selected_building)
@@ -389,8 +819,13 @@ export class GameMapComponent implements AfterViewInit  {
         
         break;
       }
+
     }
-    
+
+    // Now run the news
+    console.log ('Broadcast some news')
+    await this.broadcastNews()
+
     console.log ('USER TURN NOW')
     this.messageChange.emit({'msg': 'Your turn - continue the revolution!'});
 
@@ -400,6 +835,25 @@ export class GameMapComponent implements AfterViewInit  {
     this.updateRemainingMoves()
   }
 
+  /**
+   * Return a building based on the name.
+   * 
+   * @param buildingName 
+   * @returns BuildingService
+   */
+  getBuildingByName(buildingName: string):BuildingService {
+
+    var result: BuildingService;
+
+    for (var i = 0; i < this.buildings.buildings.length; i++){
+      if (this.buildings.buildings[i].name.toLowerCase() == buildingName.toLowerCase()){
+        result = this.buildings.buildings[i];
+        break;
+      }
+    }
+
+    return result!;
+  }
   /**
    * Returns a randomised list of buildings
    * 
@@ -541,6 +995,9 @@ export class GameMapComponent implements AfterViewInit  {
    * @returns Promise<void>
    */
   async userBuildingSelect($event:Event): Promise<void>{
+
+    //this.broadcastNews()
+
     var cur_el: any = $event.target;
 
     while (!cur_el.getAttribute('data-building-name'))
@@ -611,7 +1068,11 @@ export class GameMapComponent implements AfterViewInit  {
     }
   }
 
+  /**
+   * Set up the map with random buildings and the associated hooks
+   */
   ngAfterViewInit() {
+
     var building_divs = this.el.nativeElement.querySelectorAll('div.building');
 
     var random_numbers: number[] = this.randomNumbers()
@@ -700,9 +1161,11 @@ export class GameMapComponent implements AfterViewInit  {
       var x: number = street_div.getAttribute('data-col');
       var y: number = street_div.getAttribute('data-row');
 
-      var street:StreetService = new StreetService(x, y);
+      var street:StreetService = new StreetService(x, y, street_div);
       this.streets.push(street);
       this.grid[y][x]['street'] = street;
+
+      console.log (street.element)
     })
 
     var street_divs_imgs = this.el.nativeElement.querySelectorAll('div.street img');
