@@ -1,14 +1,16 @@
 
 <p><strong>{{title}}</strong></p>
 
-<div class="radioOptionsContainer">
-@for (govtType of govtTypes; track govtType) {
-  <div class="radioOption">
-    <label><input type="radio" class="political-selector-radio-button" name="{{group}}" [value]="govtType" (change)="selectGovtType($event)">{{govtType}}</label>
+<div class="politicalSelectorContainer">
+  <div class="radioOptionsContainer">
+  @for (govtType of govt_types; track govtType) {
+    <div class="radioOption">
+      <label><input type="radio" class="political-selector-radio-button" name="{{group}}" [value]="govtType" (change)="selectGovtType($event)">{{govtType}}</label>
+    </div>
+  }
   </div>
-}
-</div>
 
-<div class="posterContainer {{group}}">
-  <img src="/assets/posters/communist_poster.png" width="250" height="250" class="politicalPoster" />
+  <div class="posterContainer {{group}}">
+    <img src="/assets/posters/communist_poster.png" width="250" height="250" class="politicalPoster" />
+  </div>
 </div>
