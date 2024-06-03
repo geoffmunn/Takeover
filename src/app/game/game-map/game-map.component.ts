@@ -49,9 +49,9 @@ export class GameMapComponent implements AfterViewInit  {
     }
 
     // Get the HTML element
-    var rows: Array<HTMLElement> =  this.el.nativeElement.querySelectorAll('section#map div.row')
-    var cols: any = rows[building.grid['y']].querySelectorAll('div.cell')
-    var cur_el: HTMLElement = cols[building.grid['x']]
+    var rows: Array<HTMLElement> = this.el.nativeElement.querySelectorAll('section#map div.row')
+    var cols: any                = rows[building.grid['y']].querySelectorAll('div.cell')
+    var cur_el: HTMLElement      = cols[building.grid['x']]
 
     // Animate this building while we type the intelligence message
     this.renderer.addClass(cur_el, 'inProgress');
@@ -62,8 +62,8 @@ export class GameMapComponent implements AfterViewInit  {
 
     // Values we need to figure out if the building will make the switch
     var square_mood: number = this.calculateMood(x, y)
-    var liklihood: number  = building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
-    var comparison: number = Math.floor(Math.random() * 3 + 2) 
+    var liklihood: number   = building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
+    var comparison: number  = Math.floor(Math.random() * 3 + 2) 
 
     // Hide the activate button.
     const activate:HTMLElement = cur_el.querySelector('p.activateBuilding')!
@@ -79,7 +79,7 @@ export class GameMapComponent implements AfterViewInit  {
       await wait(msg.length);
 
       this.grid[y][x].owner = this.rebel_ownership;
-      building.owner = this.rebel_ownership;
+      building.owner        = this.rebel_ownership;
 
       this.updatePopularity(0.125, -0.125);
       
@@ -102,7 +102,7 @@ export class GameMapComponent implements AfterViewInit  {
       await wait(msg.length);
 
       this.grid[y][x].owner = this.govt_ownership;
-      building.owner = this.govt_ownership;
+      building.owner        = this.govt_ownership;
 
       this.updatePopularity(-0.125, 0.125);
 
@@ -125,7 +125,7 @@ export class GameMapComponent implements AfterViewInit  {
       await wait(msg.length);
 
       this.grid[y][x].owner = this.neutral_ownership;
-      building.owner = this.neutral_ownership
+      building.owner        = this.neutral_ownership
 
       this.updatePopularity(0, -0.15);
 
@@ -275,9 +275,6 @@ export class GameMapComponent implements AfterViewInit  {
     if (selected_building.owner != 0) {
       var action: string = selected_building.getAction() + '...';
       var consequence: string = selected_building.getConsequence() + '...';
-
-      console.log ('action:', action)
-      console.log ('consequence:', consequence)
 
       this.messageChange.emit({'msg': action})
       await wait(action.length);
@@ -667,18 +664,21 @@ export class GameMapComponent implements AfterViewInit  {
     this.renderer.removeClass(cur_el, 'neutral');
 
     if (new_ownership == this.rebel_ownership) {
-      this.grid[y][x].owner = this.rebel_ownership
+      this.grid[y][x].owner        = this.rebel_ownership
       this.grid[y][x].street.owner = this.rebel_ownership;
+
       this.renderer.removeClass(cur_el, this.govt.position.css);
       this.renderer.addClass(cur_el, this.user.position.css);
     } else if (new_ownership == this.govt_ownership) {
-      this.grid[y][x].owner = this.govt_ownership
+      this.grid[y][x].owner        = this.govt_ownership
       this.grid[y][x].street.owner = this.govt_ownership;
+
       this.renderer.removeClass(cur_el, this.user.position.css);
       this.renderer.addClass(cur_el, this.govt.position.css);
     } else {
-      this.grid[y][x].owner = this.neutral_ownership;
+      this.grid[y][x].owner        = this.neutral_ownership;
       this.grid[y][x].street.owner = this.neutral_ownership;
+
       this.renderer.removeClass(cur_el, this.user.position.css);
       this.renderer.removeClass(cur_el, this.govt.position.css);
       this.renderer.addClass(cur_el, 'neutral');
@@ -704,15 +704,13 @@ export class GameMapComponent implements AfterViewInit  {
 
     // Set up the remaining moves and assign the correct current_player
     this.remaining_moves = this.max_moves;
-    this.current_player = this.govt;
+    this.current_player  = this.govt;
     this.updateRemainingMoves()
 
     var activation_result:boolean = false;
 
-    console.log ('current player:', this.current_player)
-
     var cont: boolean = true;
-    var msg: string = '';
+    var msg: string   = '';
 
     // The computer has 4 moves, unless one of them fails
     for (var i = 0; i < this.max_moves; i++){
@@ -728,7 +726,7 @@ export class GameMapComponent implements AfterViewInit  {
           
           // Check to see if this was successful
           var square_mood: number = this.calculateMood(Number(selected_building.grid['x']), Number(selected_building.grid['y']))
-          var liklihood: number  = selected_building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
+          var liklihood: number   = selected_building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
           if (liklihood >= (5 - Math.floor(((i + 1) / 2)))){
 
             msg = 'The government tries to take ' + selected_building.getName() + '...';
