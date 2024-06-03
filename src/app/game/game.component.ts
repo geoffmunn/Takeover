@@ -45,7 +45,6 @@ export class GameComponent{
   selectedType: string = ''
 
   changeMoves($event:any){
-
     this.remainingMoves = $event['remaining_moves'];
     this.currentPlayer = $event['current_player'];
   }
@@ -89,7 +88,7 @@ export class GameComponent{
   };
 
   registerGovtPoliticalSelection($event:any) {
-    var politicalSelection: number = new GovtTypesService().govtTypes.get($event)!;
+        var politicalSelection: number = new GovtTypesService().govtTypes.get($event)!;
     if (politicalSelection > 0){
       this.govt.politicalType = politicalSelection
       this.checkPoliticalSelections();
@@ -117,7 +116,6 @@ export class GameComponent{
       this.buildings.initialiseLiklihoods(userPopularity, this.user.politicalType, govtPopularity, this.govt.politicalType)
       this.user.popularity = userPopularity
       this.govt.popularity = govtPopularity
-      console.log ('popularity calculated!')
     }
   };
 
