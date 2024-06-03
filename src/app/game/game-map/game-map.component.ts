@@ -42,6 +42,12 @@ export class GameMapComponent implements AfterViewInit  {
    */
   async activateBuilding(building:BuildingService): Promise<boolean>{
 
+    const wait = (length: number) => {        
+      return new Promise<void>(resolve => {
+        setTimeout(() => resolve(), Number(length * 100) + 1000);
+      })
+    }
+
     // Get the HTML element
     var rows: Array<HTMLElement> =  this.el.nativeElement.querySelectorAll('section#map div.row')
     var cols: any = rows[building.grid['y']].querySelectorAll('div.cell')
@@ -64,18 +70,13 @@ export class GameMapComponent implements AfterViewInit  {
     this.renderer.addClass(activate, 'hide')
     
     var result: boolean;  // Depending on the result, we will return a value
+    var msg: string = '';
 
     if (liklihood < comparison){
 
-      this.messageChange.emit({'msg': building.getName() + ' votes to join the revolution!'});
-
-      const wait5s = () => {        
-        return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000);
-        })
-      }
-
-      await wait5s();
+      msg = building.getName() + ' votes to join the revolution!';
+      this.messageChange.emit({'msg': msg});
+      await wait(msg.length);
 
       this.grid[y][x].owner = this.rebel_ownership;
       building.owner = this.rebel_ownership;
@@ -96,14 +97,9 @@ export class GameMapComponent implements AfterViewInit  {
 
     } else if (liklihood > comparison){
 
-      this.messageChange.emit({'msg': building.getName() + ' sides with the Government forces!'});
-
-      const wait5s = () => {        
-        return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000);
-        })
-      }
-      await wait5s();
+      msg = building.getName() + ' sides with the Government forces!';
+      this.messageChange.emit({'msg': msg});
+      await wait(msg.length);
 
       this.grid[y][x].owner = this.govt_ownership;
       building.owner = this.govt_ownership;
@@ -124,14 +120,9 @@ export class GameMapComponent implements AfterViewInit  {
 
     } else {
 
-      this.messageChange.emit({'msg': building.getName() + ' wishes to be neutral for the moment.'})
-
-      const wait5s = () => {        
-        return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000)
-        })
-      }
-      await wait5s()
+      msg = building.getName() + ' wishes to be neutral for the moment.';
+      this.messageChange.emit({'msg': msg})
+      await wait(msg.length);
 
       this.grid[y][x].owner = this.neutral_ownership;
       building.owner = this.neutral_ownership
@@ -160,7 +151,12 @@ export class GameMapComponent implements AfterViewInit  {
    */
   async activateStreet(street:StreetService): Promise<boolean>{
 
-    console.log ('street to activate:', street)
+    const wait = (length: number) => {        
+      return new Promise<void>(resolve => {
+        setTimeout(() => resolve(), Number(length * 100) + 1000);
+      })
+    }
+
     var cur_el: HTMLElement = street.element
 
     this.renderer.addClass(cur_el, 'inProgress');
@@ -175,26 +171,13 @@ export class GameMapComponent implements AfterViewInit  {
     var mood: number = this.calculateMood(x, y);
 
     var result: boolean;  // Depending on the result, we will return a value
-    
+    var msg: string = '';
     if (mood < 0){
 
-      this.messageChange.emit({'msg':'The street joins the revolution!', 'random': Math.random()})
+      msg = 'The street joins the revolution!';
+      this.messageChange.emit({'msg': msg, 'random': Math.random()})
+      await wait(msg.length)
 
-      const wait5s = () => {        
-        return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000)
-        })
-      }
-      await wait5s()
-
-      // this.grid[y][x].owner = this.rebel_ownership
-      // this.grid[y][x].street.owner = this.rebel_ownership;
-
-      // this.renderer.removeClass(cur_el, 'inProgress');
-
-      // this.renderer.removeClass(cur_el, 'neutral');
-      // this.renderer.removeClass(cur_el, this.govt.position.css);
-      // this.renderer.addClass(cur_el, this.user.position.css);
       this.changeStreetOwnership(x, y, cur_el, this.rebel_ownership)
 
       if (this.current_player.player == 'user'){
@@ -205,23 +188,10 @@ export class GameMapComponent implements AfterViewInit  {
 
     } else {
 
-      this.messageChange.emit({'msg': 'The street chooses to join the government!', 'random': Math.random()})
+      msg = 'The street chooses to join the government!';
+      this.messageChange.emit({'msg': msg, 'random': Math.random()})
+      await wait(msg.length)
 
-      const wait5s = () => {        
-        return new Promise<void>(resolve => {
-          setTimeout(() => resolve(), 5000)
-        })
-      }
-      await wait5s()
-
-      // this.grid[y][x].owner = this.govt_ownership
-      // this.grid[y][x].street.owner = this.govt_ownership;
-
-      // this.renderer.removeClass(cur_el, 'inProgress');
-      
-      // this.renderer.removeClass(cur_el, 'neutral');
-      // this.renderer.removeClass(cur_el, this.user.position.css);
-      // this.renderer.addClass(cur_el, this.govt.position.css);
       this.changeStreetOwnership(x, y, cur_el, this.govt_ownership)
       
       if (this.current_player.player == 'user'){
@@ -239,14 +209,17 @@ export class GameMapComponent implements AfterViewInit  {
    */
   async broadcastNews(){
 
-    const wait5s = () => {        
+    const wait = (length: number) => {        
       return new Promise<void>(resolve => {
-        setTimeout(() => resolve(), 5000);
+        setTimeout(() => resolve(), Number(length * 100) + 1000);
       })
     }
 
-    this.messageChange.emit({'msg': 'And now here is the news...'});
-    await wait5s();
+    var msg: string = '';
+
+    msg = 'And now here is the news...'
+    this.messageChange.emit({'msg': msg});
+    await wait(msg.length);
 
     // pick a number between 1 and 10
 
@@ -294,31 +267,23 @@ export class GameMapComponent implements AfterViewInit  {
 
     var random_number:number = Math.floor(Math.random() * 10);
 
-    random_number = 1;
     // Select the building:
     var selected_building:BuildingService = influencers[random_number];
 
     console.log('influencer building:', selected_building)
 
-    const wait2s = () => {        
-      return new Promise<void>(resolve => {
-        setTimeout(() => resolve(), 5000)
-      })
-    }
-
-    console.log ('selected building owner:', selected_building.owner)
     if (selected_building.owner != 0) {
-      var action: string = selected_building.getAction();
-      var consequence: string = selected_building.getConsequence();
+      var action: string = selected_building.getAction() + '...';
+      var consequence: string = selected_building.getConsequence() + '...';
 
       console.log ('action:', action)
       console.log ('consequence:', consequence)
 
-      this.messageChange.emit({'msg': action + '...'})
-      await wait5s();
+      this.messageChange.emit({'msg': action})
+      await wait(action.length);
 
-      this.messageChange.emit({'msg': consequence + '...'})
-      await wait5s();
+      this.messageChange.emit({'msg': consequence})
+      await wait(consequence.length);
 
       if (selected_building.streetDefection > 0){
         // Randomly select some streets to swap sides
@@ -326,10 +291,10 @@ export class GameMapComponent implements AfterViewInit  {
           var y: number = Math.floor(Math.random() * this.grid.length)
           var x: number = Math.floor(Math.random() * this.grid[y].length)
 
-          if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != selected_building.owner){
+          if (this.grid[y][x].type == 'street' && (this.grid[y][x].owner != selected_building.owner && this.grid[y][x].owner != this.neutral_ownership)){
             var cur_el: HTMLElement = this.grid[y][x].street.element
             this.renderer.addClass(cur_el, 'inProgress');
-            await wait2s()
+            await wait(10)
             this.changeStreetOwnership(x, y, cur_el, selected_building.owner)
           }
         }
@@ -351,11 +316,12 @@ export class GameMapComponent implements AfterViewInit  {
         }
 
         this.messageChange.emit({'msg': msg});
-        await wait5s();
+        await wait(msg.length);
 
       } else {
         var msg: string = 'The Cathedral makes a plea for an end to hostilities...';
         this.messageChange.emit({'msg': msg});
+        await wait(msg.length)
 
         for (var i = 0; i < selected_building.streetDefection; i ++){
           var y: number = Math.floor(Math.random() * this.grid.length)
@@ -364,13 +330,14 @@ export class GameMapComponent implements AfterViewInit  {
           if (this.grid[y][x].type == 'street' && this.grid[y][x].owner != selected_building.owner){
             var cur_el: HTMLElement = this.grid[y][x].street.element
             this.renderer.addClass(cur_el, 'inProgress');
-            await wait2s()
+            await wait(10)
             this.changeStreetOwnership(x, y, cur_el, selected_building.owner)
           }
         }
 
       }
     }
+    
     //     for (var i = 0; i < 20; i ++){
     //       // Pick a random row and a random column
     //       var y: number = Math.floor(Math.random() * this.grid.length)
@@ -684,12 +651,21 @@ export class GameMapComponent implements AfterViewInit  {
 		return square_mood;
 	}
 
-  changeStreetOwnership(x: number, y: number, cur_el: HTMLElement, new_ownership: number): boolean{
+  /**
+   * Change the ownership of the provided street.
+   * 
+   * @param x 
+   * @param y 
+   * @param cur_el 
+   * @param new_ownership 
+   * 
+   * @returns boolean
+   */
+  changeStreetOwnership(x: number, y: number, cur_el: HTMLElement, new_ownership: number): boolean {
 
     this.renderer.removeClass(cur_el, 'inProgress');
-
     this.renderer.removeClass(cur_el, 'neutral');
-    console.log ('new ownership for this street:', new_ownership)
+
     if (new_ownership == this.rebel_ownership) {
       this.grid[y][x].owner = this.rebel_ownership
       this.grid[y][x].street.owner = this.rebel_ownership;
@@ -711,33 +687,16 @@ export class GameMapComponent implements AfterViewInit  {
     return true
   }
 
-  async computerTurn(){
-
-    //for(var q = 0; q < 4; q++){
-      /*
-      FORL=1TO15					##### go through all 15 buildings
-      2030 X=INT(RND(1)*5+1)*2:Y=INT(RND(1)*3+1)*2	##### randomly pick one from the list
-      2035 J=B5(Y,X)					##### what is the b5 array?
-      2036 IFM5(Y,X)>0THEN2030			##### if the govt. already owns this, then try again
-      2038 B=M5(Y-1,X)+M5(Y+1,X)+M5(Y,X+1)+M5(Y,X-1)			##### calculate the mood of this building
-      2039 B=B+M5(Y-1,X-1)+M5(Y+1,X+1)+M5(Y-1,X+1)+M5(Y+1,X-1)
-      2040 B=INT(B(J)+B/2+G2-P2):IFB<1THENB=1
-      2045 IFB>5THENB=5
-      ##### if Q is greater than this calculated value, then activate this building.... Q is the turn number! WTF
-      2050 IFB>=(5-Q/2)THEN2200			##### activate the building in questio
-
-
-      */
-
-      // for i = 1 to 4:
-      // # randomly pick a building
-      // if b>=(5-q/2) then activate the building
-      // otherwise activate a square
-      //   randomly pick a square that the government doesn't already own
-      
-    const wait5s = () => {        
+  /**
+   * This handles the computer's turns. It activates buildings or streets depending on factors
+   * 
+   * @returns void
+   */
+  async computerTurn(): Promise<void> {
+     
+    const wait = (length: number) => {        
       return new Promise<void>(resolve => {
-        setTimeout(() => resolve(), 5000);
+        setTimeout(() => resolve(), Number(length * 100) + 1000);
       })
     }
     
@@ -753,6 +712,7 @@ export class GameMapComponent implements AfterViewInit  {
     console.log ('current player:', this.current_player)
 
     var cont: boolean = true;
+    var msg: string = '';
 
     // The computer has 4 moves, unless one of them fails
     for (var i = 0; i < this.max_moves; i++){
@@ -771,8 +731,9 @@ export class GameMapComponent implements AfterViewInit  {
           var liklihood: number  = selected_building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
           if (liklihood >= (5 - Math.floor(((i + 1) / 2)))){
 
-            this.messageChange.emit({'msg': 'The government tries to take ' + selected_building.getName() + '...'});
-            await wait5s();
+            msg = 'The government tries to take ' + selected_building.getName() + '...';
+            this.messageChange.emit({'msg': msg});
+            await wait(msg.length);
             
             activation_result = await this.activateBuilding(selected_building)
             
@@ -798,8 +759,9 @@ export class GameMapComponent implements AfterViewInit  {
             var squareMood: number = this.calculateMood(Number(selected_street.grid['x']), Number(selected_street.grid['y']))
 
             if (squareMood > 0){
-              this.messageChange.emit({'msg': 'The government tries to take a street...'});
-              await wait5s();
+              msg = 'The government tries to take a street...'
+              this.messageChange.emit({'msg': msg});
+              await wait(msg.length);
 
               activation_result = await this.activateStreet(selected_street)
               this.userSelectionFollowup(activation_result);
@@ -827,8 +789,10 @@ export class GameMapComponent implements AfterViewInit  {
     await this.broadcastNews()
 
     console.log ('USER TURN NOW')
-    this.messageChange.emit({'msg': 'Your turn - continue the revolution!'});
-
+    msg = 'Your turn - continue the revolution!';
+    this.messageChange.emit({'msg': msg});
+    await wait(msg.length)
+    
     // Set up the remaining moves and assign the correct current_player
     this.remaining_moves = this.max_moves;
     this.current_player = this.user;
