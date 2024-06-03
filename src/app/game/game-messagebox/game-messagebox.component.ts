@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import Typewriter from '@philio/t-writer.js'
 
 @Component({
@@ -20,14 +20,6 @@ export class GameMessageboxComponent implements AfterViewInit {
 
   typeText(message:any){
 
-    // var msgboxContainer = this.el.nativeElement.querySelector('section#messageBoxContainer')
-    // msgboxContainer.removeChild(msgboxContainer.firstElementChild)
-
-    // var msgbox:HTMLDivElement = this.renderer.createElement('div')
-    // this.renderer.setAttribute(msgbox, 'id', 'messageBox')
-
-    // this.renderer.appendChild(msgboxContainer, msgbox)
-
     const target = document.querySelector('div#messageBox')
 
     target!.innerHTML = ''
@@ -47,7 +39,4 @@ export class GameMessageboxComponent implements AfterViewInit {
     this.typeText({'msg': 'Your turn - start the revolution!'})
   }
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {
-    
-  }
 }
