@@ -39,8 +39,10 @@ export class GameComponent{
     'pickASide': false,
     'confirmation': false,
     'summary': false,
-    'game': false
-  };
+    'game': false,
+    'victory': false,
+    'loss': false
+  }
 
   selectedType: string = ''
 
@@ -119,16 +121,26 @@ export class GameComponent{
     }
   };
 
-  nextPage(nextDiv:string){
+  /**
+   * Show the next part of the intro, or start the game
+   * 
+   * @param nextDiv
+   */
+  nextPage(nextDiv: string): void{
     for (let key in this.showHide) {
-      //let value = this.showHide[key as keyof typeof this.showHide]
-      
       if (key == nextDiv) {
         this.showHide[key as keyof typeof this.showHide] = true;
       } else {
         this.showHide[key as keyof typeof this.showHide] = false;
       }
     }
+
+    if (nextDiv == 'game'){
+      const border_div = document.querySelector('section#border');
+      this.renderer.addClass(border_div, 'hidden');
+    }
+    
+
   };
 
   constructor(@Inject(BuildingsService) public buildings: BuildingsService, private el: ElementRef, private renderer: Renderer2) {

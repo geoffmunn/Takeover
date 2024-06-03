@@ -20,6 +20,11 @@ section#border {
     margin: 0px auto;
     padding: 2px;
 }
+
+    section#border.hidden {
+        display: none;
+    }
+    
     div.explainer {
         width: 750px;
         border: 2px solid Black;
