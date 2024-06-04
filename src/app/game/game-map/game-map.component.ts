@@ -130,7 +130,6 @@ export class GameMapComponent implements AfterViewInit  {
       this.updatePopularity(0, -0.15);
 
       this.renderer.removeClass(cur_el, 'inProgress');
-
       this.renderer.removeClass(cur_el, this.govt.position.css)
       this.renderer.removeClass(cur_el, this.user.position.css)
       this.renderer.addClass(cur_el, 'neutral');
@@ -270,10 +269,8 @@ export class GameMapComponent implements AfterViewInit  {
     // Select the building:
     var selected_building:BuildingService = influencers[random_number];
 
-    console.log('influencer building:', selected_building)
-
     if (selected_building.owner != 0) {
-      var action: string = selected_building.getAction() + '...';
+      var action: string      = selected_building.getAction() + '...';
       var consequence: string = selected_building.getConsequence() + '...';
 
       this.messageChange.emit({'msg': action})
@@ -793,7 +790,7 @@ export class GameMapComponent implements AfterViewInit  {
     
     // Set up the remaining moves and assign the correct current_player
     this.remaining_moves = this.max_moves;
-    this.current_player = this.user;
+    this.current_player  = this.user;
     this.updateRemainingMoves()
   }
 
@@ -965,8 +962,7 @@ export class GameMapComponent implements AfterViewInit  {
     while (!cur_el.getAttribute('data-building-name'))
       cur_el = cur_el.parentElement
     
-    var building:BuildingService = this.grid[Number(cur_el.getAttribute('data-row'))][Number(cur_el.getAttribute('data-col'))]['building']
-
+    var building:BuildingService   = this.grid[Number(cur_el.getAttribute('data-row'))][Number(cur_el.getAttribute('data-col'))]['building']
     var activation_result: boolean = await this.activateBuilding(building)
     
     this.userSelectionFollowup(activation_result)
@@ -990,7 +986,8 @@ export class GameMapComponent implements AfterViewInit  {
     //Go through each building and update the liklihood
     for (var index=0; index < this.buildings.buildings.length; index++){
       let building:BuildingService = this.buildings.buildings[index]
-      var square_mood = this.calculateMood(building.grid['x'],building.grid['y']);
+      var square_mood              = this.calculateMood(building.grid['x'],building.grid['y']);
+
       building.calculateLiklihood(this.user.popularity, this.govt.popularity, square_mood)
     }
 
@@ -1017,8 +1014,7 @@ export class GameMapComponent implements AfterViewInit  {
     while (!cur_el.getAttribute('data-col'))
       cur_el = cur_el.parentElement
     
-    var street:StreetService = this.grid[Number(cur_el.getAttribute('data-row'))][Number(cur_el.getAttribute('data-col'))]['street']
-
+    var street:StreetService       = this.grid[Number(cur_el.getAttribute('data-row'))][Number(cur_el.getAttribute('data-col'))]['street']
     var activation_result: boolean = await this.activateStreet(street)
 
     this.userSelectionFollowup(activation_result)
@@ -1035,18 +1031,17 @@ export class GameMapComponent implements AfterViewInit  {
    */
   ngAfterViewInit() {
 
-    var building_divs = this.el.nativeElement.querySelectorAll('div.building');
-
+    var building_divs            = this.el.nativeElement.querySelectorAll('div.building');
     var random_numbers: number[] = this.randomNumbers()
-    var count: number = 0
-    building_divs.forEach((building_div: any) => {
-      let random_building = this.buildings.buildings[random_numbers[count]]
+    var count: number            = 0
 
+    building_divs.forEach((building_div: any) => {
+      let random_building         = this.buildings.buildings[random_numbers[count]]
       var div_building_background = this.renderer.createElement('div')
       this.renderer.addClass(div_building_background, 'building-background')
 
       var div_building_image = this.renderer.createElement('div')
-      var building_img = this.renderer.createElement('img')
+      var building_img       = this.renderer.createElement('img')
       this.renderer.setAttribute(building_img, 'src', '/assets/buildings/' + random_building.image)
       this.renderer.setAttribute(building_img, 'width', '100')
       this.renderer.addClass(div_building_image, 'building-image')
@@ -1066,19 +1061,19 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.addClass(div_building_points, 'building-points')
 
       var building_points = this.renderer.createElement('p')
-      var points_text = this.renderer.createText(String(random_building.points))
+      var points_text     = this.renderer.createText(String(random_building.points))
 
       this.renderer.appendChild(building_points, points_text)
       this.renderer.appendChild(div_building_points, building_points)
       this.renderer.appendChild(div_building_background, div_building_points)
 
-      var intelligence = this.renderer.createElement('p')
+      var intelligence      = this.renderer.createElement('p')
       var intelligence_text = this.renderer.createText('')
       this.renderer.addClass(intelligence, 'buildingIntelligence')
       this.renderer.appendChild(intelligence, intelligence_text)
       this.renderer.appendChild(div_building_background, intelligence)
 
-      var activate = this.renderer.createElement('p')
+      var activate     = this.renderer.createElement('p')
       var activate_img = this.renderer.createElement('img')
       this.renderer.setAttribute(activate_img, 'src', '/assets/activate_symbol.png');
       this.renderer.setAttribute(activate_img, 'width', '25');
@@ -1088,7 +1083,6 @@ export class GameMapComponent implements AfterViewInit  {
       this.renderer.appendChild(div_building_background, activate)
 
       this.renderer.appendChild(building_div, div_building_background)
-      
       this.renderer.setAttribute(building_div, 'data-building-name', random_building.name)
 
       building_div.addEventListener('mouseenter', this.onMouseOverBuilding.bind(this));
@@ -1103,10 +1097,10 @@ export class GameMapComponent implements AfterViewInit  {
     for(var y=0; y<7; y++){
 			this.grid[y] = new Array();
 			for(var x = 0; x < 11; x ++){
-			  this.grid[y][x] = new Array();
+			  this.grid[y][x]       = new Array();
         this.grid[y][x].owner = this.neutral_ownership;
         if (y % 2 == 1 && x % 2 == 1){
-					this.grid[y][x]['type'] = 'building';
+					this.grid[y][x]['type']     = 'building';
           this.grid[y][x]['building'] = this.buildings.buildings[random_numbers[count]]
           this.buildings.buildings[random_numbers[count]].setGridCoords(x, y)
           count += 1;
