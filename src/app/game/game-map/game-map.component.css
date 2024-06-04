@@ -9,6 +9,10 @@
         border-left: 4px solid Black;
     }
 
+        section#map.hidden {
+            display: none;
+        }
+
     header, .row {
         display: table-row;
     }

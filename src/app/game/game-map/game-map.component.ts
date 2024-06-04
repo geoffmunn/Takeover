@@ -31,8 +31,8 @@ export class GameMapComponent implements AfterViewInit  {
   rebel_ownership: number       = -1;
   max_moves: number             = 4;
   remaining_moves: number       = this.max_moves;
-  streets: StreetService[]      = []
-
+  streets: StreetService[]      = [];
+  target_score: number          = 35;
   /**
    * Activate the selected building.
    * 
@@ -967,10 +967,41 @@ export class GameMapComponent implements AfterViewInit  {
     
     this.userSelectionFollowup(activation_result)
     
-    // If the activation result was false, then switch users and reset the move count
-    // Also, if the score is now 0, then it's the government's turn
-    if (activation_result == false || this.remaining_moves == 0){
-      this.computerTurn()
+    console.log ('user score:', this.user.score)
+    console.log (typeof(this.user.score))
+    console.log ('target:', this.target_score)
+
+    if (this.user.score >= this.target_score){
+      const border_div = document.querySelector('section#border');
+      this.renderer.removeClass(border_div, 'hidden');
+      
+      const victory_div = document.querySelector('div#victory');
+      this.renderer.removeClass(victory_div, 'hidden');
+
+      const game_div = document.querySelector('section#gameBorder');
+      this.renderer.addClass(game_div, 'hidden');
+      const map_section = document.querySelector('section#map');
+      this.renderer.addClass(map_section, 'hidden');
+    } else if (this.govt.score >= this.target_score){
+
+      const border_div = document.querySelector('section#border');
+      this.renderer.removeClass(border_div, 'hidden');
+      
+      const victory_div = document.querySelector('div#loss');
+      this.renderer.removeClass(victory_div, 'hidden');
+
+      const game_div = document.querySelector('section#gameBorder');
+      this.renderer.addClass(game_div, 'hidden');
+      const map_section = document.querySelector('section#map');
+      this.renderer.addClass(map_section, 'hidden');
+
+    } else {
+    
+      // If the activation result was false, then switch users and reset the move count
+      // Also, if the score is now 0, then it's the government's turn
+      if (activation_result == false || this.remaining_moves == 0){
+        this.computerTurn()
+      }
     }
 
   }
