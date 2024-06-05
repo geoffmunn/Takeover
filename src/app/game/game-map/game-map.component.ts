@@ -33,7 +33,7 @@ export class GameMapComponent implements AfterViewInit  {
   remaining_moves: number       = this.max_moves;
   streets: StreetService[]      = [];
   target_score: number          = 35;
-  
+
   /**
    * Activate the selected building.
    * 
@@ -304,12 +304,8 @@ export class GameMapComponent implements AfterViewInit  {
     } else {
       // all remains calm
       if (selected_building.name.toLowerCase() != 'cathedral'){
-        var msg: string = 'The ' + selected_building.name + ' reports that all remains calm...';
+        var msg: string = selected_building.getName() + ' reports that all remains calm...';
         
-        if (selected_building.name.toLowerCase() == 'xerxes palace'){
-          msg = msg.replace('The', '');
-        }
-
         this.messageChange.emit({'msg': msg});
         await wait(msg.length);
 
@@ -1188,11 +1184,11 @@ export class GameMapComponent implements AfterViewInit  {
 
     if (this.grid[y][x].owner == this.rebel_ownership) {
       this.renderer.addClass(activate, 'hide')
-      target.innerHTML = 'The ' + building.name + ' has already joined the revolution.'
+      target.innerHTML = building.getName() + ' has already joined the revolution.'
     } else {
       this.renderer.removeClass(activate, 'hide')
       writer
-        .type('The ' + building.name + ' ' + building.mood + ' join the revolution.')
+        .type(building.getName() + ' ' + building.mood + ' join the revolution.')
         .rest(500)
         .start()
     }
