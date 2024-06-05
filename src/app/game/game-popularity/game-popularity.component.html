@@ -1,5 +1,7 @@
 <section id="popularityContainer">
-    <div>Popularity</div>
-    <div>Rebels:<span class="barWidth {{user.position.css}}" [style]="{'width': userStyle}">&nbsp;</span></div>
-    <div>Goverment:<span class="barWidth {{govt.position.css}}" [style]="{'width': govtStyle}" >&nbsp;</span></div>
+    <div id="popularityTitle">Popularity</div>
+    <div class="barTitle">Rebels</div>
+    <div class="barContainer"><span class="barWidth {{user.position.css}}" [style]="{'width': userStyle}">&nbsp;</span></div>
+    <div class="barTitle">Government</div>
+    <div class="barContainer"><span class="barWidth {{govt.position.css}}" [style]="{'width': govtStyle}" >&nbsp;</span></div>
 </section>

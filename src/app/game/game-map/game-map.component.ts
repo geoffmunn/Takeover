@@ -33,6 +33,7 @@ export class GameMapComponent implements AfterViewInit  {
   remaining_moves: number       = this.max_moves;
   streets: StreetService[]      = [];
   target_score: number          = 35;
+  
   /**
    * Activate the selected building.
    * 

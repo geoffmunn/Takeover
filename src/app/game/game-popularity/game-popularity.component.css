@@ -1,15 +1,52 @@
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_1_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'SequentialistBB';
+    src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff2') format('woff2'),
+    url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/4273/306FA6_0_0.woff') format('woff');
+    font-style: italic;
+    font-weight: 400;
+}
 section#popularityContainer {
     border-bottom: 4px solid Black;
-    padding-bottom: 1em;
+    padding: 0.5em 0.5em 1em 0.5em;
 }
-    span.barWidth {
-        display: inline-block;
+
+    div#popularityTitle {
+        font-family: 'SequentialistBB';
+        font-size: 1.2em;
+        padding-bottom: 0.4em;
+        text-align: center;
     }
 
-    span.barWidth.left {
-        background-color: #ce0f09;
+    div.barTitle {
+        font-family: 'SequentialistBB';
+        text-align: center;
     }
 
-    span.barWidth.right {
-        background-color: #1b139c;
+        div.barTitle:first-child {
+            margin-bottom: 0.5em;        
+        }
+
+    div.barContainer {
+        width: 100%;
     }
+
+        span.barWidth {
+            display: inline-block;
+            border: 2px solid Black;
+        }
+
+            span.barWidth.left {
+                background-color: #ce0f09;
+            }
+
+            span.barWidth.right {
+                background-color: #1b139c;
+            }
