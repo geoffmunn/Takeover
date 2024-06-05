@@ -1,0 +1,267 @@
+<div id="logo"><img src="/assets/logo.png" height="128" width="128" /></div>
+<section id="border">
+    <div *ngIf="showHide['intro']" id="intro" class="explainer">
+        <div class="panel title">
+            <h2>Takeover</h2>
+        </div>
+        <div class="panel top">
+            <p>
+                In this game you attempt to take over the government headed by the evil president Xerxes.
+            </p>
+            <div class="revolutionary">
+                <img src="/assets/revolutionary_speech.png" height="150" width="150" />
+            </div>
+            <p>
+                The game is played on a city map which features streets and buildings.
+            </p>
+            <br />
+        </div>
+        <div class="panel bottom">
+            <p>
+                You are the rebel forces and the government is played by the computer (me).
+            </p>
+            <div class="xerxes">
+                <img src="/assets/xerxes_speech.png" height="150" width="150" />
+            </div>
+            <p>
+                Points are gained by capturing key buildings and the first player to reach 35 points is the winner.
+            </p>
+            <br />
+        </div>
+        
+        <div class="buttonContainer">
+            <button (click)="nextPage('howToPlay')" class="next">Next</button>
+            <!--<button (click)="nextPage('loss')" class="next">Next</button> -->
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="showHide['howToPlay']" id="howToPlay" class="explainer">
+        <div class="panel title">
+            <h3>How to play</h3>
+        </div>
+
+        <div class="panel top" style="height:200px">
+            <div class="revolutionary">
+                <img src="/assets/revolutionary4.png" width="200" height="200" style="border-left:2px solid Black" />
+            </div>
+            <p>
+                You and I each take alternate turns, and each turn consists of four consecutive moves.
+            </p>
+            <p>
+                At each move you may either...
+            </p>
+        </div>
+
+        <div class="panel top">
+            <p>
+                <strong>Try to take over a building square.</strong>
+            </p>
+            <p>
+                Each building has a traditional political leaning, loyalty and pro/anti government bias, but this will change as the game progresses according to your popularity.
+            </p>
+            
+            <p style="margin-bottom: 1em">
+                The more popular you are, the better the chance of a building coming over to your side.
+            </p>
+        </div>
+        <div class="panel top" style="height:255px">
+            <div class="governmentLarge">
+                <img src="/assets/government1.png" width="250" height="255" />
+            </div>
+            <p>
+                <strong>Try to take over a street square.</strong>
+            </p>
+            <p>
+                This will also help you to take over buildings at a later date.
+            </p>
+            <p>
+                It will also help stop government forces from advancing too far.
+            </p>
+        </div>
+        <div class="panel top">
+            <p style="padding: 0.5em;">
+                <strong>If an attempt to take a building or street square is unsuccesful, then your turn is over!</strong>
+            </p>
+        </div>
+
+        <div class="buttonContainer">
+            <button (click)="nextPage('intro')" class="back">Back</button>  
+            <button (click)="nextPage('theMap')" class="next">Next</button>
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="showHide['theMap']" id="theMap" class="explainer">
+        <div class="panel title">
+            <h3>The Map</h3>
+        </div>
+        <div class="panel top">
+            <p>
+                Taking over a street square is only possible if you already own more surrounding squares (up to 8 buildings or streets) than the opposing colour.
+            </p>
+            <p>
+                Grey neutral squares do not count. The more squares you occupy surrounding a building, the more chance you have of overcoming resisitance in a building.
+            </p>
+            <p>
+                Some buildings are particularly important since they can alter the course of the game if you occupy them. These include:
+            </p>
+            <div id="exampleBuildingList">
+                <ul>
+                    <li>The radio station</li>
+                    <li>The Newspaper Office</li>
+                    <li>The Cathedral</li>
+                    <li>The Bank</li>
+                    <li>The Hospital</li>
+                    <li>The Airport</li>
+                    <li>Xerxes' Palace</li>
+                </ul>
+            </div>
+            <div id="exampleBuildingPictures">
+                <img src="/assets/buildings/radio_station.png" width="150" height="150" id="img1"/>
+                <img src="/assets/buildings/newspaper_office.png" width="150" height="150" id="img2" />
+                <img src="/assets/buildings/cathedral.png" width="150" height="150" id="img3" />
+            </div>
+            <br />
+        </div>
+        <div class="panel top" style="height:210px">
+            <div class="governmentLarge">
+                <img src="/assets/government5.png" width="210" height="210" />
+            </div>
+            <p>
+                The radio station, newspaper office and cathedral are the most important buildings to hold, but you will probably never manage to capture Xerxes' Palace!
+            </p>
+        </div>
+        <div class="buttonContainer">
+            <button (click)="nextPage('howToPlay')" class="back">Back</button>  
+            <button (click)="nextPage('scenarios')" class="next">Next</button>
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="showHide['scenarios']" id="scenarios" class="explainer">
+        <div class="panel title">
+            <h3>Scenarios</h3>
+        </div>
+        <div class="panel top">
+            <p>Each game will be a different scenario.</p>
+
+            <p>Not only will the city map be changed, you can choose whether you wish to be left or right wing. Remember that allegiances of each building will be different.</p>
+
+            <p style="margin-bottom: 1em">It all depends on your political colour as well as the Government's politics and strength.</p>
+        </div>
+        <div class="panel bottom">
+            <p>Watch out. The Government will play a mean game! <strong>No one likes to suffer a Takeover.....</strong></p>
+        </div>
+        <div class="buttonContainer">
+            <button (click)="nextPage('theMap')" class="back">Back</button>  
+            <button (click)="nextPage('pickASide')" class="next">Next</button>
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="showHide['pickASide']" id="pickASide" class="explainer">
+        <div class="panel title">
+            <h3>Pick your side</h3>
+        </div>
+        <div class="panel top">
+            <p>So first of all, define the scenario...</p>
+
+            <political-selector [title]="'what sort of rebel group do you represent?'" [group]="'rebelsType'" (change)="registerUserPoliticalSelection($event)"></political-selector>
+
+            <br />
+        </div>
+        <div class="panel top">
+            <political-selector [title]="'What sort of government are you trying to overthrow?'" [group]="'govtType'" (change)="registerGovtPoliticalSelection($event)"></political-selector>
+
+            <br />
+        </div>
+
+        <div class="panel top">
+            <stability-selector [title]="'Is President Xerxes\' government:'" [group]="'govtStability'" (change)="registerGovtStabilitySelection($event)"></stability-selector>
+        </div>
+
+        <div class="buttonContainer">
+            <button (click)="nextPage('scenarios')" class="back">Back</button>  
+            <button (click)="nextPage('confirmation')" class="next">Next</button>
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="showHide['confirmation']" id="confirmation" class="explainer">
+        <div class="panel title">
+            <h3>Confirmation</h3>
+        </div>
+        <div class="panel top">
+            <p>So, you represent a {{user!.getPoliticalType()}} group attempting to overthrow a {{govt!.getPoliticalType()}} government headed by President Xerxes.</p>
+
+            <p>Because you are more to the {{user!.position.description}} than the government, your forces will be <span class="confirmation {{user.position.css}}">{{user.position.colourName}}</span> and the government will be <span class="confirmation {{govt.position.css}}">{{govt.position.colourName}}</span>.</p>
+
+            <p style="margin-bottom: 1em;">Is this correct?</p>
+        </div>
+        <div class="buttonContainer">
+            <button (click)="nextPage('pickASide')" class="back">No</button>  
+            <button (click)="nextPage('summary')" class="next">Yes</button>
+            <br />
+        </div>
+    </div>
+
+    <div *ngIf="showHide['summary']" id="summary" class="explainer">
+        <div class="panel title">
+            <h3>The targets</h3>
+        </div>
+        <div class="panel top">
+            <p>At the start of the game, will any of the following buildings join the rebels?</p>
+            <p><strong>(Make a note of the likely targets!)</strong></p>
+
+            <ul>
+                <li *ngFor="let building of buildings.buildings">The {{building.name}} <strong>{{building.mood}}</strong></li>
+            </ul>
+        </div>
+        <div class="buttonContainer">
+            <button (click)="nextPage('game')" class="next" >Start</button>
+            <br />
+        </div>
+    </div>
+
+    <div id ="victory" class="explainer hidden">
+        <div class="panel title">
+            <h3>Victory!</h3>
+        </div>
+        <div class="panel top">
+            <img src="/assets/posters/communist_victory.jpeg" width="746" style="border-bottom: 4px solid Black" />
+            <p><strong>Well done!</strong></p>
+            <p>You have reached 35 points and the government has surrendered!</p>
+            <br />
+        </div>
+    </div>
+    
+    <div id ="loss" class="explainer hidden">
+        <div class="panel title">
+            <h3>Defeat!</h3>
+        </div>
+        <div class="panel top">
+            <img src="/assets/posters/communist_defeat.jpeg" width="746" style="border-bottom: 4px solid Black" />
+            <p><strong>End of game!</strong></p>
+            <p>The government has reached 35 points and you will now be shot!</p>
+            <br />
+        </div>
+    </div>
+</section>
+
+<div *ngIf="showHide['game']" id ="game">
+    <section id="gameBorder">
+        <section id="gameContainer" data-game-container="gameContainer">
+            <section id="leftCol">
+                <app-game-score [userScore]="user.score" [govtScore]="govt.score"></app-game-score>
+                <app-game-popularity [userPopularity]="user.popularity" [user]="user" [govtPopularity]="govt.popularity" [govt]="govt"></app-game-popularity>
+                <app-game-remaining-moves [remainingMoves]="remainingMoves" [currentPlayer]="currentPlayer"></app-game-remaining-moves>
+                <app-game-messagebox [message]="message"></app-game-messagebox>
+            </section>
+            <app-game-map (movesChange)="changeMoves($event)" (scoreChange)="changeScore($event)" (popularityChange)="changePopularity($event)" (messageChange)="changeMessage($event)" [user]="user" [govt]="govt"></app-game-map>
+            <br style="display: none;"/>
+        </section>
+        <br style="display: none;" />
+    </section>
+    <br style="display: none;"/>
+</div>

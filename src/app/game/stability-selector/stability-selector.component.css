@@ -1,0 +1,24 @@
+p {
+  margin: 0px;
+  padding: 1em 1em 1em 1em;
+}
+
+div.radioOptionsContainer {
+  margin-left: 1em;
+}
+
+  .stability-radio-group {
+      display: flex;
+      flex-direction: column;
+      margin: 15px 0;
+      align-items: flex-start;
+    }
+    
+    div.radioOption {
+      margin-bottom: 0.5em;
+    }
+
+      .stability-selector-radio-button {
+        position: relative;
+        top: -0.2em;
+      }
